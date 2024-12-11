@@ -1,33 +1,101 @@
 <template>
   <Page :class="['w-full', 'min-h-screen', 'pb-[24px]']">
-    <div :class="['w-full', 'max-w-[1924px]', 'mx-auto', 'laptop:px-[48px]']">
+    <div :class="['w-full', 'max-w-[1924px]', 'mx-auto', 'desktop:px-[48px]']">
       <!-- Header -->
       <header>
         <div
           :class="[
             'flex',
             'justify-between',
+            'gap-[16px]',
             'items-center',
 
             'w-full',
-            'px-[16px] laptop:px-0',
           ]"
         >
-          <!-- Breadcrumb -->
-          <div class="flex gap-[8px] px-[4px] items-center">
-            <NuxtLink
-              class="text-[14px] text-medium-gray"
-              :to="localeLocation({ name: 'index' })"
-              @click.native="handleClickHomePage"
-              >{{ $t('listing_page_header_homePage') }}</NuxtLink
+          <nav class="relative flex items-center w-full">
+            <!-- Left arrow -->
+            <div
+              v-if="isTagsContainerOverflowing && !isTagsContainerAtStart"
+              :class="[
+                ...tagsContainerArrowClass,
+
+                'left-0',
+                'bg-gradient-to-l',
+              ]"
+              @click="scrollTagsContainerLeft"
             >
-            <IconArrowRight class="text-medium-gray" />
-            <NuxtLink
-              class="text-[20px] laptop:text-[28px]"
-              :to="localeLocation({ name: 'store' })"
-              >{{ $t('listing_page_header_listingPage') }}</NuxtLink
+              <IconArrowLeft class="hidden desktop:block w-[20px] h-[20px]" />
+            </div>
+            <!-- Tags -->
+            <div
+              ref="tagsContainer"
+              :class="[
+                'w-full',
+                'px-[16px] desktop:px-0',
+                'py-[16px]',
+
+                'overflow-scroll',
+                'laptop:overflow-x-hidden',
+                'overflow-y-hidden',
+                'scrollbar-custom',
+                'cursor-grab',
+                'select-none',
+              ]"
+              @scroll="handleTagsContainerScroll"
+              @mousedown="startDrag"
+              @mousemove="onDrag"
+              @mouseup="endDrag"
+              @mouseleave="endDrag"
+              @touchstart="startDrag"
+              @touchmove="onDrag"
+              @touchend="endDrag"
             >
-          </div>
+              <ul class="flex gap-x-2 gap-y-4">
+                <li
+                  v-for="(tag, index) in bookstoreTagButtons"
+                  :key="tag.id"
+                  :ref="tag.id === selectedTagId ? 'activeTag' : null"
+                  :class="[
+                    'shrink-0',
+                    // NOTE: Prevent cropping the last tag button shadow
+                    { 'pr-[12px]': index === bookstoreTagButtons.length - 1 },
+                  ]"
+                  @dragstart.prevent
+                >
+                  <ButtonV2
+                    class="pointer-event-auto"
+                    :preset="
+                      tag.id === selectedTagId ||
+                      (!selectedTagId && tag.id === 'featured')
+                        ? 'secondary'
+                        : 'outline'
+                    "
+                    :text="tag.name"
+                    :alt="tag.name"
+                    size="mini"
+                    theme="glow"
+                    :to="tag.route"
+                    @click.native="handleTagClick(tag)"
+                  />
+                </li>
+              </ul>
+            </div>
+            <!-- Right arrow -->
+            <div
+              v-if="isTagsContainerOverflowing && !isTagsContainerAtEnd"
+              :class="[
+                ...tagsContainerArrowClass,
+
+                'justify-end',
+                'right-0',
+                'bg-gradient-to-r',
+              ]"
+              @click="scrollTagsContainerRight"
+            >
+              <IconArrowRight class="hidden desktop:block w-[20px] h-[20px]" />
+            </div>
+          </nav>
 
           <!-- Desktop Filter & Sorting -->
           <div class="hidden desktop:flex items-center gap-[16px] relative">
@@ -37,84 +105,22 @@
               @clear="handleSearchBarClear"
               @input="handleSearchBarInput"
             />
-            <Dropdown>
-              <template #trigger="{ toggle }">
-                <ButtonV2
-                  preset="tertiary"
-                  :text="selectedLanguageFilterLabel"
-                  @click="toggle"
-                >
-                  <template #append>
-                    <IconArrowDown />
-                  </template>
-                </ButtonV2>
+
+            <ButtonV2
+              preset="tertiary"
+              :text="$t('listing_page_filter')"
+              class="whitespace-nowrap"
+              @click="handleOpenFilterDialog"
+            >
+              <template #prepend>
+                <IconFilter />
               </template>
-              <MenuList class="!py-[8px]">
-                <MenuItem
-                  v-for="(item, i) in languageFilterList"
-                  :key="i"
-                  class="w-full"
-                  label-align="left"
-                  label-class="py-[8px]"
-                  :value="item.value"
-                  :label="item.text"
-                  :selected-value="selectedLanguageFilter"
-                  @select="selectedLanguageFilter = item.value"
-                >
-                  <template
-                    v-if="selectedLanguageFilter === item.value"
-                    #label-append
-                  >
-                    <IconCheck />
-                  </template>
-                </MenuItem>
-              </MenuList>
-            </Dropdown>
-
+            </ButtonV2>
             <Dropdown>
               <template #trigger="{ toggle }">
                 <ButtonV2
                   preset="tertiary"
-                  :text="selectedPriceFilterLabel"
-                  @click="toggle"
-                >
-                  <template #append>
-                    <IconArrowDown />
-                  </template>
-                </ButtonV2>
-              </template>
-              <MenuList class="!py-[8px]">
-                <MenuItem
-                  v-for="(item, i) in priceFilterList"
-                  :key="i"
-                  class="w-full"
-                  label-align="left"
-                  label-class="py-[8px]"
-                  :value="item.value"
-                  :label="item.text"
-                  :selected-value="selectedPriceFilter"
-                  @select="selectedPriceFilter = item.value"
-                >
-                  <template
-                    v-if="selectedPriceFilter === item.value"
-                    #label-append
-                  >
-                    <IconCheck />
-                  </template>
-                </MenuItem>
-              </MenuList>
-            </Dropdown>
-
-            <ListingPageToggleButton
-              v-model="isAppliedDRMFreeFilter"
-              :label="$t('listing_page_filter_drm_free_label')"
-              @input="handleToggleDRMFreeFilter"
-            />
-
-            <Dropdown>
-              <template #trigger="{ toggle }">
-                <ButtonV2
-                  preset="tertiary"
+                  class="whitespace-nowrap"
                   :text="selectedSortingLabel"
                   @click="toggle"
                 >
@@ -143,44 +149,6 @@
           </div>
         </div>
 
-        <nav
-          v-show="!searchQuery"
-          :class="[
-            'flex',
-            'items-start',
-
-            'w-full',
-            'px-[16px] laptop:px-0',
-            'py-[16px]',
-
-            'overflow-x-auto',
-            'overflow-y-hidden',
-          ]"
-        >
-          <ul class="flex gap-x-2 gap-y-4">
-            <li
-              v-for="tag in bookstoreTagButtons"
-              :key="tag.id"
-              class="shrink-0"
-            >
-              <ButtonV2
-                :preset="
-                  tag.id === selectedTagId ||
-                  (!selectedTagId && tag.id === 'all')
-                    ? 'secondary'
-                    : 'outline'
-                "
-                :text="tag.name"
-                :alt="tag.name"
-                size="mini"
-                theme="glow"
-                :to="tag.route"
-                @click.native="handleTagClick(tag)"
-              />
-            </li>
-          </ul>
-        </nav>
-
         <!-- Mobile Filter & Sorting -->
         <div
           :class="[
@@ -200,8 +168,11 @@
             'relative',
           ]"
         >
-          <div class="flex items-center justify-center">
+          <div
+            class="flex items-center justify-center cursor-pointer px-[10px]"
+          >
             <SearchBar
+              class="w-full"
               :search-query="searchQuery"
               @open="handleSearchBarOpen"
               @clear="handleSearchBarClear"
@@ -235,7 +206,7 @@
           v-if="selectedTagTitle"
           :class="[
             'mt-[36px] desktop:mt-[20px]',
-            'px-[16px] laptop:px-0',
+            'px-[16px] desktop:px-0',
 
             'text-[24px] desktop:text-[32px]',
             'font-bold',
@@ -245,7 +216,7 @@
 
         <p
           v-if="selectedTagDescription"
-          class="mt-[8px] px-[16px] laptop:px-0 text-gray-4a text-[14px]"
+          class="mt-[8px] px-[16px] desktop:px-0 text-gray-4a text-[14px]"
           v-text="selectedTagDescription"
         />
       </header>
@@ -261,7 +232,7 @@
 
           'w-full',
           'mt-[40px]',
-          'px-[16px] laptop:px-0',
+          'px-[16px] desktop:px-0',
         ]"
       >
         <!-- Loading -->
@@ -536,6 +507,8 @@ import { parseNFTMetadataURL } from '~/util/nft';
 
 import crispMixin from '~/mixins/crisp';
 
+const TAGS_CONTAINER_SCROLL_BY_SIZE = 100;
+
 function getCMSTagIdsForRecommendedBookstoreItemsByLocale(locale = '') {
   const languages = ['zh', 'en'];
   // Return language matches with locale first
@@ -551,7 +524,7 @@ export default {
   name: 'ListingPage',
   mixins: [crispMixin],
   layout: 'default',
-  defaultSorting: SORTING_OPTIONS.RECOMMEND,
+  defaultSorting: SORTING_OPTIONS.DEFAULT,
   defaultPrice: PRICE_OPTIONS.ALL,
   defaultLanguage: LANGUAGE_OPTIONS.ALL,
   async asyncData({
@@ -573,30 +546,42 @@ export default {
       const fetches = [
         $api.$get(fetchBookstoreCMSTags({ limit: 100 })),
         ...getCMSTagIdsForRecommendedBookstoreItemsByLocale(i18n.locale).map(
-          tagId => store.dispatch('lazyFetchBookstoreCMSProductsByTagId', tagId)
+          tagId =>
+            store
+              .dispatch('lazyFetchBookstoreCMSProductsByTagId', tagId)
+              .catch(() => ({ records: [] }))
         ),
         store.dispatch('fetchBookstoreLatestItems'),
       ];
+
       if (route.query.tag) {
         fetches.push(
-          store.dispatch(
-            'lazyFetchBookstoreCMSProductsByTagId',
-            route.query.tag
-          )
+          store
+            .dispatch('lazyFetchBookstoreCMSProductsByTagId', route.query.tag)
+            .catch(err => {
+              if (err.response?.data === 'TAG_NOT_FOUND') {
+                if (
+                  route.query.tag !== 'latest' &&
+                  route.query.tag !== 'featured'
+                ) {
+                  throw error({
+                    statusCode: 404,
+                    message: i18n.t('listing_page_tag_not_found'),
+                  });
+                } else {
+                  return { records: [] };
+                }
+              }
+              throw err;
+            })
         );
       }
+
       const [tagsResult] = await Promise.all(fetches);
-      bookstoreCMSTags = tagsResult.records;
+      bookstoreCMSTags = tagsResult?.records || [];
     } catch (err) {
-      if (err.response?.data === 'TAG_NOT_FOUND') {
-        error({
-          statusCode: 404,
-          message: i18n.t('listing_page_tag_not_found'),
-        });
-        return {};
-      }
       // eslint-disable-next-line no-console
-      console.error(error);
+      console.error(err);
     }
     return { bookstoreCMSTags };
   },
@@ -610,13 +595,20 @@ export default {
 
       isSearching: false,
       searchItems: [],
+
+      // Tag scroll
+      isTagsContainerOverflowing: false,
+      isTagsContainerAtStart: true,
+      isTagsContainerAtEnd: false,
+      isDragging: false,
+      startX: 0,
+      scrollLeft: 0,
     };
   },
   head() {
-    let title = this.$t('store_index_page_title');
-    if (this.selectedTagId) {
-      title = `${this.selectedTagTitle} - ${title}`;
-    }
+    const title = this.$t('store_index_page_title', {
+      name: this.selectedTagTitle,
+    });
 
     const description =
       this.selectedTagDescription || this.$t('store_books_page_description');
@@ -802,10 +794,17 @@ export default {
     availableSorting() {
       const options = [];
 
-      options.push({
-        text: this.$t('listing_page_header_sort_recommend'),
-        value: SORTING_OPTIONS.RECOMMEND,
-      });
+      if (this.selectedTagId === 'featured' || !this.selectedTagId) {
+        options.push({
+          text: this.$t('listing_page_header_sort_default'),
+          value: SORTING_OPTIONS.DEFAULT,
+        });
+      } else if (this.selectedTagId !== 'latest') {
+        options.push({
+          text: this.$t('listing_page_header_sort_recommend'),
+          value: SORTING_OPTIONS.RECOMMEND,
+        });
+      }
 
       options.push({
         text: this.$t('listing_page_header_sort_latest'),
@@ -856,12 +855,16 @@ export default {
     },
 
     bookstoreItems() {
-      if (this.selectedTagId) {
+      if (
+        this.selectedTagId &&
+        this.selectedTagId !== 'latest' &&
+        this.selectedTagId !== 'featured'
+      ) {
         // Return books with particular tag from CMS
         return this.nftGetBookstoreCMSProductsByTagId(this.selectedTagId);
       }
 
-      if (this.selectedSorting === SORTING_OPTIONS.LATEST) {
+      if (this.selectedTagId === 'latest') {
         // Return the latest 100 published books & fill up with recommended books from CMS
         return this.nftBookstoreLatestItems
           .map(item => ({
@@ -925,6 +928,7 @@ export default {
 
       items.sort((a, b) => {
         switch (this.selectedSorting) {
+          case SORTING_OPTIONS.DEFAULT:
           case SORTING_OPTIONS.RECOMMEND:
             if (a.order && b.order) {
               return a.order - b.order;
@@ -995,12 +999,22 @@ export default {
     bookstoreTagButtons() {
       return [
         {
-          id: 'all',
-          name: this.$t('tag_all_title'),
+          id: 'featured',
+          name: this.$t('tag_all_featured'),
           route: this.localeLocation({
             query: {
               ...this.$route.query,
-              tag: undefined,
+              tag: 'featured',
+            },
+          }),
+        },
+        {
+          id: 'latest',
+          name: this.$t('tag_all_latest'),
+          route: this.localeLocation({
+            query: {
+              ...this.$route.query,
+              tag: 'latest',
             },
           }),
         },
@@ -1029,10 +1043,31 @@ export default {
       );
     },
     selectedTagTitle() {
-      return this.selectedTag?.name;
+      switch (this.selectedTagId) {
+        case 'featured':
+          return this.$t('tag_all_featured');
+        case 'latest':
+          return this.$t('tag_all_latest');
+        default:
+          return this.selectedTag?.name;
+      }
     },
     selectedTagDescription() {
       return this.selectedTag?.description;
+    },
+    tagsContainerArrowClass() {
+      return [
+        'flex',
+        'absolute',
+        'h-full',
+        'z-10',
+        'items-center',
+        'w-[60px]',
+        'text-gray-500',
+        'from-transparent',
+        'to-light-gray',
+        'cursor-pointer',
+      ];
     },
 
     shouldShowProgressIndicator() {
@@ -1085,6 +1120,14 @@ export default {
       search_term: this.searchQuery || undefined,
       isNFTBook: true,
     });
+    this.$nextTick(() => {
+      this.checkTagsContainerOverflow();
+    });
+    this.scrollToActiveTag();
+    window.addEventListener('resize', this.checkTagsContainerOverflow);
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.checkTagsContainerOverflow);
   },
   methods: {
     ...mapActions(['lazyFetchBookstoreCMSProductsByTagId']),
@@ -1284,12 +1327,21 @@ export default {
     },
     async handleTagClick(tag) {
       logTrackerEvent(this, 'listing', 'tag_click', tag.id, 1);
-      try {
-        await this.lazyFetchBookstoreCMSProductsByTagId(tag.id);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+      if (tag.id === 'latest' || tag.id === 'featured') {
+        if (tag.id === 'featured') {
+          this.selectedSorting = SORTING_OPTIONS.DEFAULT;
+        } else {
+          this.selectedSorting = SORTING_OPTIONS.LATEST;
+        }
+      } else {
+        try {
+          await this.lazyFetchBookstoreCMSProductsByTagId(tag.id);
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
+        }
       }
+
       logPurchaseFlowEvent(this, 'view_item_list', {
         item_list_id: tag.id,
         item_list_name: tag.name,
@@ -1301,6 +1353,92 @@ export default {
           currency: 'USD',
         })),
         isNFTBook: true,
+      });
+    },
+    checkTagsContainerOverflow() {
+      const container = this.$refs.tagsContainer;
+      this.isTagsContainerOverflowing =
+        container.scrollWidth > container.clientWidth;
+      this.handleTagsContainerScroll();
+    },
+    handleTagsContainerScroll() {
+      const container = this.$refs.tagsContainer;
+      const tolerance = 2;
+
+      this.isTagsContainerAtStart = container.scrollLeft <= 0;
+      this.isTagsContainerAtEnd =
+        container.scrollLeft + container.clientWidth >=
+        container.scrollWidth - tolerance;
+    },
+    scrollTagsContainerLeft() {
+      const container = this.$refs.tagsContainer;
+      const remainingScrollLeft =
+        container.scrollLeft - TAGS_CONTAINER_SCROLL_BY_SIZE;
+      const isNearStart = remainingScrollLeft < TAGS_CONTAINER_SCROLL_BY_SIZE;
+      if (isNearStart) {
+        container.scrollTo({
+          left: 0,
+          behavior: 'smooth',
+        });
+      } else {
+        container.scrollBy({
+          left: -TAGS_CONTAINER_SCROLL_BY_SIZE,
+          behavior: 'smooth',
+        });
+      }
+    },
+    scrollTagsContainerRight() {
+      const container = this.$refs.tagsContainer;
+      const tolerance = 2;
+      const remainingScrollLeft =
+        container.scrollWidth -
+        container.clientWidth -
+        container.scrollLeft -
+        TAGS_CONTAINER_SCROLL_BY_SIZE;
+
+      const isNearEnd =
+        remainingScrollLeft <= TAGS_CONTAINER_SCROLL_BY_SIZE + tolerance;
+      if (isNearEnd) {
+        container.scrollTo({
+          left: container.scrollWidth,
+          behavior: 'smooth',
+        });
+      } else {
+        container.scrollBy({
+          left: TAGS_CONTAINER_SCROLL_BY_SIZE,
+          behavior: 'smooth',
+        });
+      }
+    },
+    startDrag(event) {
+      this.isDragging = true;
+      const pageX = event.pageX || event.touches[0].pageX;
+      this.startX = pageX - this.$refs.tagsContainer.offsetLeft;
+      this.scrollLeft = this.$refs.tagsContainer.scrollLeft;
+    },
+    onDrag(event) {
+      if (!this.isDragging) return;
+      event.preventDefault();
+      const pageX = event.pageX || event.touches[0].pageX;
+      const x = pageX - this.$refs.tagsContainer.offsetLeft;
+      const walk = (x - this.startX) * 1.5;
+      this.$refs.tagsContainer.scrollLeft = this.scrollLeft - walk;
+    },
+    endDrag() {
+      this.isDragging = false;
+    },
+    scrollToActiveTag() {
+      this.$nextTick(() => {
+        const activeTag = this.$refs.activeTag?.[0];
+        const container = this.$refs.tagsContainer;
+
+        if (activeTag && container) {
+          activeTag.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center',
+          });
+        }
       });
     },
   },

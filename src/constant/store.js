@@ -1,5 +1,6 @@
 export const SORTING_OPTIONS = {
   RECOMMEND: 'recommend',
+  DEFAULT: 'default',
   LATEST: 'latest',
   LOWER_PRICE: 'lower_price',
   HIGHER_PRICE: 'higher_price',
