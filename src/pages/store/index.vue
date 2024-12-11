@@ -55,6 +55,7 @@
                 <li
                   v-for="(tag, index) in bookstoreTagButtons"
                   :key="tag.id"
+                  :ref="tag.id === selectedTagId ? 'activeTag' : null"
                   :class="[
                     'shrink-0',
                     // NOTE: Prevent cropping the last tag button shadow
@@ -1122,6 +1123,7 @@ export default {
     this.$nextTick(() => {
       this.checkTagsContainerOverflow();
     });
+    this.scrollToActiveTag();
     window.addEventListener('resize', this.checkTagsContainerOverflow);
   },
   beforeDestroy() {
@@ -1424,6 +1426,20 @@ export default {
     },
     endDrag() {
       this.isDragging = false;
+    },
+    scrollToActiveTag() {
+      this.$nextTick(() => {
+        const activeTag = this.$refs.activeTag?.[0];
+        const container = this.$refs.tagsContainer;
+
+        if (activeTag && container) {
+          activeTag.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center',
+          });
+        }
+      });
     },
   },
 };
