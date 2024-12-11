@@ -60,8 +60,10 @@
                     // NOTE: Prevent cropping the last tag button shadow
                     { 'pr-[12px]': index === bookstoreTagButtons.length - 1 },
                   ]"
+                  @dragstart.prevent
                 >
                   <ButtonV2
+                    class="pointer-event-auto"
                     :preset="
                       tag.id === selectedTagId ||
                       (!selectedTagId && tag.id === 'featured')
@@ -1359,10 +1361,12 @@ export default {
     },
     handleTagsContainerScroll() {
       const container = this.$refs.tagsContainer;
+      const tolerance = 2;
 
-      this.isTagsContainerAtStart = container.scrollLeft === 0;
+      this.isTagsContainerAtStart = container.scrollLeft <= 0;
       this.isTagsContainerAtEnd =
-        container.scrollLeft + container.clientWidth >= container.scrollWidth;
+        container.scrollLeft + container.clientWidth >=
+        container.scrollWidth - tolerance;
     },
     scrollTagsContainerLeft() {
       const container = this.$refs.tagsContainer;
@@ -1383,12 +1387,15 @@ export default {
     },
     scrollTagsContainerRight() {
       const container = this.$refs.tagsContainer;
+      const tolerance = 2;
       const remainingScrollLeft =
         container.scrollWidth -
         container.clientWidth -
         container.scrollLeft -
         TAGS_CONTAINER_SCROLL_BY_SIZE;
-      const isNearEnd = remainingScrollLeft < TAGS_CONTAINER_SCROLL_BY_SIZE;
+
+      const isNearEnd =
+        remainingScrollLeft <= TAGS_CONTAINER_SCROLL_BY_SIZE + tolerance;
       if (isNearEnd) {
         container.scrollTo({
           left: container.scrollWidth,
