@@ -215,11 +215,19 @@ export default {
     },
     NFTImageUrl() {
       const { image = '' } = this.NFTClassMetadata;
-      return parseNFTMetadataURL(image);
+      let url = image;
+      if (!url.startsWith('ar://') && this.iscnThumbnailUrl) {
+        url = this.iscnThumbnailUrl;
+      }
+      return parseNFTMetadataURL(url);
     },
     nftImageURL() {
-      const image = this.nftMetadata.image || this.NFTImageUrl;
-      return parseNFTMetadataURL(image);
+      const { image = '' } = this.nftMetadata;
+      let url = image;
+      if (!url.startsWith('ar://') && this.iscnThumbnailUrl) {
+        url = this.iscnThumbnailUrl;
+      }
+      return parseNFTMetadataURL(url) || this.NFTImageUrl;
     },
     NFTAnimationUrl() {
       const { animation_url: video = '' } = this.NFTClassMetadata;
@@ -265,6 +273,9 @@ export default {
     },
     iscnUrl() {
       return this.iscnData?.contentMetadata?.url;
+    },
+    iscnThumbnailUrl() {
+      return this.iscnData?.contentMetadata?.thumbnailUrl;
     },
     iscnContentUrls() {
       return this.iscnData?.contentMetadata?.sameAs || [];
