@@ -148,7 +148,10 @@
             class="text-like-cyan"
             :text="$t('campaign_nft_book_just_arrived')"
           />
-          <Label preset="h3" :class="titleStyle" :text="NFTName" />
+          <h1
+            :class="['text-[24px]', 'font-600', titleStyle]"
+            v-text="NFTName"
+          />
           <p :class="['text-14', 'whitespace-pre-line', descriptionStyle]">
             {{ bookDescriptionTrimmed }}
           </p>

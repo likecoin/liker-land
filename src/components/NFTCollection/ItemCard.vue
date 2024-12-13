@@ -98,7 +98,10 @@
             class="text-like-collection"
             :text="$t('nft_collection_label')"
           />
-          <Label preset="h3" :class="titleStyle" :text="collectionName" />
+          <h1
+            :class="['text-[24px]', 'font-600', titleStyle]"
+            v-text="collectionName"
+          />
           <Markdown :md-string="collectionDescription" />
           <NFTBookSpecTable class="mt-[12px]">
             <client-only>
