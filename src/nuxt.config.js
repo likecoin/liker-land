@@ -254,6 +254,9 @@ const nuxtConfig = {
           'https://*.js.stripe.com',
           'https://maps.googleapis.com',
 
+          // cloudflare
+          'static.cloudflareinsights.com',
+
           'https://unpkg.com/@google/model-viewer@3.1.1/',
           'https://substackapi.com',
           '*.crisp.chat',
@@ -273,12 +276,16 @@ const nuxtConfig = {
 
           'bid.g.doubleclick.net',
           'td.doubleclick.net',
-          'https://likecoin.github.io',
+          'www.googletagmanager.com',
+
           'verify.walletconnect.com',
+
           'www.facebook.com',
           'www.youtube.com',
+
           'https://newsletter.like.co',
           'https://authcore.like.co',
+          'https://likecoin.github.io',
           'https://likecoin-integration-test.authcore.io',
         ],
         'connect-src': [
