@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const cors = require('cors');
 
 const { IS_TESTNET } = require('../../../config/config');
 
@@ -10,6 +11,8 @@ const {
 const { handleRestfulError } = require('../../middleware/error');
 
 const router = Router();
+
+router.use('/bookstore', cors({ origin: true }));
 
 router.get('/bookstore/tags', async (req, res, next) => {
   try {
