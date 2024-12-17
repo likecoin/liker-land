@@ -312,6 +312,11 @@ const nuxtConfig = {
       },
     },
   },
+
+  helmet: {
+    referrerPolicy: { policy: 'strict-origin' },
+  },
+
   /*
    ** Global CSS
    */

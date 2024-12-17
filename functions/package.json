@@ -63,6 +63,7 @@
     "marked": "^5.1.2",
     "node-fetch": "^2.6.7",
     "nuxt-facebook-pixel-module": "^1.6.0",
+    "nuxt-helmet": "^2.1.1",
     "nuxt-start": "^2.17.2",
     "portal-vue": "^1.5.1",
     "querystring": "^0.2.1",
