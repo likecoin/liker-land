@@ -1,5 +1,6 @@
 <template>
   <div class="flex flex-col items-stretch min-h-screen">
+    <ChristmasCampaignBanner />
     <!-- <AlertBanner
       v-if="getRouteBaseName($route) !== 'nft-class-classId' && $route.params.classId !== alertBannerNFTClassId"
       :primary-button-text="$t('alert_banner_actions_purchase')"
