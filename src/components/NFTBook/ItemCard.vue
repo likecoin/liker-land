@@ -181,11 +181,21 @@
               v-if="iscnWorkPublisher"
               class="flex flex-col justify-center min-w-0"
             >
-              <NFTBookSpecTableLabel :text="$t('identity_type_publisher')" />
-              <NFTBookSpecTableValue
-                :text="iscnWorkPublisher"
-                :preset="preset"
-              />
+              <NuxtLink
+                class="group"
+                :to="
+                  localeLocation({
+                    name: 'store',
+                    query: { q: iscnWorkPublisher },
+                  })
+                "
+              >
+                <NFTBookSpecTableLabel :text="$t('identity_type_publisher')" />
+                <NFTBookSpecTableValue
+                  :text="iscnWorkPublisher"
+                  :preset="preset"
+                />
+              </NuxtLink>
             </li>
             <client-only>
               <li>
