@@ -361,7 +361,7 @@ export default {
             fbClickId: this.fbClickId,
             items: this.shoppingCartBookItems,
             email: this.walletEmail,
-            coupon: this.coupon,
+            coupon: this.coupon || 'CHRISTMAS10',
             giftInfo,
           },
           {
