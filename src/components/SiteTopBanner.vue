@@ -30,13 +30,16 @@
 export default {
   data() {
     return {
-      messages: ['🎄聖誕限時 全店9折優惠', '於付款頁面輸入優惠碼”CHRISTMAS10”'],
+      messages: [
+        this.$t('christmas_campaign_text_1'),
+        this.$t('christmas_campaign_text_2'),
+      ],
       showBanner: true,
     };
   },
   computed: {
     repeatedMessages() {
-      return [...this.messages, ...this.messages];
+      return this.messages.concat(this.messages);
     },
   },
   created() {
