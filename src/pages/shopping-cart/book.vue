@@ -73,6 +73,16 @@
       <footer
         class="grid grid-cols-6 items-center gap-[1em] mt-[1em] text-right"
       >
+        <div
+          class="col-span-3 sm:col-span-4 text-medium-gray text-[14px] font-200"
+        >
+          {{ $t('shopping_cart_list_coupon_title') }}
+        </div>
+        <div
+          class="col-span-3 sm:col-span-2 text-medium-gray text-[14px] font-400"
+        >
+          {{ $t('shopping_cart_list_coupon_text') }}
+        </div>
         <div class="col-span-3 sm:col-span-4 text-gray-4a">
           {{ $t('shopping_cart_list_total_price') }}
         </div>
@@ -84,25 +94,24 @@
       </footer>
 
       <div class="flex justify-end mt-[2em]">
-        <div class="flex gap-[1em]">
-          <ButtonV2
-            v-if="giftInfo"
-            class="min-w-[120px]"
-            preset="outline"
-            :text="$t('nft_edition_select_confirm_button_text_gift')"
-            @click="handleClickGiftButton"
-          >
-            <template #prepend>
-              <IconGift class="w-[16px]" />
-            </template>
-          </ButtonV2>
-          <EventModalCollectMethodButton
-            :title="$t('shopping_cart_checkout_button_by_card')"
-            type="stripe"
-            :price="formattedFiatPrice"
-            @click="_ => handleClickCheckoutByFiatButton()"
-          />
-        </div>
+        <ButtonV2
+          v-if="giftInfo"
+          class="min-w-[120px]"
+          preset="outline"
+          :text="$t('nft_edition_select_confirm_button_text_gift')"
+          @click="handleClickGiftButton"
+        >
+          <template #prepend>
+            <IconGift class="w-[16px]" />
+          </template>
+        </ButtonV2>
+      </div>
+      <div class="grid w-full grid-cols-6">
+        <ButtonV2
+          class="w-full col-span-3 col-start-4 sm:col-span-2 sm:col-start-5"
+          :text="$t('shopping_cart_checkout')"
+          @click="handleClickCheckoutByFiatButton()"
+        />
       </div>
     </CardV2>
 
@@ -144,6 +153,9 @@ import { getNFTBookCartPurchaseLink } from '~/util/api';
 
 import nftMixin from '~/mixins/nft';
 import alertMixin from '~/mixins/alert';
+
+const CHRISTMAS_CAMPAIGN_MIN_SPEND = 9;
+const CHRISTMAS_CAMPAIGN_COUPON = 'XMASREAD';
 
 export default {
   name: 'ShoppingCartPage',
@@ -219,8 +231,31 @@ export default {
         return totalPrice + (unitPrice * item.quantity || 0);
       }, 0);
     },
+    totalItemPriceInUSD() {
+      return this.shoppingCartBookItems.reduce((totalPrice, item) => {
+        let itemPrice = 0;
+        if (item.collectionId) {
+          itemPrice = this.getNFTCollectionPriceByCollectionId(
+            item.collectionId
+          );
+        } else {
+          const edition = this.getNFTBookStorePriceByClassIdAndIndex(
+            item.productId,
+            item.classId ? item.priceIndex : undefined
+          );
+          itemPrice = edition?.price || 0;
+        }
+        return totalPrice + (itemPrice * item.quantity || 0);
+      }, 0);
+    },
     formattedFiatPrice() {
       return formatNumberWithUSD(this.totalNFTPriceInUSD);
+    },
+    getApplicableCoupon() {
+      if (this.coupon) return this.coupon;
+      return this.totalItemPriceInUSD > CHRISTMAS_CAMPAIGN_MIN_SPEND
+        ? CHRISTMAS_CAMPAIGN_COUPON
+        : '';
     },
   },
   mounted() {
@@ -352,7 +387,7 @@ export default {
             fbClickId: this.fbClickId,
             items: this.shoppingCartBookItems,
             email: this.walletEmail,
-            coupon: this.coupon,
+            coupon: this.getApplicableCoupon,
             giftInfo,
           },
           {
