@@ -33,6 +33,7 @@ export default {
       messages: [
         this.$t('christmas_campaign_text_1'),
         this.$t('christmas_campaign_text_2'),
+        this.$t('christmas_campaign_text_3'),
       ],
       showBanner: true,
     };
@@ -69,17 +70,21 @@ export default {
 .scrolling-content {
   display: flex;
   flex-direction: column;
-  animation: scrollUp 10s linear infinite;
+  animation: scrollUp 12s cubic-bezier(0.7, 0, 0.25, 1) infinite;
 }
 
 @keyframes scrollUp {
   0%,
-  25% {
+  16.666% {
     transform: translateY(0%);
   }
-  50%,
-  75% {
-    transform: translateY(-25%);
+  33.333%,
+  50% {
+    transform: translateY(-16.666%);
+  }
+  66.666%,
+  83.333% {
+    transform: translateY(-33.333%);
   }
   100% {
     transform: translateY(-50%);
