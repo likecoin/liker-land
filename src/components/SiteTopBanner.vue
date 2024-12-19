@@ -39,6 +39,9 @@ export default {
       return [...this.messages, ...this.messages];
     },
   },
+  created() {
+    this.checkBannerStatus();
+  },
   methods: {
     closeBanner() {
       this.showBanner = false;
@@ -55,9 +58,6 @@ export default {
         }
       } catch (error) {}
     },
-  },
-  created() {
-    this.checkBannerStatus();
   },
 };
 </script>
