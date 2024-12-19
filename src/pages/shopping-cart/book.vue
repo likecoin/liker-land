@@ -79,7 +79,7 @@
           {{ $t('shopping_cart_list_coupon_title') }}
         </div>
         <div
-          class="col-span-3 sm:col-span-2 text-medium-gray text-[14px] font-200"
+          class="col-span-3 sm:col-span-2 text-medium-gray text-[14px] font-400"
         >
           {{ $t('shopping_cart_list_coupon_text') }}
         </div>
@@ -153,6 +153,9 @@ import { getNFTBookCartPurchaseLink } from '~/util/api';
 
 import nftMixin from '~/mixins/nft';
 import alertMixin from '~/mixins/alert';
+
+const CHRISTMAS_CAMPAIGN_MIN_SPEND = 9;
+const CHRISTMAS_CAMPAIGN_COUPON = 'XMASREAD';
 
 export default {
   name: 'ShoppingCartPage',
@@ -228,8 +231,31 @@ export default {
         return totalPrice + (unitPrice * item.quantity || 0);
       }, 0);
     },
+    totalItemPriceInUSD() {
+      return this.shoppingCartBookItems.reduce((totalPrice, item) => {
+        let itemPrice = 0;
+        if (item.collectionId) {
+          itemPrice = this.getNFTCollectionPriceByCollectionId(
+            item.collectionId
+          );
+        } else {
+          const edition = this.getNFTBookStorePriceByClassIdAndIndex(
+            item.productId,
+            item.classId ? item.priceIndex : undefined
+          );
+          itemPrice = edition?.price || 0;
+        }
+        return totalPrice + (itemPrice * item.quantity || 0);
+      }, 0);
+    },
     formattedFiatPrice() {
       return formatNumberWithUSD(this.totalNFTPriceInUSD);
+    },
+    getApplicableCoupon() {
+      if (this.coupon) return this.coupon;
+      return this.totalItemPriceInUSD > CHRISTMAS_CAMPAIGN_MIN_SPEND
+        ? CHRISTMAS_CAMPAIGN_COUPON
+        : '';
     },
   },
   mounted() {
@@ -361,7 +387,7 @@ export default {
             fbClickId: this.fbClickId,
             items: this.shoppingCartBookItems,
             email: this.walletEmail,
-            coupon: this.coupon || 'CHRISTMAS10',
+            coupon: this.getApplicableCoupon,
             giftInfo,
           },
           {
