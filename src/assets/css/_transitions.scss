@@ -18,3 +18,22 @@
     transition-timing-function: ease-in;
   }
 }
+
+.scroll-up- {
+  &enter {
+    transform: translateY(100%);
+  }
+  &leave-to {
+    transform: translateY(-100%);
+  }
+
+  &enter-active,
+  &leave-active {
+    transition-property: opacity, transform !important;
+    transition-duration: 2s;
+  }
+  &enter-active,
+  &leave-active {
+    transition-timing-function: cubic-bezier(0.7, 0, 0.25, 1);
+  }
+}
