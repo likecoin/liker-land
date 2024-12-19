@@ -3,7 +3,7 @@
     <AlertBanner v-if="uiIsChainUpgrading">{{
       $t('notice_chain_upgrading')
     }}</AlertBanner>
-    <SiteTopBanner />
+    <SiteTopBannerForChristmas />
 
     <nuxt
       :class="[

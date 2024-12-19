@@ -1,93 +1,130 @@
 <template>
-  <div
-    v-if="showBanner"
-    class="z-[500] w-full h-[40px] overflow-hidden flex items-center justify-center text-white bg-like-green relative"
-  >
-    <div class="h-[24px] overflow-hidden relative">
-      <div class="scrolling-content">
-        <div
-          v-for="(message, index) in repeatedMessages"
-          :key="index"
-          class="h-[24px] text-[14px] flex items-center justify-center"
-        >
-          {{ message }}
-        </div>
-      </div>
-    </div>
+  <Transition @enter="handleBannerEnter" @leave="handleBannerLeave">
+    <div
+      v-if="isShowBanner"
+      :class="[
+        'relative',
+        'top-0',
+        'z-[500]',
 
-    <ButtonV2
-      preset="plain"
-      size="small"
-      class="absolute translate-y-[-50%] right-[12px] top-1/2"
-      @click="closeBanner"
+        'flex',
+        'items-center',
+        'justify-center',
+
+        'overflow-hidden',
+
+        'w-full',
+        'h-[40px]',
+
+        'text-white',
+        'bg-like-green',
+      ]"
     >
-      <IconClose class="transform scale-75 laptop:scale-100" />
-    </ButtonV2>
-  </div>
+      <Transition name="scroll-up">
+        <div
+          :key="activeMessage"
+          :class="[
+            'absolute',
+            'inset-0',
+
+            'flex',
+            'justify-center',
+            'items-center',
+
+            'text-[14px]',
+            'text-center',
+          ]"
+          v-text="activeMessage"
+        />
+      </Transition>
+
+      <ButtonV2
+        preset="plain"
+        size="small"
+        class="absolute translate-y-[-50%] right-[12px] top-1/2"
+        @click="closeBanner"
+      >
+        <IconClose class="transform scale-75 laptop:scale-100" />
+      </ButtonV2>
+    </div>
+  </Transition>
 </template>
 
 <script>
+const LAST_CLOSED_AT_KEY = 'site-top-banner-last-closed-at';
+
 export default {
+  name: 'SiteTopBanner',
+  props: {
+    messages: {
+      type: Array,
+      default: () => [],
+    },
+    interval: {
+      type: Number,
+      default: 4000,
+    },
+  },
   data() {
     return {
-      messages: [
-        this.$t('christmas_campaign_text_1'),
-        this.$t('christmas_campaign_text_2'),
-        this.$t('christmas_campaign_text_3'),
-      ],
-      showBanner: true,
+      isShowBanner: false,
+      activeMessageIndex: 0,
     };
   },
   computed: {
-    repeatedMessages() {
-      return this.messages.concat(this.messages);
+    activeMessage() {
+      return this.messages[this.activeMessageIndex];
     },
   },
-  created() {
-    this.checkBannerStatus();
+  mounted() {
+    this.showBannerIfPossible();
+  },
+  beforeDestroy() {
+    this.clearInterval();
   },
   methods: {
-    closeBanner() {
-      this.showBanner = false;
-      try {
-        window.localStorage.setItem('bannerClosedTime', Date.now());
-      } catch (error) {}
+    handleBannerEnter(el, done) {
+      this.$gsap.gsap.from(el, {
+        height: 0,
+        duration: 0.5,
+        onComplete: done,
+      });
     },
-    checkBannerStatus() {
+    handleBannerLeave(el, done) {
+      this.$gsap.gsap.to(el, {
+        height: 0,
+        duration: 0.5,
+        onComplete: done,
+      });
+    },
+    nextMessage() {
+      this.activeMessageIndex =
+        (this.activeMessageIndex + 1) % this.messages.length;
+    },
+    clearInterval() {
+      if (this.messageInterval) {
+        clearInterval(this.messageInterval);
+        this.messageInterval = null;
+      }
+    },
+    closeBanner() {
+      this.isShowBanner = false;
       try {
-        const lastClosedTime = window.localStorage.getItem('bannerClosedTime');
+        window.localStorage.setItem(LAST_CLOSED_AT_KEY, Date.now());
+      } finally {
+        this.clearInterval();
+      }
+    },
+    showBannerIfPossible() {
+      try {
+        const lastClosedTime = window.localStorage.getItem(LAST_CLOSED_AT_KEY);
         const oneDay = 24 * 60 * 60 * 1000;
-        if (lastClosedTime && Date.now() - lastClosedTime < oneDay) {
-          this.showBanner = false;
+        if (!lastClosedTime || Date.now() - lastClosedTime >= oneDay) {
+          this.isShowBanner = true;
+          this.messageInterval = setInterval(this.nextMessage, this.interval);
         }
-      } catch (error) {}
+      } catch {}
     },
   },
 };
 </script>
-
-<style scoped>
-.scrolling-content {
-  display: flex;
-  flex-direction: column;
-  animation: scrollUp 12s cubic-bezier(0.7, 0, 0.25, 1) infinite;
-}
-
-@keyframes scrollUp {
-  0%,
-  16.666% {
-    transform: translateY(0%);
-  }
-  33.333%,
-  50% {
-    transform: translateY(-16.666%);
-  }
-  66.666%,
-  83.333% {
-    transform: translateY(-33.333%);
-  }
-  100% {
-    transform: translateY(-50%);
-  }
-}
-</style>
