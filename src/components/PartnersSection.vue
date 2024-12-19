@@ -161,36 +161,34 @@ export default {
           wallet: 'like19fqws220rwcmacn5dgt0dtwts8c05ty58mcr3a',
         },
         {
-          id: 'tseringwoeser',
-          name: this.$t('section_partners_author_tseringwoeser'),
-          keyword: '唯色',
+          id: 'quanan',
+          name: this.$t('section_partners_author_quanan'),
+          keyword: '崑南',
         },
         {
-          id: 'wanglixiong',
-          name: this.$t('section_partners_author_wanglixiong'),
-          keyword: '王力雄',
+          id: 'holok',
+          name: this.$t('section_partners_author_holok'),
+          keyword: '可洛',
         },
         {
-          id: 'eglenweyl',
-          name: this.$t('section_partners_author_eglenweyl'),
-          classId:
-            'likenft1cxcpmtg7wz7xu7pnlpmxvfj82c44j3uc8634rgz6zddpew8fkx7smut5cl',
+          id: 'chankaming',
+          name: this.$t('section_partners_author_chankaming'),
+          keyword: '陳嘉銘',
         },
         {
-          id: 'audreytang',
-          name: this.$t('section_partners_author_audreytang'),
-          classId:
-            'likenft1cxcpmtg7wz7xu7pnlpmxvfj82c44j3uc8634rgz6zddpew8fkx7smut5cl',
+          id: 'chowshukping',
+          name: this.$t('section_partners_author_chowshukping'),
+          keyword: '周淑屏',
         },
         {
-          id: 'allenau',
-          name: this.$t('section_partners_author_allenau'),
-          keyword: '區家麟',
+          id: 'chanchan',
+          name: this.$t('section_partners_author_chanchan'),
+          keyword: '陳塵',
         },
         {
-          id: 'kinko',
-          name: this.$t('section_partners_author_kinko'),
-          wallet: 'like13f4glvg80zvfrrs7utft5p68pct4mcq7t5atf6',
+          id: 'anong',
+          name: this.$t('section_partners_author_anong'),
+          keyword: '阿濃',
         },
         {
           id: 'francislee',
@@ -198,10 +196,34 @@ export default {
           keyword: '李立峯',
         },
         {
-          id: 'chankinman',
-          name: this.$t('section_partners_author_chankinman'),
-          classId:
-            'likenft1ekvx3en9l0640kv9fd5n5hvltwyfl443ymyu2cnhmalvjfy0cdcqqa3l6h',
+          id: 'koeylee',
+          name: this.$t('section_partners_author_koeylee'),
+          keyword: '李雨夢',
+        },
+        {
+          id: 'kinko',
+          name: this.$t('section_partners_author_kinko'),
+          wallet: 'like13f4glvg80zvfrrs7utft5p68pct4mcq7t5atf6',
+        },
+        {
+          id: 'tseringwoeser',
+          name: this.$t('section_partners_author_tseringwoeser'),
+          keyword: '唯色',
+        },
+        {
+          id: 'allenau',
+          name: this.$t('section_partners_author_allenau'),
+          keyword: '區家麟',
+        },
+        {
+          id: 'lauyuisiu',
+          name: this.$t('section_partners_author_lauyuisiu'),
+          keyword: '劉銳紹',
+        },
+        {
+          id: 'wongyuhing',
+          name: this.$t('section_partners_author_wongyuhing'),
+          keyword: '黃宇軒',
         },
       ].map(this.populatePartnerItem);
     },

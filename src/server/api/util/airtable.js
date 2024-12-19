@@ -46,6 +46,7 @@ async function fetchAirtableCMSProductsByTagId(
     const classIds = fields.IDs;
     const title = fields.Name;
     const titles = fields.Names;
+    const author = fields.Author;
     const imageUrl = fields['Image URL'];
     const imageUrls = fields['Image URLs'];
     const locales = fields.Locales;
@@ -59,6 +60,7 @@ async function fetchAirtableCMSProductsByTagId(
       classIds: isMultiple ? classIds : undefined,
       title,
       titles: isMultiple ? titles : undefined,
+      author,
       imageUrl,
       imageUrls: isMultiple ? imageUrls : undefined,
       locales,
