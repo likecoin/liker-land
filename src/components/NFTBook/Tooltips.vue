@@ -20,8 +20,11 @@
       'shadow-md',
     ]"
   >
-    <h4 class="font-600 text-dark-gray">{{ tooltipTitle }}</h4>
-    <p>{{ tooltipText }}</p>
+    <p
+      class="block text-[14px] font-600 text-dark-gray"
+      v-text="tooltipTitle"
+    />
+    <p v-text="tooltipText" />
   </div>
 </template>
 

@@ -26,7 +26,7 @@
       </div>
       <div class="w-full h-[1px] bg-shade-gray" />
 
-      <div class="px-[20px] pt-[18px] pb-[24px]">
+      <div class="px-[20px] pt-[18px] pb-[48px]">
         <slot name="content" />
       </div>
     </div>
