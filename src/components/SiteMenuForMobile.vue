@@ -1,7 +1,7 @@
 <template>
   <div class="fixed inset-0 z-50 bg-black bg-opacity-[30%]">
     <div
-      class="flex flex-col items-center gap-[22px] w-full bg-white pl-[16px] pr-[8px] py-[28px]"
+      class="flex flex-col items-center gap-[22px] w-full bg-white pl-[16px] pr-[8px] pt-[40px] pb-[28px]"
     >
       <header
         class="flex items-center justify-between w-full text-like-green mb-[10px]"
