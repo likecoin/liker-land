@@ -816,7 +816,6 @@ export default {
           if (this.iscnWorkAuthorName) {
             titleWithEdition += ` - ${this.iscnWorkAuthorName}`;
           }
-          titleWithEdition += ` - ${this.$t('nft_details_page_title_book')}`;
           meta.find(m => m.hid === 'og:title').content = titleWithEdition;
         }
         if (this.iscnData?.contentMetadata?.isbn) {
