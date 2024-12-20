@@ -525,6 +525,9 @@ const actions = {
         hideDownload: bookstoreInfo.hideDownload,
         defaultPaymentCurrency: bookstoreInfo.defaultPaymentCurrency,
         enableCustomMessagePage: bookstoreInfo.enableCustomMessagePage,
+        signedMessageText: bookstoreInfo.signedMessageText,
+        enableSignatureImage: bookstoreInfo.enableSignatureImage,
+        isHidden: bookstoreInfo.isHidden,
       };
       commit(TYPES.NFT_BOOK_STORE_INFO_BY_CLASS_ID_MAP_SET, payload);
     }
@@ -873,6 +876,9 @@ const actions = {
       hideDownload: data.hideDownload,
       defaultPaymentCurrency: data.defaultPaymentCurrency,
       enableCustomMessagePage: data.enableCustomMessagePage,
+      signedMessageText: data.signedMessageText,
+      enableSignatureImage: data.enableSignatureImage,
+      isHidden: data.isHidden,
     };
     commit(TYPES.NFT_BOOK_STORE_INFO_BY_CLASS_ID_MAP_SET, payload);
     return payload;

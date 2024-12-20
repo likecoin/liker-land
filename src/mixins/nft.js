@@ -567,8 +567,9 @@ export default {
       return this.nftCreatorMessage.replaceAll('{collector}', collector);
     },
     isNFTHidden() {
-      return this.getNFTClassHiddenSetByAddress(this.iscnOwner)?.has(
-        this.classId
+      return (
+        this.getNFTBookStoreInfoByClassId(this.classId).isHidden ||
+        this.getNFTClassHiddenSetByAddress(this.iscnOwner)?.has(this.classId)
       );
     },
 
