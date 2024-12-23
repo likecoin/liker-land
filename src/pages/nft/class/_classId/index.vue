@@ -427,8 +427,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import {
-  CHRISTMAS_CAMPAIGN_MIN_SPEND,
-  CHRISTMAS_CAMPAIGN_COUPON,
   IS_TESTNET,
   USD_TO_HKD_RATIO,
   EXTERNAL_HOST,
