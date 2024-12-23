@@ -568,7 +568,7 @@ export default {
     },
     isNFTHidden() {
       return (
-        this.getNFTBookStoreInfoByClassId(this.classId).isHidden ||
+        this.getNFTBookStoreInfoByClassId(this.classId)?.isHidden ||
         this.getNFTClassHiddenSetByAddress(this.iscnOwner)?.has(this.classId)
       );
     },
