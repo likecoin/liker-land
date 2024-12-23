@@ -147,15 +147,17 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
+import {
+  CHRISTMAS_CAMPAIGN_MIN_SPEND,
+  CHRISTMAS_CAMPAIGN_COUPON,
+} from '@/constant/index';
+
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import { formatNumberWithUSD } from '~/util/ui';
 import { getNFTBookCartPurchaseLink } from '~/util/api';
 
 import nftMixin from '~/mixins/nft';
 import alertMixin from '~/mixins/alert';
-
-const CHRISTMAS_CAMPAIGN_MIN_SPEND = 9;
-const CHRISTMAS_CAMPAIGN_COUPON = 'XMASREAD';
 
 export default {
   name: 'ShoppingCartPage',

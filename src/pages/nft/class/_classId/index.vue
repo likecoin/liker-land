@@ -426,17 +426,19 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { nftClassCollectionType, parseNFTMetadataURL } from '~/util/nft';
-import { getNFTBookPurchaseLink, postNewStripeFiatPayment } from '~/util/api';
-import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import {
+  CHRISTMAS_CAMPAIGN_MIN_SPEND,
+  CHRISTMAS_CAMPAIGN_COUPON,
   IS_TESTNET,
   USD_TO_HKD_RATIO,
   EXTERNAL_HOST,
   NFT_BOOK_PLATFORM_LIKER_LAND,
   LIKECOIN_API_BASE,
   LIKECOIN_BUTTON_BASE,
-} from '~/constant';
+} from '@/constant/index';
+import { nftClassCollectionType, parseNFTMetadataURL } from '~/util/nft';
+import { getNFTBookPurchaseLink, postNewStripeFiatPayment } from '~/util/api';
+import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
@@ -1383,6 +1385,14 @@ export default {
         this.isAddingToCart = false;
       }
     },
+    getApplicableCoupon(price) {
+      if (this.$route.query.coupon) {
+        return this.$route.query.coupon;
+      }
+      return price > CHRISTMAS_CAMPAIGN_MIN_SPEND
+        ? CHRISTMAS_CAMPAIGN_COUPON
+        : '';
+    },
     async handleCollectFromEdition(selectedValue, giftInfo = undefined) {
       const edition = this.getEdition(selectedValue ?? this.selectedValue);
       const hasStock = edition?.stock;
@@ -1424,7 +1434,7 @@ export default {
                 gaClientId,
                 gaSessionId,
                 giftInfo,
-                coupon: this.$route.query.coupon,
+                coupon: this.getApplicableCoupon(edition.price),
                 customPriceInDecimal,
                 utmCampaign: this.utmCampaign,
                 utmSource: this.utmSource,

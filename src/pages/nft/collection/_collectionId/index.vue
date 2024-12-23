@@ -103,6 +103,8 @@ import {
   EXTERNAL_HOST,
   NFT_BOOK_PLATFORM_LIKER_LAND,
   USD_TO_HKD_RATIO,
+  CHRISTMAS_CAMPAIGN_MIN_SPEND,
+  CHRISTMAS_CAMPAIGN_COUPON,
 } from '~/constant';
 import { parseNFTMetadataURL } from '~/util/nft';
 
@@ -492,6 +494,12 @@ export default {
       });
       this.uiPromptSuccessAlert(this.$t('cart_item_added'));
     },
+    getApplicableCoupon() {
+      if (this.$route.query.coupon) return this.$route.query.coupon;
+      return this.customPriceInDecimal > CHRISTMAS_CAMPAIGN_MIN_SPEND
+        ? CHRISTMAS_CAMPAIGN_COUPON
+        : '';
+    },
     async handleCollectFromEdition(giftInfo = undefined) {
       const hasStock = this.collection?.stock;
       if (!hasStock) return;
@@ -533,7 +541,7 @@ export default {
                 gaClientId,
                 giftInfo,
                 gaSessionId,
-                coupon: this.$route.query.coupon,
+                coupon: this.getApplicableCoupon(customPriceInDecimal),
                 customPriceInDecimal,
                 utmCampaign: this.utmCampaign,
                 utmSource: this.utmSource,

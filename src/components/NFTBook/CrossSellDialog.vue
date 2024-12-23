@@ -66,7 +66,11 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import { NFT_BOOK_PLATFORM_LIKER_LAND } from '~/constant';
+import {
+  NFT_BOOK_PLATFORM_LIKER_LAND,
+  CHRISTMAS_CAMPAIGN_MIN_SPEND,
+  CHRISTMAS_CAMPAIGN_COUPON,
+} from '~/constant';
 
 import { getNFTBookPurchaseLink } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
@@ -139,6 +143,14 @@ export default {
         1
       );
     },
+    getApplicableCoupon(customPriceInDecimal) {
+      if (this.$route.query.coupon) {
+        return this.$route.query.coupon;
+      }
+      return customPriceInDecimal > CHRISTMAS_CAMPAIGN_MIN_SPEND
+        ? CHRISTMAS_CAMPAIGN_COUPON
+        : '';
+    },
     async gotoCheckoutPage({
       link,
       customPriceInDecimal,
@@ -150,7 +162,7 @@ export default {
           {
             gaClientId: this.getGaClientId,
             gaSessionId: this.getGaSessionId,
-            coupon: this.$route.query.coupon,
+            coupon: this.getApplicableCoupon(customPriceInDecimal),
             customPriceInDecimal,
             utmCampaign: this.utmCampaign,
             utmSource: `${this.utmSource}_cross-sell`,
