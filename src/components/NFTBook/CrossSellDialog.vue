@@ -72,10 +72,11 @@ import { getNFTBookPurchaseLink } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 
 import nftOrCollectionMixin from '~/mixins/nft-or-collection';
+import couponMixin from '~/mixins/coupon';
 
 export default {
   name: 'NFTBookCrossSellDialog',
-  mixins: [nftOrCollectionMixin],
+  mixins: [nftOrCollectionMixin, couponMixin],
   props: {
     open: {
       type: Boolean,
@@ -150,7 +151,9 @@ export default {
           {
             gaClientId: this.getGaClientId,
             gaSessionId: this.getGaSessionId,
-            coupon: this.$route.query.coupon,
+            coupon: this.getApplicableCoupon({
+              checkoutPrice: customPriceInDecimal,
+            }),
             customPriceInDecimal,
             utmCampaign: this.utmCampaign,
             utmSource: `${this.utmSource}_cross-sell`,

@@ -452,3 +452,6 @@ export const SEARCH_SUGGESTIONS = [
   '信仰',
   '邵家臻',
 ];
+
+export const CHRISTMAS_CAMPAIGN_MIN_SPEND = 9;
+export const CHRISTMAS_CAMPAIGN_COUPON = 'XMASREAD';

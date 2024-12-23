@@ -426,9 +426,6 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { nftClassCollectionType, parseNFTMetadataURL } from '~/util/nft';
-import { getNFTBookPurchaseLink, postNewStripeFiatPayment } from '~/util/api';
-import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 import {
   IS_TESTNET,
   USD_TO_HKD_RATIO,
@@ -436,7 +433,10 @@ import {
   NFT_BOOK_PLATFORM_LIKER_LAND,
   LIKECOIN_API_BASE,
   LIKECOIN_BUTTON_BASE,
-} from '~/constant';
+} from '@/constant/index';
+import { nftClassCollectionType, parseNFTMetadataURL } from '~/util/nft';
+import { getNFTBookPurchaseLink, postNewStripeFiatPayment } from '~/util/api';
+import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 
 import nftMixin from '~/mixins/nft';
 import clipboardMixin from '~/mixins/clipboard';
@@ -444,6 +444,7 @@ import crossSellMixin from '~/mixins/cross-sell';
 import navigationListenerMixin from '~/mixins/navigation-listener';
 import utmMixin from '~/mixins/utm';
 import alertMixin from '~/mixins/alert';
+import couponMixin from '~/mixins/coupon';
 
 export default {
   name: 'NFTClassDetailsPage',
@@ -454,6 +455,7 @@ export default {
     navigationListenerMixin,
     utmMixin,
     alertMixin,
+    couponMixin,
   ],
   layout: 'default',
   asyncData({ query }) {
@@ -1424,7 +1426,9 @@ export default {
                 gaClientId,
                 gaSessionId,
                 giftInfo,
-                coupon: this.$route.query.coupon,
+                coupon: this.getApplicableCoupon({
+                  checkoutPrice: edition.price,
+                }),
                 customPriceInDecimal,
                 utmCampaign: this.utmCampaign,
                 utmSource: this.utmSource,

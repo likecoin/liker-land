@@ -111,6 +111,7 @@ import clipboardMixin from '~/mixins/clipboard';
 import navigationListenerMixin from '~/mixins/navigation-listener';
 import utmMixin from '~/mixins/utm';
 import alertMixin from '~/mixins/alert';
+import couponMixin from '~/mixins/coupon';
 
 export default {
   name: 'NFTCollectionDetailsPage',
@@ -120,6 +121,7 @@ export default {
     navigationListenerMixin,
     utmMixin,
     alertMixin,
+    couponMixin,
   ],
   layout: 'default',
   data() {
@@ -533,7 +535,9 @@ export default {
                 gaClientId,
                 giftInfo,
                 gaSessionId,
-                coupon: this.$route.query.coupon,
+                coupon: this.getApplicableCoupon({
+                  checkoutPrice: customPriceInDecimal,
+                }),
                 customPriceInDecimal,
                 utmCampaign: this.utmCampaign,
                 utmSource: this.utmSource,

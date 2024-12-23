@@ -153,16 +153,14 @@ import { getNFTBookCartPurchaseLink } from '~/util/api';
 
 import nftMixin from '~/mixins/nft';
 import alertMixin from '~/mixins/alert';
-
-const CHRISTMAS_CAMPAIGN_MIN_SPEND = 9;
-const CHRISTMAS_CAMPAIGN_COUPON = 'XMASREAD';
+import couponMixin from '~/mixins/coupon';
 
 export default {
   name: 'ShoppingCartPage',
   filters: {
     formatNumberWithUSD,
   },
-  mixins: [nftMixin, alertMixin],
+  mixins: [nftMixin, alertMixin, couponMixin],
   data() {
     return {
       isGiftDialogOpen: false,
@@ -250,12 +248,6 @@ export default {
     },
     formattedFiatPrice() {
       return formatNumberWithUSD(this.totalNFTPriceInUSD);
-    },
-    getApplicableCoupon() {
-      if (this.coupon) return this.coupon;
-      return this.totalItemPriceInUSD > CHRISTMAS_CAMPAIGN_MIN_SPEND
-        ? CHRISTMAS_CAMPAIGN_COUPON
-        : '';
     },
   },
   mounted() {
@@ -387,7 +379,10 @@ export default {
             fbClickId: this.fbClickId,
             items: this.shoppingCartBookItems,
             email: this.walletEmail,
-            coupon: this.getApplicableCoupon,
+            coupon: this.getApplicableCoupon({
+              cartCoupon: this.coupon,
+              checkoutPrice: this.totalNFTPriceInUSD,
+            }),
             giftInfo,
           },
           {
