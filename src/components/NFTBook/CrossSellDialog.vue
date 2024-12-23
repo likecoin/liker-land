@@ -66,20 +66,17 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import {
-  NFT_BOOK_PLATFORM_LIKER_LAND,
-  CHRISTMAS_CAMPAIGN_MIN_SPEND,
-  CHRISTMAS_CAMPAIGN_COUPON,
-} from '~/constant';
+import { NFT_BOOK_PLATFORM_LIKER_LAND } from '~/constant';
 
 import { getNFTBookPurchaseLink } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
 
 import nftOrCollectionMixin from '~/mixins/nft-or-collection';
+import couponMixin from '~/mixins/coupon';
 
 export default {
   name: 'NFTBookCrossSellDialog',
-  mixins: [nftOrCollectionMixin],
+  mixins: [nftOrCollectionMixin, couponMixin],
   props: {
     open: {
       type: Boolean,
@@ -143,14 +140,6 @@ export default {
         1
       );
     },
-    getApplicableCoupon(customPriceInDecimal) {
-      if (this.$route.query.coupon) {
-        return this.$route.query.coupon;
-      }
-      return customPriceInDecimal > CHRISTMAS_CAMPAIGN_MIN_SPEND
-        ? CHRISTMAS_CAMPAIGN_COUPON
-        : '';
-    },
     async gotoCheckoutPage({
       link,
       customPriceInDecimal,
@@ -162,7 +151,9 @@ export default {
           {
             gaClientId: this.getGaClientId,
             gaSessionId: this.getGaSessionId,
-            coupon: this.getApplicableCoupon(customPriceInDecimal),
+            coupon: this.getApplicableCoupon({
+              checkoutPrice: customPriceInDecimal,
+            }),
             customPriceInDecimal,
             utmCampaign: this.utmCampaign,
             utmSource: `${this.utmSource}_cross-sell`,

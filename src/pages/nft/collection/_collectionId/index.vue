@@ -103,8 +103,6 @@ import {
   EXTERNAL_HOST,
   NFT_BOOK_PLATFORM_LIKER_LAND,
   USD_TO_HKD_RATIO,
-  CHRISTMAS_CAMPAIGN_MIN_SPEND,
-  CHRISTMAS_CAMPAIGN_COUPON,
 } from '~/constant';
 import { parseNFTMetadataURL } from '~/util/nft';
 
@@ -113,6 +111,7 @@ import clipboardMixin from '~/mixins/clipboard';
 import navigationListenerMixin from '~/mixins/navigation-listener';
 import utmMixin from '~/mixins/utm';
 import alertMixin from '~/mixins/alert';
+import couponMixin from '~/mixins/coupon';
 
 export default {
   name: 'NFTCollectionDetailsPage',
@@ -122,6 +121,7 @@ export default {
     navigationListenerMixin,
     utmMixin,
     alertMixin,
+    couponMixin,
   ],
   layout: 'default',
   data() {
@@ -494,12 +494,6 @@ export default {
       });
       this.uiPromptSuccessAlert(this.$t('cart_item_added'));
     },
-    getApplicableCoupon() {
-      if (this.$route.query.coupon) return this.$route.query.coupon;
-      return this.customPriceInDecimal > CHRISTMAS_CAMPAIGN_MIN_SPEND
-        ? CHRISTMAS_CAMPAIGN_COUPON
-        : '';
-    },
     async handleCollectFromEdition(giftInfo = undefined) {
       const hasStock = this.collection?.stock;
       if (!hasStock) return;
@@ -541,7 +535,9 @@ export default {
                 gaClientId,
                 giftInfo,
                 gaSessionId,
-                coupon: this.getApplicableCoupon(customPriceInDecimal),
+                coupon: this.getApplicableCoupon({
+                  checkoutPrice: customPriceInDecimal,
+                }),
                 customPriceInDecimal,
                 utmCampaign: this.utmCampaign,
                 utmSource: this.utmSource,

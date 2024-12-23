@@ -446,6 +446,7 @@ import crossSellMixin from '~/mixins/cross-sell';
 import navigationListenerMixin from '~/mixins/navigation-listener';
 import utmMixin from '~/mixins/utm';
 import alertMixin from '~/mixins/alert';
+import couponMixin from '~/mixins/coupon';
 
 export default {
   name: 'NFTClassDetailsPage',
@@ -456,6 +457,7 @@ export default {
     navigationListenerMixin,
     utmMixin,
     alertMixin,
+    couponMixin,
   ],
   layout: 'default',
   asyncData({ query }) {
@@ -1385,14 +1387,6 @@ export default {
         this.isAddingToCart = false;
       }
     },
-    getApplicableCoupon(price) {
-      if (this.$route.query.coupon) {
-        return this.$route.query.coupon;
-      }
-      return price > CHRISTMAS_CAMPAIGN_MIN_SPEND
-        ? CHRISTMAS_CAMPAIGN_COUPON
-        : '';
-    },
     async handleCollectFromEdition(selectedValue, giftInfo = undefined) {
       const edition = this.getEdition(selectedValue ?? this.selectedValue);
       const hasStock = edition?.stock;
@@ -1434,7 +1428,9 @@ export default {
                 gaClientId,
                 gaSessionId,
                 giftInfo,
-                coupon: this.getApplicableCoupon(edition.price),
+                coupon: this.getApplicableCoupon({
+                  checkoutPrice: edition.price,
+                }),
                 customPriceInDecimal,
                 utmCampaign: this.utmCampaign,
                 utmSource: this.utmSource,
