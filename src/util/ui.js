@@ -22,6 +22,19 @@ export function ellipsis(value) {
   return value;
 }
 
+export function ellipsisCollectorAddress(value) {
+  if (value) {
+    const len = value.length;
+    const dots = '...';
+    if (!value) return '';
+    if (value.length > 10) {
+      return value.substring(0, 8) + dots;
+    }
+    return value;
+  }
+  return value;
+}
+
 export function ellipsisNFTName(value) {
   if (value) {
     const len = value.length;
