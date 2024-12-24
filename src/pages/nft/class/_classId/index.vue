@@ -206,12 +206,27 @@
                 />
               </div>
               <NFTPageCollectorMessageList
-                class="absolute transform -translate-x-1/2 w-[100vw] left-1/2"
+                class="transform -translate-x-1/2 w-[100vw] left-1/2"
                 :class-id="classId"
                 :creator-avatar="creatorAvatar"
                 :messages="filterCollectorsWithReplies"
                 :duration-multiplier="8"
               />
+              <div
+                :class="[
+                  'relative',
+                  'flex',
+                  'justify-between',
+                  'h-[180px] laptop:h-[204px]',
+                  'z-50',
+                  '-mx-[12px] laptop:-mx-[24px] desktop:-mx-[calc((100vw-962px)/2)]',
+                  '-mt-[180px] laptop:-mt-[204px]',
+                  'pointer-events-none',
+                ]"
+              >
+                <div :class="[overlayClasses, 'bg-gradient-to-r']" />
+                <div :class="[overlayClasses, 'bg-gradient-to-l']" />
+              </div>
             </div>
           </section>
 
@@ -1118,6 +1133,9 @@ export default {
           ? 'nft_edition_view_edition_button_text'
           : 'nft_edition_select_compare_button_text'
       );
+    },
+    overlayClasses() {
+      return ['h-full', 'w-[60px]', 'from-light-gray', 'to-transparent'];
     },
   },
   async mounted() {
