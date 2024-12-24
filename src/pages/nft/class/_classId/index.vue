@@ -208,7 +208,9 @@
               <NFTPageCollectorMessageList
                 class="absolute transform -translate-x-1/2 w-[100vw] left-1/2"
                 :class-id="classId"
+                :creator-avatar="creatorAvatar"
                 :messages="filterCollectorsWithReplies"
+                :duration-multiplier="8"
               />
             </div>
           </section>

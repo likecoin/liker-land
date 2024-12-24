@@ -36,9 +36,12 @@
       >
         {{ userLabel }}
       </div>
-      <Label class="text-like-green" :preset="userLabelSize" align="center">{{
-        userDisplayNameFull | ellipsis
-      }}</Label>
+      <Label
+        class="text-like-green hover:underline"
+        :preset="userLabelSize"
+        align="center"
+        >{{ userDisplayNameFull | ellipsis }}</Label
+      >
     </div>
   </component>
 </template>

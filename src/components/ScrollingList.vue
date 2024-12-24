@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative flex"
+    class="relative flex hover-animate"
     :style="{
       '--animation-duration': durationTime,
     }"
@@ -38,6 +38,11 @@ export default {
 .animate-scroll.delay {
   animation: scroll var(--animation-duration, 60s) infinite linear;
   animation-delay: calc(var(--animation-duration, 60s) * -1);
+}
+
+.hover-animate:hover .animate-scroll,
+.hover-animate:hover .animate-scroll.delay {
+  animation-play-state: paused;
 }
 
 @keyframes scroll {
