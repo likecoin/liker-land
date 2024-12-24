@@ -4,8 +4,10 @@
       <NFTPageCollectorMessageListItem
         v-for="(message, i) in displayMessages"
         :key="`${message.id}-${i}`"
-        class="mx-[16px]"
+        class="mx-[8px]"
         :message="message"
+        :creator-avatar="creatorAvatar"
+        :class-id="classId"
       />
     </template>
   </ScrollingList>
@@ -20,6 +22,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    creatorAvatar: {
+      type: String,
+      default: undefined,
+    },
     classId: {
       type: String,
       default: undefined,
@@ -28,22 +34,34 @@ export default {
       type: Boolean,
       default: false,
     },
+    minMessages: {
+      type: Number,
+      default: 6,
+    },
+    maxMessages: {
+      type: Number,
+      default: 20,
+    },
+    durationMultiplier: {
+      type: Number,
+      default: 3.33,
+    },
   },
   computed: {
     displayMessages() {
       if (this.messages.length < 3) return [];
       let loopedMessages = [...this.messages];
 
-      while (loopedMessages.length < 6) {
+      while (loopedMessages.length < this.minMessages) {
         loopedMessages = loopedMessages.concat(this.messages);
       }
-      if (loopedMessages.length > 20) {
-        loopedMessages = loopedMessages.slice(0, 20);
+      if (loopedMessages.length > this.maxMessages) {
+        loopedMessages = loopedMessages.slice(0, this.maxMessages);
       }
       return loopedMessages;
     },
     durationTime() {
-      return `${this.messages.length * 3.33}s`;
+      return `${this.messages.length * this.durationMultiplier}s`;
     },
   },
   mounted() {
