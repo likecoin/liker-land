@@ -30,18 +30,9 @@
       :is-avatar-outlined="isUserCivicLiker"
     />
     <div>
-      <div
-        v-if="isShowTypeLabel"
-        class="text-[12px] text-medium-gray phone:text-center"
-      >
-        {{ userLabel }}
-      </div>
-      <Label
-        class="text-like-green hover:underline"
-        :preset="userLabelSize"
-        align="center"
-        >{{ userDisplayNameFull | ellipsis }}</Label
-      >
+      <p class="text-like-green hover:underline" align="center">
+        {{ userDisplayNameFull | ellipsisCollectorAddress }}
+      </p>
     </div>
   </component>
 </template>
@@ -50,14 +41,14 @@
 import { mapActions } from 'vuex';
 
 import { createUserInfoMixin } from '~/mixins/user-info';
-import { ellipsis } from '~/util/ui';
+import { ellipsisCollectorAddress } from '~/util/ui';
 
 const userInfoMixin = createUserInfoMixin({ walletKey: 'walletAddress' });
 
 export default {
-  name: 'MessageIdentity',
+  name: 'NFTPageCollectorMessageListIdentity',
   filters: {
-    ellipsis,
+    ellipsisCollectorAddress,
   },
   mixins: [userInfoMixin],
   props: {
@@ -93,29 +84,6 @@ export default {
         params: { id: this.walletAddress },
         query: { tab: this.isCreatedTab ? 'created' : 'collected' },
       });
-    },
-    userLabel() {
-      switch (this.type) {
-        case 'publisher':
-          return this.$t('identity_type_publisher');
-        case 'collector':
-          return this.$t('identity_type_collector');
-        case 'creator':
-        default:
-          return this.$t('identity_type_creator');
-      }
-    },
-    userLabelSize() {
-      switch (this.avatarSize) {
-        case 32:
-          return 'p6';
-        case 48:
-        default:
-          return 'h5';
-      }
-    },
-    isCreatedTab() {
-      return this.type === 'creator' || this.type === 'publisher';
     },
   },
   watch: {
