@@ -8,22 +8,26 @@
         'flex-col',
         'justify-between',
 
-        'p-[16px] laptop:p-[24px]',
+        'p-[12px] laptop:p-[24px]',
         'pb-[12px] laptop:pb-[20px]',
 
         'min-w-[195px] laptop:min-w-[240px]',
         'h-[180px] laptop:h-[204px]',
-
         'cursor-pointer',
+
+        'bg-[url(~/assets/images/nft/books/collector-message-item-background.svg)]',
+        'laptop:bg-[url(~/assets/images/nft/books/collector-message-item-background-lg.svg)]',
+        'bg-cover',
+        'bg-center',
       ]"
       :style="bgStyle"
     >
       <p class="block text-[16px] line-clamp-4">{{ buyerMessage }}</p>
-      <NFTMessageIdentity
+      <NFTPageCollectorMessageListIdentity
         :is-show-type-label="false"
         :wallet-address="message.id"
         :avatar-size="32"
-        :wrapper-classes="`!bg-transparent`"
+        :wrapper-classes="['!bg-transparent', 'phone:!flex-row']"
       />
 
       <Identity
@@ -39,6 +43,7 @@
         :avatar-url="creatorAvatar"
         :avatar-size="20"
       />
+
       <svg
         v-if="authorReplied"
         :class="[
@@ -74,14 +79,8 @@
 </template>
 
 <script>
-import collectorMessageBg from '~/assets/images/nft/books/collector-message-item-background.svg';
-import { ellipsis } from '~/util/ui';
-
 export default {
   name: 'NFTPageCollectorMessageListItem',
-  filters: {
-    ellipsis,
-  },
   props: {
     message: {
       type: Object,
@@ -99,13 +98,6 @@ export default {
   computed: {
     buyerMessage() {
       return this.message?.buyerMessage;
-    },
-    bgStyle() {
-      return {
-        backgroundImage: `url(${collectorMessageBg})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      };
     },
     authorReplied() {
       return this.message?.authorReply;
