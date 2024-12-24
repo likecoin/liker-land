@@ -1,5 +1,5 @@
 <template>
-  <Page class="relative">
+  <Page class="relative overflow-x-hidden">
     <CardV2 v-if="isLoading" class="absolute top-[40%]">{{
       $t('nft_details_page_label_loading')
     }}</CardV2>
@@ -173,6 +173,46 @@
             </ul>
           </section>
 
+          <client-only>
+            <lazy-component
+              class="pointer-events-none"
+              @show.once="fetchTrimmedCollectorsInfo"
+            />
+          </client-only>
+          <section
+            v-if="shouldShowCollectorMessage"
+            :class="[
+              'relative',
+              isHistoryInfoLoading ? 'py-[32px]' : 'pt-[48px] pb-[96px]',
+            ]"
+          >
+            <div
+              v-if="isHistoryInfoLoading"
+              class="flex items-center justify-center w-full"
+            >
+              <ProgressIndicator preset="thin" />
+            </div>
+            <div v-else>
+              <div class="flex items-center justify-between mb-[24px]">
+                <h3
+                  class="text-[28px] font-600 text-center text-like-green"
+                  v-text="$t('nft_collector_message_label')"
+                />
+                <ButtonV2
+                  preset="tertiary"
+                  size="mini"
+                  :text="$t('nft_collector_message_view_all')"
+                  @click="handleClickMoreCollectorMessage"
+                />
+              </div>
+              <NFTPageCollectorMessageList
+                class="absolute transform -translate-x-1/2 w-[100vw] left-1/2"
+                :class-id="classId"
+                :messages="filterCollectorsWithReplies"
+              />
+            </div>
+          </section>
+
           <NFTBookSignatureBanner
             v-if="nftHasSignImage"
             tag="section"
@@ -222,24 +262,6 @@
                 />
               </li>
             </ul>
-          </section>
-
-          <Separator class="mx-auto" />
-
-          <section>
-            <client-only>
-              <lazy-component
-                class="pointer-events-none"
-                @show.once="fetchTrimmedCollectorsInfo"
-              />
-            </client-only>
-            <NFTPageCollectorList
-              :class-id="classId"
-              :owner-count="ownerCount"
-              :items="populatedBuyerWithMessage"
-              :trimmed-count="trimmedCount"
-              @click-show-more-collector="handleClickMoreCollector"
-            />
           </section>
         </template>
 
@@ -421,6 +443,13 @@
       class="w-full"
       @click-button="handleClickBookBannerCTA"
     />
+
+    <NFTPageCollectorListDialog
+      :is-open-dialog="isOpeningCollectorListDialog"
+      :class-id="classId"
+      :items="populatedBuyerWithMessage"
+      @close="isOpeningCollectorListDialog = false"
+    />
   </Page>
 </template>
 
@@ -479,6 +508,10 @@ export default {
 
       customPrice: 0,
       isOpeningCheckoutPage: false,
+
+      isHistoryInfoLoading: false,
+      isFinishedLoadingHistory: false,
+      isOpeningCollectorListDialog: false,
     };
   },
   async fetch({ route, store, redirect, error, localeLocation }) {
@@ -936,6 +969,7 @@ export default {
     shouldShowFollowButton() {
       return Boolean(this.iscnOwner !== this.getAddress);
     },
+    // for WNFT
     populatedCollectorsWithMemo() {
       if (!this.populatedDisplayEvents) {
         return this.populatedCollectors;
@@ -967,6 +1001,7 @@ export default {
       }
       return collectorsWithMemo;
     },
+    // for collector dialog
     populatedBuyerWithMessage() {
       if (!this.populatedDisplayEvents) {
         return this.populatedCollectors;
@@ -1000,6 +1035,62 @@ export default {
         });
       }
       return collectorsWithBuyerMessages;
+    },
+    // for collector message list
+    filterCollectorsWithReplies() {
+      if (!this.populatedDisplayEvents || !this.populatedCollectors) {
+        return [];
+      }
+      const collectorsWithReplies = this.populatedCollectors
+        .map(collector => {
+          const purchaseEvent = this.populatedDisplayEvents.find(
+            event =>
+              event.event === 'purchase' && event.toWallet === collector.id
+          );
+
+          const transferEvent = this.populatedDisplayEvents.find(
+            event =>
+              event.event === 'transfer' && event.toWallet === collector.id
+          );
+
+          let buyerMessage = null;
+          let authorReply = null;
+
+          if (purchaseEvent) {
+            buyerMessage = purchaseEvent.buyerMessage || null;
+          } else if (transferEvent) {
+            buyerMessage = transferEvent.buyerMessage || null;
+            authorReply = transferEvent.memo || null;
+          }
+
+          if (!buyerMessage) {
+            return null;
+          }
+
+          return {
+            ...collector,
+            buyerMessage,
+            authorReply,
+          };
+        })
+        .filter(Boolean);
+
+      if (collectorsWithReplies && collectorsWithReplies.length) {
+        collectorsWithReplies.sort((a, b) => {
+          if (a.buyerMessage && !b.buyerMessage) {
+            return -1;
+          }
+          if (!a.buyerMessage && b.buyerMessage) {
+            return 1;
+          }
+          return b.authorReply - a.authorReply;
+        });
+      }
+
+      return collectorsWithReplies;
+    },
+    shouldShowCollectorMessage() {
+      return this.filterCollectorsWithReplies?.length > 3;
     },
     isShowBanner() {
       return (
@@ -1100,6 +1191,7 @@ export default {
     ]),
     parseNFTMetadataURL,
     async fetchTrimmedCollectorsInfo() {
+      this.isHistoryInfoLoading = true;
       const trimmedCollectors = this.sortedOwnerListId.slice(
         0,
         this.trimmedCount
@@ -1108,6 +1200,8 @@ export default {
         this.lazyGetUserInfoByAddresses(trimmedCollectors),
         this.updateNFTHistory({ getAllUserInfo: false }),
       ]);
+      this.isHistoryInfoLoading = false;
+      this.isFinishedLoadingHistory = true;
     },
     getPurchaseEventParams(edition) {
       const customPriceInDecimal = this.customPrice
@@ -1131,6 +1225,17 @@ export default {
       };
     },
     async handleClickMoreCollector() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'class_details_show_more_collector_clicked',
+        this.classId,
+        1
+      );
+      await this.lazyGetUserInfoByAddresses(this.sortedOwnerListId);
+    },
+    async handleClickMoreCollectorMessage() {
+      this.isOpeningCollectorListDialog = true;
       logTrackerEvent(
         this,
         'NFT',
