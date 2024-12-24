@@ -192,6 +192,7 @@
               >
                 <NFTBookSpecTableLabel :text="$t('identity_type_publisher')" />
                 <NFTBookSpecTableValue
+                  class="group-hover:underline"
                   :text="iscnWorkPublisher"
                   :preset="preset"
                 />
