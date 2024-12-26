@@ -854,7 +854,10 @@ export default {
       }
       this.status = status;
       this.giftInfo = giftInfo;
-      if (query.type === 'nft_book') this.clearBookProductShoppingCart();
+      if (query.type === 'nft_book') {
+        await this.restoreAuthSession();
+        this.clearBookProductShoppingCart();
+      }
     } else if (this.paymentId) {
       if (this.isNFTBook) {
         try {
@@ -1055,7 +1058,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['clearBookProductShoppingCart']),
+    ...mapActions(['restoreAuthSession', 'clearBookProductShoppingCart']),
     isValidAddress,
     parseNFTMetadataURL,
     getIscnData(classId) {
