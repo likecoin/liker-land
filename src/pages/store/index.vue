@@ -983,6 +983,7 @@ export default {
           ...this.$route.query,
           tag: undefined,
           q: value,
+          ll_medium: 'search',
         };
         this.$router.replace({ query });
       },
@@ -1005,6 +1006,7 @@ export default {
             query: {
               ...this.$route.query,
               tag: 'featured',
+              ll_medium: 'tag_featured',
             },
           }),
         },
@@ -1015,6 +1017,7 @@ export default {
             query: {
               ...this.$route.query,
               tag: 'latest',
+              ll_medium: 'tag_latest',
             },
           }),
         },
@@ -1028,6 +1031,7 @@ export default {
                 ...this.$route.query,
                 q: undefined,
                 tag: tag.id,
+                ll_medium: `tag_${tag.id}`,
               },
             }),
           })),
