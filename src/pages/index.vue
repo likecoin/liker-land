@@ -347,9 +347,9 @@
               >
                 <input
                   v-model="searchQuery"
-                  class="grow w-full bg-transparent border-0 text-dark-gray focus-visible:outline-none"
+                  class="w-full bg-transparent border-0 grow text-dark-gray focus-visible:outline-none"
                   type="text"
-                  :placeholder="$t('gutenberg_search_placeholder')"
+                  :placeholder="placeholderText"
                   @keyup.enter="toggleSearch"
                 />
                 <ButtonV2
@@ -816,6 +816,8 @@ import bookstoreMixin from '~/mixins/bookstore';
 import { logTrackerEvent, logRetailEvent } from '~/util/EventLogger';
 import { fisherShuffle } from '~/util/misc';
 
+import { SEARCH_SUGGESTIONS } from '@/constant/index';
+
 const SIGNATURE_BANNER_NAMES = [
   '董啟章',
   '陳健民',
@@ -845,6 +847,8 @@ export default {
       dialogNFTClassList: [],
       isSiteHeaderFixed: false,
       searchQuery: '',
+      placeholderText: '',
+      randomKeywords: [],
     };
   },
   async fetch({ store }) {
@@ -1004,6 +1008,7 @@ export default {
   mounted() {
     logRetailEvent(this, 'home-page-view');
     window.addEventListener('scroll', this.handleScroll);
+    this.placeholderText = this.getRandomPlaceholder();
   },
   beforeDestroy() {
     window.removeEventListener('scroll', this.handleScroll);
@@ -1096,7 +1101,26 @@ export default {
             query: { q: this.searchQuery },
           })
         );
+      } else {
+        const fallbackKeyword = this.randomKeywords?.[0];
+        this.$router.push(
+          this.localeLocation({
+            name: 'store',
+            query: { q: fallbackKeyword },
+          })
+        );
       }
+    },
+    getRandomPlaceholder() {
+      if (this.$i18n.locale === 'zh-Hant') {
+        const shuffled = [...SEARCH_SUGGESTIONS].sort(
+          () => Math.random() - 0.5
+        );
+        const randomTerms = shuffled.slice(0, 3);
+        this.randomKeywords = randomTerms;
+        return randomTerms.join('、');
+      }
+      return this.$t('gutenberg_search_placeholder');
     },
   },
 };
