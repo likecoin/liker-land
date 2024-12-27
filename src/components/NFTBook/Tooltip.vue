@@ -30,7 +30,7 @@
 
 <script>
 export default {
-  name: 'NFTBookTooltips',
+  name: 'NFTBookTooltip',
   props: {
     tooltipText: {
       type: String,

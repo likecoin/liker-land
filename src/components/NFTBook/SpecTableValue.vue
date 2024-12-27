@@ -4,10 +4,10 @@
     <div
       v-if="tooltipText"
       class="relative z-[300] hidden group laptop:block"
-      @mouseenter="hoverTooltips"
+      @mouseenter="hoverTooltip"
     >
       <IconInfo class="w-[16px]" />
-      <NFTBookTooltips
+      <NFTBookTooltip
         class="hidden group-hover:block"
         :tooltip-text="tooltipText"
         :tooltip-title="tooltipTitle"
@@ -17,14 +17,14 @@
     <div
       v-if="tooltipText"
       class="cursor-pointer laptop:hidden"
-      @click="onclickShowTooltips"
+      @click="onclickShowTooltip"
     >
       <IconInfo class="w-[16px]" />
     </div>
     <BottomDialog
-      v-if="showTooltips"
+      v-if="showTooltip"
       :title="tooltipTitle"
-      @close="closeTooltips"
+      @close="closeTooltip"
     >
       <template #content>
         {{ tooltipText }}
@@ -58,7 +58,7 @@ export default {
   },
   data() {
     return {
-      showTooltips: false,
+      showTooltip: false,
     };
   },
   computed: {
@@ -68,15 +68,16 @@ export default {
     },
   },
   methods: {
-    hoverTooltips() {
-      logTrackerEvent(this, 'NFTBook', 'TooltipsHover', '', 1);
+    hoverTooltip() {
+      logTrackerEvent(this, 'NFTBook', 'TooltipHover', '', 1);
     },
-    onclickShowTooltips() {
-      this.showTooltips = true;
-      logTrackerEvent(this, 'NFTBook', 'TooltipsClicked', '', 1);
+    onclickShowTooltip() {
+      this.showTooltip = true;
+      logTrackerEvent(this, 'NFTBook', 'TooltipClicked', '', 1);
+      this.$emit('clickTooltip');
     },
-    closeTooltips() {
-      this.showTooltips = false;
+    closeTooltip() {
+      this.showTooltip = false;
     },
   },
 };
