@@ -355,12 +355,12 @@ const actions = {
 
     try {
       if (getters.walletIsMatchedSession) {
-        // Do not await here to prevent blocking
         await setLoggerUser(this, {
           wallet: getters.loginAddress,
           method: getters.walletMethodType,
           event: 'login',
         });
+        // Do not await here to prevent blocking
         dispatch('walletFetchSessionUserData');
       } else if (getters.getAddress) {
         // Re-login if the wallet address is different from session
@@ -481,8 +481,10 @@ const actions = {
       const { accounts, method } = session;
       await dispatch('initWallet', { accounts, method });
       if (getters.walletIsMatchedSession) {
-        await setLoggerUser(this, { wallet: getters.loginAddress, method });
-        dispatch('walletFetchSessionUserData');
+        await Promise.all([
+          setLoggerUser(this, { wallet: getters.loginAddress, method }),
+          dispatch('walletFetchSessionUserData'),
+        ]);
       }
     }
   },
