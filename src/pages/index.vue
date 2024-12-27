@@ -847,7 +847,6 @@ export default {
       dialogNFTClassList: [],
       isSiteHeaderFixed: false,
       searchQuery: '',
-      placeholderText: '',
     };
   },
   async fetch({ store }) {
@@ -1013,13 +1012,15 @@ export default {
       }
       return [];
     },
+    placeholderText() {
+      return this.randomKeywords?.length
+        ? this.randomKeywords.join('、')
+        : this.$t('gutenberg_search_placeholder');
+    },
   },
   mounted() {
     logRetailEvent(this, 'home-page-view');
     window.addEventListener('scroll', this.handleScroll);
-    this.placeholderText = this.randomKeywords?.length
-      ? this.randomKeywords.join('、')
-      : this.$t('gutenberg_search_placeholder');
   },
   beforeDestroy() {
     window.removeEventListener('scroll', this.handleScroll);
