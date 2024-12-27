@@ -848,7 +848,6 @@ export default {
       isSiteHeaderFixed: false,
       searchQuery: '',
       placeholderText: '',
-      randomKeywords: [],
     };
   },
   async fetch({ store }) {
@@ -1004,11 +1003,23 @@ export default {
         answer,
       }));
     },
+    randomKeywords() {
+      if (this.$i18n.locale === 'zh-Hant') {
+        const shuffled = [...SEARCH_SUGGESTIONS].sort(
+          () => Math.random() - 0.5
+        );
+        const randomTerms = shuffled.slice(0, 3);
+        return randomTerms;
+      }
+      return [];
+    },
   },
   mounted() {
     logRetailEvent(this, 'home-page-view');
     window.addEventListener('scroll', this.handleScroll);
-    this.placeholderText = this.getRandomPlaceholder();
+    this.placeholderText = this.randomKeywords?.length
+      ? this.randomKeywords.join('、')
+      : this.$t('gutenberg_search_placeholder');
   },
   beforeDestroy() {
     window.removeEventListener('scroll', this.handleScroll);
@@ -1110,17 +1121,6 @@ export default {
           })
         );
       }
-    },
-    getRandomPlaceholder() {
-      if (this.$i18n.locale === 'zh-Hant') {
-        const shuffled = [...SEARCH_SUGGESTIONS].sort(
-          () => Math.random() - 0.5
-        );
-        const randomTerms = shuffled.slice(0, 3);
-        this.randomKeywords = randomTerms;
-        return randomTerms.join('、');
-      }
-      return this.$t('gutenberg_search_placeholder');
     },
   },
 };
