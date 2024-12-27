@@ -249,6 +249,7 @@
             <NFTBookSpecTableItemAccessMethod
               :is-downloadable="!nftIsDownloadHidden"
               :preset="preset"
+              @clickTooltip="$emit('clickTooltip')"
             />
           </NFTBookSpecTable>
           <div

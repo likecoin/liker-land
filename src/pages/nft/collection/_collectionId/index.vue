@@ -9,6 +9,7 @@
           :collection-id="collectionId"
           preset="details"
           @click-avatar="handleNFTCardClickAvatar"
+          @clickTooltip="handleNFTCardClickTooltip"
         >
           <template #column-left>
             <ButtonV2
@@ -785,6 +786,15 @@ export default {
         'NFT',
         'nft_collection_details_recommendation_moved_slider',
         this.collection_id,
+        1
+      );
+    },
+    handleNFTCardClickTooltip() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_collection_details_card_tooltip_clicked',
+        this.collectionId,
         1
       );
     },

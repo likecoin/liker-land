@@ -155,6 +155,7 @@
             />
             <NFTBookSpecTableItemAccessMethod
               :is-downloadable="isDownloadable"
+              @clickTooltip="$emit('clickTooltip')"
             />
           </NFTBookSpecTable>
           <div

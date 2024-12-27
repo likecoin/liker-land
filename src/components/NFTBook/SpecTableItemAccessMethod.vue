@@ -8,6 +8,7 @@
       :preset="preset"
       :tooltip-title="tooltipsContent.title"
       :tooltip-text="tooltipsContent.text"
+      @clickTooltip="$emit('clickTooltip')"
     />
   </component>
 </template>
@@ -41,7 +42,7 @@ export default {
               'nft_details_page_label_access_methods_tooltips_title_drm_free'
             ),
             text: this.$t(
-              'nft_details_page_label_access_methods_tooltips_text_drm_free'
+              'nft_details_page_label_access_methods_tooltip_text_drm_free'
             ),
           }
         : {
@@ -49,7 +50,7 @@ export default {
               'nft_details_page_label_access_methods_tooltips_title_drm'
             ),
             text: this.$t(
-              'nft_details_page_label_access_methods_tooltips_text_drm'
+              'nft_details_page_label_access_methods_tooltip_text_drm'
             ),
           };
     },
