@@ -74,12 +74,11 @@ export default {
 
 <style scoped>
 @screen laptop {
-  .animate-scroll {
-    animation: scroll var(--animation-duration, 60s) infinite linear;
-  }
-
+  .animate-scroll,
   .animate-scroll.delay {
     animation: scroll var(--animation-duration, 60s) infinite linear;
+  }
+  .animate-scroll.delay {
     animation-delay: calc(var(--animation-duration, 60s) * -1);
   }
 }
