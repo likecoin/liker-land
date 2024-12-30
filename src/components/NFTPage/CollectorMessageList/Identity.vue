@@ -31,7 +31,7 @@
     />
     <div>
       <p class="text-like-green hover:underline" align="center">
-        {{ userDisplayNameFull | ellipsisCollectorAddress }}
+        {{ formattedUserDisplayNameFull }}
       </p>
     </div>
   </component>
@@ -41,15 +41,12 @@
 import { mapActions } from 'vuex';
 
 import { createUserInfoMixin } from '~/mixins/user-info';
-import { ellipsisCollectorAddress } from '~/util/ui';
+import { ellipsis } from '~/util/ui';
 
 const userInfoMixin = createUserInfoMixin({ walletKey: 'walletAddress' });
 
 export default {
   name: 'NFTPageCollectorMessageListIdentity',
-  filters: {
-    ellipsisCollectorAddress,
-  },
   mixins: [userInfoMixin],
   props: {
     walletAddress: {
@@ -84,6 +81,9 @@ export default {
         params: { id: this.walletAddress },
         query: { tab: this.isCreatedTab ? 'created' : 'collected' },
       });
+    },
+    formattedUserDisplayNameFull() {
+      return ellipsis(this.userDisplayNameFull, 13, 0);
     },
   },
   watch: {
