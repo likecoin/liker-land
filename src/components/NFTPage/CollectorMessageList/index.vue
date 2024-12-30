@@ -61,7 +61,7 @@ export default {
       return loopedMessages;
     },
     durationTime() {
-      return `${this.messages.length * this.durationMultiplier}s`;
+      return `${this.messages.length * this.durationMultiplier}`;
     },
   },
   mounted() {

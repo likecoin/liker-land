@@ -22,7 +22,7 @@
       ]"
       :style="bgStyle"
     >
-      <p class="block text-[16px] line-clamp-4">{{ buyerMessage }}</p>
+      <p class="block text-[16px] line-clamp-4" v-text="buyerMessage" />
       <NFTPageCollectorMessageListIdentity
         :is-show-type-label="false"
         :wallet-address="message.id"
@@ -31,12 +31,12 @@
       />
 
       <Identity
-        v-if="authorReplied"
+        v-if="hasAuthorReplied"
         :class="[
           'absolute bottom-0 right-[6px]',
           '!hidden',
           'transition-all duration-100',
-          authorReplied
+          hasAuthorReplied
             ? 'group-hover:!block group-hover:right-[8px]'
             : 'hidden',
         ]"
@@ -45,10 +45,10 @@
       />
 
       <svg
-        v-if="authorReplied"
+        v-if="hasAuthorReplied"
         :class="[
           'absolute bottom-0 right-[6px]',
-          authorReplied ? 'group-hover:right-[22px]' : '',
+          { 'group-hover:right-[22px]': hasAuthorReplied },
         ]"
         width="20"
         height="20"
@@ -99,7 +99,7 @@ export default {
     buyerMessage() {
       return this.message?.buyerMessage;
     },
-    authorReplied() {
+    hasAuthorReplied() {
       return this.message?.authorReply;
     },
     messagesPageLink() {

@@ -528,7 +528,7 @@ export default {
       isOpeningCheckoutPage: false,
 
       isHistoryInfoLoading: false,
-      isFinishedLoadingHistory: false,
+      hasHistoryInfoLoaded: false,
       isOpeningCollectorListDialog: false,
     };
   },
@@ -1222,7 +1222,7 @@ export default {
         this.updateNFTHistory({ getAllUserInfo: false }),
       ]);
       this.isHistoryInfoLoading = false;
-      this.isFinishedLoadingHistory = true;
+      this.hasHistoryInfoLoaded = true;
     },
     getPurchaseEventParams(edition) {
       const customPriceInDecimal = this.customPrice
