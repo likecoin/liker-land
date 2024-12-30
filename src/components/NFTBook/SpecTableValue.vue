@@ -6,7 +6,7 @@
       class="relative z-[300] hidden group laptop:block"
       @mouseenter="hoverTooltip"
     >
-      <IconInfo class="w-[16px]" />
+      <IconInfo class="w-[16px] h-[16px]" />
       <NFTBookTooltip
         class="hidden group-hover:block"
         :tooltip-text="tooltipText"
@@ -19,7 +19,7 @@
       class="cursor-pointer laptop:hidden"
       @click="onclickShowTooltip"
     >
-      <IconInfo class="w-[16px]" />
+      <IconInfo class="w-[16px] h-[16px]" />
     </div>
     <BottomDialog
       v-if="showTooltip"
