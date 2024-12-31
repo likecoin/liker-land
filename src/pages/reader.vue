@@ -187,21 +187,6 @@ export default {
 
       const duration = formatDuration(Date.now() - this.openTimestamp);
       logTrackerEvent(this, 'Reader', 'ReaderClose', this.classId, duration);
-      this.localstorageLog('Reader', 'ReaderClose', this.classId, duration);
-    },
-    localstorageLog(category, action, label, value) {
-      const logs = JSON.parse(localStorage.getItem('readerLogs') || '[]');
-      if (logs.length >= 20) {
-        logs.shift();
-      }
-      logs.push({
-        category,
-        action,
-        label,
-        value,
-        timestamp: new Date().toISOString(),
-      });
-      localStorage.setItem('readerLogs', JSON.stringify(logs));
     },
   },
 };
