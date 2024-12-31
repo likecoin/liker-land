@@ -13,7 +13,7 @@
             'w-full',
           ]"
         >
-          <nav class="relative flex items-center w-full">
+          <nav class="relative flex items-center min-w-0">
             <!-- Left arrow -->
             <div
               v-if="isTagsContainerOverflowing && !isTagsContainerAtStart"
