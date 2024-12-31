@@ -8,7 +8,7 @@
         :type="progressIndicatorType"
         :value="progressPercent"
       />
-      <span class="text-white text-center">{{ progressLabelText }}</span>
+      <span class="text-center text-white">{{ progressLabelText }}</span>
     </div>
     <iframe
       ref="pdfIframe"
@@ -82,6 +82,19 @@ export default {
           );
           this.fileData = null;
         }
+      }
+      if (event.data.event === 'pdfDownload') {
+        logTrackerEvent(
+          this,
+          'ReaderPdf',
+          'PDFDownloaded',
+          {
+            classId: this.classId,
+            filename: event.data.filename,
+          },
+          1
+        );
+        console.log(`PDF downloaded: ${event.data.filename}`);
       }
     },
     async initRendition() {
