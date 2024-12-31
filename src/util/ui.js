@@ -98,4 +98,13 @@ export function oscillate(min, max, period, time) {
     mag / 2.0
   );
 }
+
+export function formatDuration(milliseconds) {
+  const seconds = Math.floor((milliseconds / 1000) % 60);
+  const minutes = Math.floor((milliseconds / (1000 * 60)) % 60);
+  const hours = Math.floor((milliseconds / (1000 * 60 * 60)) % 24);
+
+  return `${hours}h ${minutes}m ${seconds}s`;
+}
+
 export default ellipsis;

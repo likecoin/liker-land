@@ -33,6 +33,8 @@ import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
 import { parseNFTMetadataURL } from '~/util/nft';
 import { LIKECOIN_API_BASE } from '~/constant';
+import { logTrackerEvent } from '~/util/EventLogger';
+import { formatDuration } from '~/util/ui';
 
 export default {
   name: 'PDFReaderPage',
@@ -41,6 +43,9 @@ export default {
   data() {
     return {
       isLoading: true,
+      openTimestamp: null,
+      hasTracked: false,
+      tabId: null,
     };
   },
   head: {
@@ -114,6 +119,7 @@ export default {
     },
   },
   async mounted() {
+    this.openTimestamp = Date.now();
     try {
       this.isLoading = true;
       if (!this.classId) {
@@ -159,9 +165,44 @@ export default {
     } finally {
       this.isLoading = false;
     }
+    window.addEventListener('beforeunload', this.handleBeforeUnload);
+    window.addEventListener('unload', this.handleBeforeUnload);
+  },
+  beforeDestroy() {
+    window.removeEventListener('beforeunload', this.handleBeforeUnload);
+    window.removeEventListener('unload', this.handleBeforeUnload);
+  },
+  beforeRouteLeave(to, from, next) {
+    this.trackReaderClose();
+    next();
   },
   methods: {
     ...mapActions(['restoreAuthSession']),
+    handleBeforeUnload() {
+      this.trackReaderClose();
+    },
+    trackReaderClose() {
+      if (this.hasTracked || !this.openTimestamp) return;
+      this.hasTracked = true;
+
+      const duration = formatDuration(Date.now() - this.openTimestamp);
+      logTrackerEvent(this, 'Reader', 'ReaderClose', this.classId, duration);
+      this.localstorageLog('Reader', 'ReaderClose', this.classId, duration);
+    },
+    localstorageLog(category, action, label, value) {
+      const logs = JSON.parse(localStorage.getItem('readerLogs') || '[]');
+      if (logs.length >= 20) {
+        logs.shift();
+      }
+      logs.push({
+        category,
+        action,
+        label,
+        value,
+        timestamp: new Date().toISOString(),
+      });
+      localStorage.setItem('readerLogs', JSON.stringify(logs));
+    },
   },
 };
 </script>
