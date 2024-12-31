@@ -38,6 +38,7 @@
             :class-id="classId"
             preset="details"
             @click-avatar="handleNFTCardClickAvatar"
+            @clickTooltip="handleNFTCardClickTooltip"
           >
             <template #column-left>
               <ul
@@ -1792,6 +1793,15 @@ export default {
         this,
         'NFT',
         'nft_class_details_sign_banner_scroll',
+        this.classId,
+        1
+      );
+    },
+    handleNFTCardClickTooltip() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_card_tooltip_clicked',
         this.classId,
         1
       );
