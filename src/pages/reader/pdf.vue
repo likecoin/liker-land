@@ -87,14 +87,10 @@ export default {
         logTrackerEvent(
           this,
           'ReaderPdf',
-          'PDFDownloaded',
-          {
-            classId: this.classId,
-            filename: event.data.filename,
-          },
+          'ReaderDownloadPdf',
+          this.classId,
           1
         );
-        console.log(`PDF downloaded: ${event.data.filename}`);
       }
     },
     async initRendition() {
