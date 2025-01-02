@@ -347,9 +347,9 @@
               >
                 <input
                   v-model="searchQuery"
-                  class="grow w-full bg-transparent border-0 text-dark-gray focus-visible:outline-none"
+                  class="w-full bg-transparent border-0 grow text-dark-gray focus-visible:outline-none"
                   type="text"
-                  :placeholder="$t('gutenberg_search_placeholder')"
+                  :placeholder="placeholderText"
                   @keyup.enter="toggleSearch"
                 />
                 <ButtonV2
@@ -816,6 +816,8 @@ import bookstoreMixin from '~/mixins/bookstore';
 import { logTrackerEvent, logRetailEvent } from '~/util/EventLogger';
 import { fisherShuffle } from '~/util/misc';
 
+import { SEARCH_SUGGESTIONS } from '@/constant/index';
+
 const SIGNATURE_BANNER_NAMES = [
   '董啟章',
   '陳健民',
@@ -1000,6 +1002,21 @@ export default {
         answer,
       }));
     },
+    randomKeywords() {
+      if (this.$i18n.locale === 'zh-Hant') {
+        const shuffled = [...SEARCH_SUGGESTIONS].sort(
+          () => Math.random() - 0.5
+        );
+        const randomTerms = shuffled.slice(0, 3);
+        return randomTerms;
+      }
+      return [];
+    },
+    placeholderText() {
+      return this.randomKeywords?.length
+        ? this.randomKeywords.join('、')
+        : this.$t('gutenberg_search_placeholder');
+    },
   },
   mounted() {
     logRetailEvent(this, 'home-page-view');
@@ -1094,6 +1111,14 @@ export default {
           this.localeLocation({
             name: 'store',
             query: { q: this.searchQuery },
+          })
+        );
+      } else {
+        const fallbackKeyword = this.randomKeywords?.[0];
+        this.$router.push(
+          this.localeLocation({
+            name: 'store',
+            query: { q: fallbackKeyword },
           })
         );
       }
