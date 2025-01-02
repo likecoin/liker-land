@@ -185,7 +185,13 @@ export default {
       this.hasTrackedReaderClose = true;
 
       const duration = Date.now() - this.openTimestamp;
-      logTrackerEvent(this, 'Reader', 'ReaderClose', duration, 1);
+      logTrackerEvent(
+        this,
+        'Reader',
+        'ReaderClose',
+        this.classId,
+        Math.round(duration / 1000)
+      );
     },
   },
 };
