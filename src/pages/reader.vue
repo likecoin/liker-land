@@ -33,14 +33,21 @@ import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
 import { parseNFTMetadataURL } from '~/util/nft';
 import { LIKECOIN_API_BASE } from '~/constant';
+import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   name: 'PDFReaderPage',
   mixins: [nftMixin, walletMixin],
+  beforeRouteLeave(to, from, next) {
+    this.trackReaderClose();
+    next();
+  },
   layout: 'empty',
   data() {
     return {
       isLoading: true,
+      openTimestamp: null,
+      hasTrackedReaderClose: false,
     };
   },
   head: {
@@ -114,6 +121,7 @@ export default {
     },
   },
   async mounted() {
+    this.openTimestamp = Date.now();
     try {
       this.isLoading = true;
       if (!this.classId) {
@@ -159,9 +167,32 @@ export default {
     } finally {
       this.isLoading = false;
     }
+    window.addEventListener('beforeunload', this.handleBeforeUnload);
+    window.addEventListener('unload', this.handleBeforeUnload);
   },
+  beforeDestroy() {
+    window.removeEventListener('beforeunload', this.handleBeforeUnload);
+    window.removeEventListener('unload', this.handleBeforeUnload);
+  },
+
   methods: {
     ...mapActions(['restoreAuthSession']),
+    handleBeforeUnload() {
+      this.trackReaderClose();
+    },
+    trackReaderClose() {
+      if (this.hasTrackedReaderClose || !this.openTimestamp) return;
+      this.hasTrackedReaderClose = true;
+
+      const duration = Date.now() - this.openTimestamp;
+      logTrackerEvent(
+        this,
+        'Reader',
+        'ReaderClose',
+        this.classId,
+        Math.round(duration / 1000)
+      );
+    },
   },
 };
 </script>
