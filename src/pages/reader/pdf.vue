@@ -82,8 +82,7 @@ export default {
           );
           this.fileData = null;
         }
-      }
-      if (event.data.event === 'pdfDownload') {
+      } else if (event.data.event === 'pdfDownload') {
         logTrackerEvent(
           this,
           'ReaderPdf',
