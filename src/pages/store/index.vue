@@ -428,7 +428,7 @@
                   name="sorting"
                   :value="item.value"
                   :checked="item.value === selectedLanguageFilter"
-                  @change="selectedLanguageFilter = item.value"
+                  @change="handleFilterLanguageChange(item.value)"
                 />
               </label>
             </li>
@@ -441,6 +441,7 @@
           <ListingPageOptionList
             v-model="selectedPriceFilter"
             :items="priceFilterList"
+            @input="handleFilterPriceChange"
           />
         </li>
 
@@ -1173,7 +1174,6 @@ export default {
         value,
         1
       );
-      this.selectedPriceFilter = value;
     },
     handleFilterLanguageChange(value) {
       logTrackerEvent(
