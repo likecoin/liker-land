@@ -27,7 +27,12 @@
         :is-show-type-label="false"
         :wallet-address="message.id"
         :avatar-size="32"
-        :wrapper-classes="['!bg-transparent', 'phone:!flex-row']"
+        :wrapper-classes="[
+          '!bg-transparent',
+          'phone:!flex-row',
+          '!pl-[0px]',
+          '!gap-[12px]',
+        ]"
       />
 
       <Identity
