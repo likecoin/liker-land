@@ -375,23 +375,19 @@
       class="w-full laptop:max-w-[1920px] mx-auto mt-[3rem]"
     >
       <div :class="['desktop:flex', 'gap-[16px]', paddingClass]">
-        <div
+        <h2
           :class="[
             bookstoreSectionStickyClass,
+            bookstoreSectionTitleClass,
 
             'self-start',
 
             'mb-[1rem] desktop:mb-0',
 
-            'text-[1.75rem] desktop:text-[2.5rem]',
-            'font-[600]',
-            'font-serif',
-
             'desktop:vertical-lr',
           ]"
-        >
-          {{ $t('index_bookstore_title') }}
-        </div>
+          v-text="$t('index_bookstore_title')"
+        />
 
         <div
           :class="[
@@ -514,11 +510,9 @@
       id="latest"
       :class="['w-full', 'laptop:max-w-[1920px]', 'mx-auto', paddingClass]"
     >
-      <Label
-        preset="h5"
-        class="w-full text-dark-gray text-[24px] desktop:text-[32px]"
-        align="left"
-        :text="$t('index_latest_books_title')"
+      <h2
+        :class="bookstoreSectionTitleClass"
+        v-text="$t('index_latest_books_title')"
       />
 
       <ul
@@ -987,6 +981,13 @@ export default {
     ...mapGetters(['nftGetBookstoreCMSProductsByTagId']),
     isEnglish() {
       return this.$i18n.locale === 'en';
+    },
+    bookstoreSectionTitleClass() {
+      return [
+        'text-[1.75rem] desktop:text-[2.5rem]',
+        'font-[600]',
+        'font-serif',
+      ];
     },
     paddingClass() {
       return 'px-[16px] laptop:px-[32px] desktop:px-[48px]';
