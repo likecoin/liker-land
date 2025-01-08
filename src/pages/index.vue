@@ -370,11 +370,8 @@
       </div>
     </section>
 
-    <section
-      id="featured-books"
-      class="w-full laptop:max-w-[1920px] mx-auto mt-[3rem]"
-    >
-      <div :class="['desktop:flex', 'gap-[16px]', paddingClass]">
+    <section id="featured-books" :class="bookstoreSectionClass">
+      <div :class="['w-full', 'desktop:flex', 'gap-[16px]', paddingClass]">
         <h2
           :class="[
             bookstoreSectionStickyClass,
@@ -444,7 +441,7 @@
       </div>
 
       <Swiper
-        class="relative block desktop:hidden mt-[32px] right-0"
+        class="w-full relative block desktop:hidden mt-[32px] right-0"
         :options="{
           slidesOffsetBefore: 16,
           slidesOffsetAfter: 16,
@@ -473,15 +470,12 @@
         </SwiperSlide>
       </Swiper>
 
-      <div
-        class="flex justify-center item-center pt-[4rem] px-[10px] pb-[5rem]"
-      >
-        <ButtonV2
-          :text="$t('index_bookstore_more_button')"
-          :to="localeLocation({ name: 'store' })"
-          @click.native="handleClickBookstoreMore"
-        />
-      </div>
+      <ButtonV2
+        class="self-center"
+        :text="$t('index_bookstore_more_button')"
+        :to="localeLocation({ name: 'store' })"
+        @click.native="handleClickBookstoreMore"
+      />
 
       <Dialog
         :open="dialogNFTClassList.length > 0"
@@ -506,10 +500,7 @@
       </Dialog>
     </section>
 
-    <section
-      id="latest-books"
-      :class="['w-full', 'laptop:max-w-[1920px]', 'mx-auto', paddingClass]"
-    >
+    <section id="latest-books" :class="[bookstoreSectionClass, paddingClass]">
       <h2
         :class="bookstoreSectionTitleClass"
         v-text="$t('index_latest_books_title')"
@@ -526,7 +517,6 @@
           'desktopLg:grid-cols-5',
           'gap-x-[16px] sm:gap-x-[20px] gap-y-[40px]',
           'items-stretch',
-          'mt-[40px]',
         ]"
       >
         <li v-for="item in latestBookstoreItems" :key="item.id">
@@ -540,15 +530,12 @@
         </li>
       </ul>
 
-      <div
-        class="flex justify-center item-center pt-[4rem] px-[10px] pb-[5rem]"
-      >
-        <ButtonV2
-          :text="$t('index_bookstore_more_button')"
-          :to="localeLocation({ name: 'store', query: { tag: 'latest' } })"
-          @click.native="handleClickLatestMore"
-        />
-      </div>
+      <ButtonV2
+        class="self-center"
+        :text="$t('index_bookstore_more_button')"
+        :to="localeLocation({ name: 'store', query: { tag: 'latest' } })"
+        @click.native="handleClickLatestMore"
+      />
     </section>
 
     <div class="overflow-hidden">
@@ -981,6 +968,18 @@ export default {
     ...mapGetters(['nftGetBookstoreCMSProductsByTagId']),
     isEnglish() {
       return this.$i18n.locale === 'en';
+    },
+    bookstoreSectionClass() {
+      return [
+        'flex',
+        'flex-col',
+        'gap-[40px]',
+        'w-full',
+        'laptop:max-w-[1920px]',
+        'mx-auto',
+        'pt-[3rem]',
+        'pb-[5rem]',
+      ];
     },
     bookstoreSectionTitleClass() {
       return [
