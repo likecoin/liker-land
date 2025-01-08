@@ -473,7 +473,9 @@
       <ButtonV2
         class="self-center"
         :text="$t('index_bookstore_more_button')"
-        :to="localeLocation({ name: 'store' })"
+        :to="
+          localeLocation({ name: 'store', ll_medium: 'index_grid_item_more' })
+        "
         @click.native="handleClickBookstoreMore"
       />
 
@@ -524,7 +526,7 @@
             :item-id="item.classId"
             class-cover-frame-aspect-ratio="aspect-[4/5]"
             :is-link-disabled="item.isMultiple"
-            link-medium="landing-latest"
+            link-medium="index_latest_item"
             @click-cover="handleClickItem($event, item)"
           />
         </li>
@@ -533,7 +535,12 @@
       <ButtonV2
         class="self-center"
         :text="$t('index_bookstore_more_button')"
-        :to="localeLocation({ name: 'store', query: { tag: 'latest' } })"
+        :to="
+          localeLocation({
+            name: 'store',
+            query: { tag: 'latest', ll_medium: 'index_latest_more' },
+          })
+        "
         @click.native="handleClickLatestMore"
       />
     </section>
