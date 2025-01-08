@@ -371,7 +371,7 @@
     </section>
 
     <section
-      id="bookstore"
+      id="featured-books"
       class="w-full laptop:max-w-[1920px] mx-auto mt-[3rem]"
     >
       <div :class="['desktop:flex', 'gap-[16px]', paddingClass]">
@@ -507,7 +507,7 @@
     </section>
 
     <section
-      id="latest"
+      id="latest-books"
       :class="['w-full', 'laptop:max-w-[1920px]', 'mx-auto', paddingClass]"
     >
       <h2
