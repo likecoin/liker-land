@@ -42,9 +42,9 @@ export default {
       type: Number,
       default: 20,
     },
-    durationMultiplier: {
+    scrollSpeed: {
       type: Number,
-      default: 3.33,
+      default: 7.5,
     },
   },
   computed: {
@@ -61,7 +61,7 @@ export default {
       return loopedMessages;
     },
     durationTime() {
-      return `${this.messages.length * this.durationMultiplier}`;
+      return `${this.displayMessages.length * this.scrollSpeed}`;
     },
   },
   mounted() {

@@ -210,7 +210,7 @@
                 :class-id="classId"
                 :creator-avatar="creatorAvatar"
                 :messages="filterCollectorsWithReplies"
-                :duration-multiplier="8"
+                :scroll-speed="7.5"
               />
               <div
                 :class="[
