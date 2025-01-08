@@ -193,7 +193,9 @@
               <ProgressIndicator preset="thin" />
             </div>
             <div v-else>
-              <div class="flex items-center justify-between mb-[24px]">
+              <div
+                class="flex items-center justify-between mb-[24px] px-[16px] laptop:px-0 sm:px-[32px]"
+              >
                 <h3
                   class="text-[28px] font-600 text-center text-like-green"
                   v-text="$t('nft_collector_message_label')"
@@ -1135,7 +1137,14 @@ export default {
       );
     },
     overlayClasses() {
-      return ['h-full', 'w-[60px]', 'from-light-gray', 'to-transparent'];
+      return [
+        'h-full',
+        'w-[60px]',
+        'from-light-gray',
+        'to-transparent',
+        'hidden',
+        'laptop:block',
+      ];
     },
   },
   async mounted() {

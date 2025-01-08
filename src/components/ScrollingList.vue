@@ -43,6 +43,8 @@ export default {
       isDragging: false,
       startX: 0,
       scrollLeft: 0,
+      velocity: 0,
+      animationFrame: null,
     };
   },
   computed: {
@@ -56,17 +58,40 @@ export default {
       const pageX = event.pageX || event.touches[0].pageX;
       this.startX = pageX - this.$refs.sliderContainer.offsetLeft;
       this.scrollLeft = this.$refs.sliderContainer.scrollLeft;
+
+      cancelAnimationFrame(this.animationFrame);
+      this.velocity = 0;
     },
     onDrag(event) {
       if (!this.isDragging) return;
       event.preventDefault();
       const pageX = event.pageX || event.touches[0].pageX;
       const x = pageX - this.$refs.sliderContainer.offsetLeft;
-      const walk = (x - this.startX) * 1.5;
-      this.$refs.sliderContainer.scrollLeft = this.scrollLeft - walk;
+      const delta = x - this.startX;
+      this.$refs.sliderContainer.scrollLeft = this.scrollLeft - delta;
+      this.velocity = delta;
     },
     endDrag() {
+      if (!this.isDragging) return;
       this.isDragging = false;
+      this.startInertiaScroll();
+    },
+    startInertiaScroll() {
+      const friction = 0.95;
+      const step = () => {
+        if (Math.abs(this.velocity) < 0.1) {
+          cancelAnimationFrame(this.animationFrame);
+          return;
+        }
+
+        this.$refs.sliderContainer.scrollLeft -= this.velocity;
+
+        this.velocity *= friction;
+
+        this.animationFrame = requestAnimationFrame(step);
+      };
+
+      step();
     },
   },
 };

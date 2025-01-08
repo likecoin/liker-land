@@ -8,7 +8,7 @@
         'flex-col',
         'justify-between',
 
-        'p-[12px] laptop:p-[24px]',
+        'p-[16px] laptop:p-[24px]',
         'pb-[12px] laptop:pb-[20px]',
 
         'min-w-[195px] laptop:min-w-[240px]',
@@ -20,18 +20,18 @@
         'bg-cover',
         'bg-center',
       ]"
-      :style="bgStyle"
     >
       <p class="block text-[16px] line-clamp-4" v-text="buyerMessage" />
       <NFTPageCollectorMessageListIdentity
         :is-show-type-label="false"
         :wallet-address="message.id"
-        :avatar-size="32"
+        :avatar-size="24"
         :wrapper-classes="[
           '!bg-transparent',
           'phone:!flex-row',
           '!pl-[0px]',
           '!gap-[12px]',
+          '!text-[14px]',
         ]"
       />
 
