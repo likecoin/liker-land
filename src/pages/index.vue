@@ -524,7 +524,16 @@
           'items-stretch',
         ]"
       >
-        <li v-for="item in latestBookstoreItems" :key="item.id">
+        <li
+          v-for="(item, index) in latestBookstoreItems"
+          :key="item.id"
+          :class="{
+            'desktop:hidden desktopLg:block':
+              $options.latestBookstoreItemsLimit - index <= 2,
+            'hidden desktop:block':
+              $options.latestBookstoreItemsLimit - index <= 4,
+          }"
+        >
           <NFTBookItemCardV2
             :item-id="item.classId"
             class-cover-frame-aspect-ratio="aspect-[4/5]"
@@ -878,6 +887,7 @@ function getFeatureIcon(iconName, { isWhite = false } = {}) {
 
 export default {
   name: 'IndexV2',
+  latestBookstoreItemsLimit: 10,
   components: {
     Swiper,
     SwiperSlide,
@@ -1031,7 +1041,7 @@ export default {
     latestBookstoreItems() {
       return this.nftGetBookstoreCMSProductsByTagId('landing-latest').slice(
         0,
-        10
+        this.$options.latestBookstoreItemsLimit
       );
     },
     signatureBannerNames() {
