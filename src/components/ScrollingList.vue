@@ -7,6 +7,7 @@
       'overflow-x-scroll laptop:overflow-x-hidden',
       'hover-animate',
 
+      'px-[16px] laptop:px-0 sm:px-[32px]',
       'select-none',
       'scrollbar-custom',
     ]"
