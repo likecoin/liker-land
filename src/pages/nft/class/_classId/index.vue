@@ -192,7 +192,7 @@
             >
               <ProgressIndicator preset="thin" />
             </div>
-            <div v-else>
+            <template v-else>
               <div
                 class="flex items-center justify-between mb-[24px] px-[16px] laptop:px-0 sm:px-[32px]"
               >
@@ -229,7 +229,7 @@
                 <div :class="[overlayClasses, 'bg-gradient-to-r']" />
                 <div :class="[overlayClasses, 'bg-gradient-to-l']" />
               </div>
-            </div>
+            </template>
           </section>
 
           <NFTBookSignatureBanner

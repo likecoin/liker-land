@@ -30,9 +30,10 @@
       :is-avatar-outlined="isUserCivicLiker"
     />
     <div>
-      <p class="text-like-green hover:underline" align="center">
-        {{ formattedUserDisplayNameFull }}
-      </p>
+      <p
+        class="text-like-green hover:underline"
+        v-text="formattedUserDisplayNameFull"
+      />
     </div>
   </component>
 </template>
