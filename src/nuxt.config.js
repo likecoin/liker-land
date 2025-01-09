@@ -148,6 +148,11 @@ const nuxtConfig = {
         async: true,
       },
       {
+        hid: 'pixel-script-poptin',
+        src: 'https://cdn.popt.in/pixel.js?id=771c46b9e377e',
+        async: true,
+      },
+      {
         hid: 'schema',
         innerHTML: JSON.stringify([
           {
@@ -256,12 +261,14 @@ const nuxtConfig = {
 
           // cloudflare
           'static.cloudflareinsights.com',
+          'cdnjs.cloudflare.com',
 
           'https://unpkg.com/@google/model-viewer@3.1.1/',
           'https://substackapi.com',
           '*.crisp.chat',
           'connect.facebook.net',
           '*.elfsight.com',
+          'cdn.popt.in',
         ],
         'frame-src': [
           'blob:',
