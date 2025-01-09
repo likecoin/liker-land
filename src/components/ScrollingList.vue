@@ -4,7 +4,7 @@
     :class="[
       'relative',
       'flex',
-      'overflow-x-auto laptop:overflow-x-hidden',
+      'overflow-x-scroll laptop:overflow-x-hidden',
       'hover-animate',
 
       'select-none',
@@ -13,15 +13,11 @@
     :style="{
       '--animation-duration': durationTime,
     }"
-    @mousedown="startDrag"
-    @mousemove="onDrag"
-    @mouseup="endDrag"
-    @mouseleave="endDrag"
-    @touchstart="startDrag"
-    @touchmove="onDrag"
-    @touchend="endDrag"
   >
-    <ul class="flex animate-scroll">
+    <ul class="flex laptop:hidden">
+      <slot name="item" />
+    </ul>
+    <ul class="hidden laptop:flex animate-scroll">
       <slot name="item" />
     </ul>
     <ul class="hidden laptop:flex animate-scroll delay">
