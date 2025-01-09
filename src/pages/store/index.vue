@@ -525,7 +525,6 @@ export default {
   name: 'ListingPage',
   mixins: [crispMixin],
   layout: 'default',
-  defaultSorting: SORTING_OPTIONS.DEFAULT,
   defaultPrice: PRICE_OPTIONS.ALL,
   defaultLanguage: LANGUAGE_OPTIONS.ALL,
   async asyncData({
@@ -827,16 +826,21 @@ export default {
 
       return options;
     },
+    defaultSorting() {
+      return this.selectedTagId === 'latest'
+        ? SORTING_OPTIONS.LATEST
+        : SORTING_OPTIONS.DEFAULT;
+    },
     selectedSorting: {
       get() {
-        return this.$route.query.sort || this.$options.defaultSorting;
+        return this.$route.query.sort || this.defaultSorting;
       },
       set(value) {
         const query = {
           ...this.$route.query,
           sort: Object.values(SORTING_OPTIONS).includes(value)
             ? value
-            : this.$options.defaultSorting,
+            : undefined,
         };
 
         this.$router.push({ query });
@@ -1031,6 +1035,10 @@ export default {
               query: {
                 ...this.$route.query,
                 q: undefined,
+                sort: undefined,
+                price: undefined,
+                drm_free: undefined,
+                lang: undefined,
                 tag: tag.id,
                 ll_medium: `tag_${tag.id}`,
               },
@@ -1331,13 +1339,7 @@ export default {
     },
     async handleTagClick(tag) {
       logTrackerEvent(this, 'listing', 'tag_click', tag.id, 1);
-      if (tag.id === 'latest' || tag.id === 'featured') {
-        if (tag.id === 'featured') {
-          this.selectedSorting = SORTING_OPTIONS.DEFAULT;
-        } else {
-          this.selectedSorting = SORTING_OPTIONS.LATEST;
-        }
-      } else {
+      if (tag.id !== 'latest' && tag.id !== 'featured') {
         try {
           await this.lazyFetchBookstoreCMSProductsByTagId(tag.id);
         } catch (error) {

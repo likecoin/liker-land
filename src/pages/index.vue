@@ -370,28 +370,21 @@
       </div>
     </section>
 
-    <section
-      id="bookstore"
-      class="w-full laptop:max-w-[1920px] mx-auto mt-[3rem]"
-    >
-      <div :class="['desktop:flex', 'gap-[16px]', paddingClass]">
-        <div
+    <section id="featured-books" :class="bookstoreSectionClass">
+      <div :class="['w-full', 'desktop:flex', 'gap-[16px]', paddingClass]">
+        <h2
           :class="[
             bookstoreSectionStickyClass,
+            bookstoreSectionTitleClass,
 
             'self-start',
 
             'mb-[1rem] desktop:mb-0',
 
-            'text-[1.75rem] desktop:text-[2.5rem]',
-            'font-[600]',
-            'font-serif',
-
             'desktop:vertical-lr',
           ]"
-        >
-          {{ $t('index_bookstore_title') }}
-        </div>
+          v-text="$t('index_bookstore_title')"
+        />
 
         <div
           :class="[
@@ -402,18 +395,20 @@
             'flex-grow',
           ]"
         >
-          <div v-if="stickyBookstoreItem" class="col-span-2">
+          <div v-if="stickyEditorialBookstoreItem" class="col-span-2">
             <NFTBookItemCardV2
               :class="[bookstoreSectionStickyClass, 'w-full']"
               class-cover-frame-aspect-ratio="min-h-[360px] desktop:min-h-[0] desktop:aspect-[4/5]"
-              :item-id="stickyBookstoreItem.classId"
+              :item-id="stickyEditorialBookstoreItem.classId"
               preset="shelf"
               theme="spencer"
               :cover-resize="300"
-              :is-link-disabled="stickyBookstoreItem.isMultiple"
+              :is-link-disabled="stickyEditorialBookstoreItem.isMultiple"
               :is-lazy-loaded="false"
               link-medium="index_sticky_item"
-              @click-cover="handleClickItem($event, stickyBookstoreItem)"
+              @click-cover="
+                handleClickItem($event, stickyEditorialBookstoreItem)
+              "
             />
           </div>
 
@@ -428,7 +423,10 @@
               'desktop:mt-0',
             ]"
           >
-            <li v-for="item in bookstoreItemsInGrid" :key="item.classId">
+            <li
+              v-for="item in editorialBookstoreItemsInGrid"
+              :key="item.classId"
+            >
               <NFTBookItemCardV2
                 :item-id="item.classId"
                 class-cover-frame-aspect-ratio="min-h-[360px] laptop:min-h-[0] aspect-[4/5]"
@@ -443,7 +441,7 @@
       </div>
 
       <Swiper
-        class="relative block desktop:hidden mt-[32px] right-0"
+        class="w-full relative block desktop:hidden mt-[32px] right-0"
         :options="{
           slidesOffsetBefore: 16,
           slidesOffsetAfter: 16,
@@ -459,7 +457,7 @@
         @sliderMove="handleSwiperBookstoreSwiper"
       >
         <SwiperSlide
-          v-for="item in bookstoreItemsInGrid"
+          v-for="item in editorialBookstoreItemsInGrid"
           :key="item.classId"
           style="width: 220px"
         >
@@ -472,15 +470,17 @@
         </SwiperSlide>
       </Swiper>
 
-      <div
-        class="flex justify-center item-center pt-[4rem] px-[10px] pb-[5rem]"
-      >
-        <ButtonV2
-          :text="$t('index_bookstore_more_button')"
-          :to="localeLocation({ name: 'store' })"
-          @click.native="handleClickBookstoreMore"
-        />
-      </div>
+      <ButtonV2
+        class="self-center"
+        :text="$t('index_bookstore_more_button')"
+        :to="
+          localeLocation({
+            name: 'store',
+            query: { ll_medium: 'index_grid_item_more' },
+          })
+        "
+        @click.native="handleClickBookstoreMore"
+      />
 
       <Dialog
         :open="dialogNFTClassList.length > 0"
@@ -503,6 +503,58 @@
           </li>
         </ul>
       </Dialog>
+    </section>
+
+    <section id="latest-books" :class="[bookstoreSectionClass, paddingClass]">
+      <h2
+        :class="bookstoreSectionTitleClass"
+        v-text="$t('index_latest_books_title')"
+      />
+
+      <ul
+        :class="[
+          'w-full',
+          'grid',
+          'grid-cols-2',
+          'sm:grid-cols-3',
+          'laptop:grid-cols-3',
+          'desktop:grid-cols-4',
+          'desktopLg:grid-cols-5',
+          'gap-x-[16px] sm:gap-x-[20px] gap-y-[40px]',
+          'items-stretch',
+        ]"
+      >
+        <li
+          v-for="(item, index) in latestBookstoreItems"
+          :key="item.id"
+          :class="{
+            'desktop:hidden desktopLg:block':
+              $options.latestBookstoreItemsLimit - index <= 2,
+            'hidden desktop:block':
+              $options.latestBookstoreItemsLimit - index <= 4,
+          }"
+        >
+          <NFTBookItemCardV2
+            :item-id="item.classId"
+            class-cover-frame-aspect-ratio="aspect-[4/5]"
+            :is-link-disabled="item.isMultiple"
+            link-medium="index_latest_item"
+            @click-cover="handleClickItem($event, item)"
+          />
+        </li>
+      </ul>
+
+      <ButtonV2
+        class="self-center"
+        :text="$t('index_bookstore_more_button')"
+        :to="
+          localeLocation({
+            name: 'store',
+            query: { tag: 'latest', ll_medium: 'index_latest_more' },
+          })
+        "
+        @click.native="handleClickLatestMore"
+      />
     </section>
 
     <div class="overflow-hidden">
@@ -809,6 +861,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
 
 import bookstoreMixin from '~/mixins/bookstore';
@@ -836,6 +889,7 @@ function getFeatureIcon(iconName, { isWhite = false } = {}) {
 
 export default {
   name: 'IndexV2',
+  latestBookstoreItemsLimit: 10,
   components: {
     Swiper,
     SwiperSlide,
@@ -851,7 +905,13 @@ export default {
   },
   async fetch({ store }) {
     try {
-      await store.dispatch('fetchBookstoreCMSProductsForLandingPage');
+      await Promise.all([
+        store.dispatch('fetchBookstoreCMSProductsForLandingPage'),
+        store.dispatch(
+          'lazyFetchBookstoreCMSProductsByTagId',
+          'landing-latest'
+        ),
+      ]);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
@@ -862,7 +922,9 @@ export default {
     const description = this.$t('og_description');
 
     const classIds = Array.from(
-      new Set(this.bookstoreItems.map(b => b.classIds || b.classId).flat())
+      new Set(
+        this.editorialBookstoreItems.map(b => b.classIds || b.classId).flat()
+      )
     );
     const links = [];
     classIds.forEach(classId =>
@@ -925,8 +987,28 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['nftGetBookstoreCMSProductsByTagId']),
     isEnglish() {
       return this.$i18n.locale === 'en';
+    },
+    bookstoreSectionClass() {
+      return [
+        'flex',
+        'flex-col',
+        'gap-[40px]',
+        'w-full',
+        'laptop:max-w-[1920px]',
+        'mx-auto',
+        'pt-[3rem]',
+        'pb-[5rem]',
+      ];
+    },
+    bookstoreSectionTitleClass() {
+      return [
+        'text-[1.75rem] desktop:text-[2.5rem]',
+        'font-[600]',
+        'font-serif',
+      ];
     },
     paddingClass() {
       return 'px-[16px] laptop:px-[32px] desktop:px-[48px]';
@@ -945,18 +1027,24 @@ export default {
     bookstoreSectionStickyClass() {
       return 'desktop:sticky desktop:top-[124px]';
     },
-    bookstoreItems() {
+    editorialBookstoreItems() {
       return this.nftBookstoreCMSProductsForLandingPage.filter(
         item =>
           !item.locales ||
           item.locales.some(locale => this.$i18n.locale.includes(locale))
       );
     },
-    stickyBookstoreItem() {
-      return this.bookstoreItems[0];
+    stickyEditorialBookstoreItem() {
+      return this.editorialBookstoreItems[0];
     },
-    bookstoreItemsInGrid() {
-      return this.bookstoreItems.slice(1, 10);
+    editorialBookstoreItemsInGrid() {
+      return this.editorialBookstoreItems.slice(1, 10);
+    },
+    latestBookstoreItems() {
+      return this.nftGetBookstoreCMSProductsByTagId('landing-latest').slice(
+        0,
+        this.$options.latestBookstoreItemsLimit
+      );
     },
     signatureBannerNames() {
       return fisherShuffle([...SIGNATURE_BANNER_NAMES]);
@@ -1074,6 +1162,9 @@ export default {
     },
     handleClickBookstoreMore() {
       logTrackerEvent(this, 'IndexPage', 'IndexClickBookstoreMore', '', 1);
+    },
+    handleClickLatestMore() {
+      logTrackerEvent(this, 'IndexPage', 'IndexClickLatestMore', '', 1);
     },
     handleClickFeatureSupportAuthor() {
       logTrackerEvent(
