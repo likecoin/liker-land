@@ -474,7 +474,10 @@
         class="self-center"
         :text="$t('index_bookstore_more_button')"
         :to="
-          localeLocation({ name: 'store', ll_medium: 'index_grid_item_more' })
+          localeLocation({
+            name: 'store',
+            query: { ll_medium: 'index_grid_item_more' },
+          })
         "
         @click.native="handleClickBookstoreMore"
       />
