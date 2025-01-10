@@ -2,6 +2,7 @@
   <CollapsibleCard
     :title="$t('nft_details_page_activity_list_title')"
     :has-content-padding="false"
+    :default-open="false"
   >
     <template #titleIcon>
       <IconActivity />

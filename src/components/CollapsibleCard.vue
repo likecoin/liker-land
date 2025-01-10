@@ -83,10 +83,14 @@ export default {
       type: Boolean,
       default: true,
     },
+    defaultOpen: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
-      isOpen: true,
+      isOpen: this.defaultOpen,
     };
   },
   computed: {

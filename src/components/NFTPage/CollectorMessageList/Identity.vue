@@ -30,18 +30,10 @@
       :is-avatar-outlined="isUserCivicLiker"
     />
     <div>
-      <div
-        v-if="isShowTypeLabel"
-        class="text-[12px] text-medium-gray phone:text-center"
-      >
-        {{ userLabel }}
-      </div>
-      <Label
+      <p
         class="text-like-green hover:underline"
-        :preset="userLabelSize"
-        align="center"
-        >{{ userDisplayNameFull | ellipsis }}</Label
-      >
+        v-text="formattedUserDisplayNameFull"
+      />
     </div>
   </component>
 </template>
@@ -55,10 +47,7 @@ import { ellipsis } from '~/util/ui';
 const userInfoMixin = createUserInfoMixin({ walletKey: 'walletAddress' });
 
 export default {
-  name: 'MessageIdentity',
-  filters: {
-    ellipsis,
-  },
+  name: 'NFTPageCollectorMessageListIdentity',
   mixins: [userInfoMixin],
   props: {
     walletAddress: {
@@ -94,28 +83,8 @@ export default {
         query: { tab: this.isCreatedTab ? 'created' : 'collected' },
       });
     },
-    userLabel() {
-      switch (this.type) {
-        case 'publisher':
-          return this.$t('identity_type_publisher');
-        case 'collector':
-          return this.$t('identity_type_collector');
-        case 'creator':
-        default:
-          return this.$t('identity_type_creator');
-      }
-    },
-    userLabelSize() {
-      switch (this.avatarSize) {
-        case 32:
-          return 'p6';
-        case 48:
-        default:
-          return 'h5';
-      }
-    },
-    isCreatedTab() {
-      return this.type === 'creator' || this.type === 'publisher';
+    formattedUserDisplayNameFull() {
+      return ellipsis(this.userDisplayNameFull, 13, 0);
     },
   },
   watch: {

@@ -623,6 +623,8 @@
   "nft_collect_modal_subtitle_select_collect_method": "請選擇收藏方法",
   "nft_collect_modal_title_collect": "收藏作品",
   "nft_collect_modal_title_collecting": "正在收藏作品",
+  "nft_collector_message_label": "收藏者的留言",
+  "nft_collector_message_view_all": "顯示全部",
   "nft_collection_content_label": "套裝內容",
   "nft_collection_hint": "此本書收錄在套裝中",
   "nft_collection_label": "組合套裝",

@@ -623,6 +623,8 @@
   "nft_collect_modal_subtitle_select_collect_method": "Select a collect method",
   "nft_collect_modal_title_collect": "Collect NFT",
   "nft_collect_modal_title_collecting": "Collecting NFT",
+  "nft_collector_message_label": "Collector's message",
+  "nft_collector_message_view_all": "View all",
   "nft_collection_content_label": "Content in this collection",
   "nft_collection_hint": "This book is part of a collection",
   "nft_collection_label": "Collection",
