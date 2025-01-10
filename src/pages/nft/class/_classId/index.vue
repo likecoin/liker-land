@@ -1102,7 +1102,7 @@ export default {
           if (!a.buyerMessage && b.buyerMessage) {
             return 1;
           }
-          return b.authorReply - a.authorReply;
+          return 0;
         });
       }
 

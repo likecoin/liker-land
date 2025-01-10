@@ -50,7 +50,7 @@ export default {
   computed: {
     displayMessages() {
       if (this.messages.length < 3) return [];
-      let loopedMessages = [...this.messages];
+      let loopedMessages = this.messages;
 
       while (loopedMessages.length < this.minMessages) {
         loopedMessages = loopedMessages.concat(this.messages);
