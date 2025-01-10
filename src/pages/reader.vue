@@ -46,8 +46,9 @@ export default {
   data() {
     return {
       isLoading: true,
-      openTimestamp: null,
       hasTrackedReaderClose: false,
+      activeTime: 0,
+      lastActiveTimestamp: null,
     };
   },
   head: {
@@ -121,7 +122,7 @@ export default {
     },
   },
   async mounted() {
-    this.openTimestamp = Date.now();
+    this.lastActiveTimestamp = Date.now();
     try {
       this.isLoading = true;
       if (!this.classId) {
@@ -167,31 +168,49 @@ export default {
     } finally {
       this.isLoading = false;
     }
-    window.addEventListener('beforeunload', this.handleBeforeUnload);
-    window.addEventListener('unload', this.handleBeforeUnload);
+    this.addEventListeners();
   },
   beforeDestroy() {
-    window.removeEventListener('beforeunload', this.handleBeforeUnload);
-    window.removeEventListener('unload', this.handleBeforeUnload);
+    this.trackReaderClose();
+    this.removeEventListeners();
   },
 
   methods: {
     ...mapActions(['restoreAuthSession']),
-    handleBeforeUnload() {
-      this.trackReaderClose();
+    addEventListeners() {
+      window.addEventListener('beforeunload', this.trackReaderClose);
+      window.addEventListener('unload', this.trackReaderClose);
+      document.addEventListener('visibilitychange', this.updateActiveTime);
+    },
+    removeEventListeners() {
+      window.removeEventListener('beforeunload', this.trackReaderClose);
+      window.removeEventListener('unload', this.trackReaderClose);
+      document.removeEventListener('visibilitychange', this.updateActiveTime);
     },
     trackReaderClose() {
-      if (this.hasTrackedReaderClose || !this.openTimestamp) return;
+      if (this.hasTrackedReaderClose) return;
       this.hasTrackedReaderClose = true;
 
-      const duration = Date.now() - this.openTimestamp;
+      this.updateActiveTime();
+
+      const durationInSeconds = Math.round(this.activeTime / 1000);
       logTrackerEvent(
         this,
         'Reader',
         'ReaderClose',
         this.classId,
-        Math.round(duration / 1000)
+        durationInSeconds
       );
+    },
+    updateActiveTime() {
+      const now = Date.now();
+      if (document.hidden && this.lastActiveTimestamp) {
+        const addedTime = Math.max(0, now - this.lastActiveTimestamp);
+        this.activeTime += addedTime;
+        this.lastActiveTimestamp = null;
+      } else if (!document.hidden) {
+        this.lastActiveTimestamp = now;
+      }
     },
   },
 };
