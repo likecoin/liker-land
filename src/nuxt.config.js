@@ -313,6 +313,11 @@ const nuxtConfig = {
           "'unsafe-inline'",
           'client.crisp.chat',
           'fonts.googleapis.com',
+
+          // Poptin
+          'fonts.popt.in',
+          'cdn.popt.in',
+          'cdnjs.cloudflare.com',
         ],
         'worker-src': ["'self'", 'blob:'],
         'child-src': ["'self'", 'blob:'],
