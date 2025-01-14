@@ -19,11 +19,9 @@ export default {
       return this.isCollection ? this.collection : this.NFTClassMetadata;
     },
     productName() {
-      const name = this.productMetadata?.name;
-      if (name && name[this.collectionLocale] !== undefined) {
-        return name[this.collectionLocale];
-      }
-      return name;
+      const name = this.NFTName || this.productMetadata?.name;
+      const hasLocalizedName = name?.[this.collectionLocale] !== undefined;
+      return hasLocalizedName ? name[this.collectionLocale] : name;
     },
     productDescription() {
       const description = this.productMetadata?.description;
