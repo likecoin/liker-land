@@ -102,6 +102,12 @@ const nuxtConfig = {
         as: 'script',
       },
       {
+        hid: 'pixel-script-poptin-link',
+        rel: 'preload',
+        href: 'https://cdn.popt.in/pixel.js?id=771c46b9e377e',
+        as: 'script',
+      },
+      {
         rel: 'icon',
         type: 'image/png',
         sizes: '32x32',
@@ -145,6 +151,11 @@ const nuxtConfig = {
       {
         hid: 'stripe-js-script',
         src: 'https://js.stripe.com/v3',
+        async: true,
+      },
+      {
+        hid: 'pixel-script-poptin',
+        src: 'https://cdn.popt.in/pixel.js?id=771c46b9e377e',
         async: true,
       },
       {
@@ -256,12 +267,14 @@ const nuxtConfig = {
 
           // cloudflare
           'static.cloudflareinsights.com',
+          'cdnjs.cloudflare.com',
 
           'https://unpkg.com/@google/model-viewer@3.1.1/',
           'https://substackapi.com',
           '*.crisp.chat',
           'connect.facebook.net',
           '*.elfsight.com',
+          'cdn.popt.in',
         ],
         'frame-src': [
           'blob:',
@@ -306,6 +319,11 @@ const nuxtConfig = {
           "'unsafe-inline'",
           'client.crisp.chat',
           'fonts.googleapis.com',
+
+          // Poptin
+          'fonts.popt.in',
+          'cdn.popt.in',
+          'cdnjs.cloudflare.com',
         ],
         'worker-src': ["'self'", 'blob:'],
         'child-src': ["'self'", 'blob:'],
