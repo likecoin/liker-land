@@ -102,6 +102,12 @@ const nuxtConfig = {
         as: 'script',
       },
       {
+        hid: 'pixel-script-poptin-link',
+        rel: 'preload',
+        href: 'https://cdn.popt.in/pixel.js?id=771c46b9e377e',
+        as: 'script',
+      },
+      {
         rel: 'icon',
         type: 'image/png',
         sizes: '32x32',
