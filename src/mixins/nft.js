@@ -187,6 +187,9 @@ export default {
       }
       return this.iscnWorkAuthor?.name?.trim();
     },
+    iscnWorkAuthorDescription() {
+      return this.iscnWorkAuthor?.description?.trim();
+    },
     iscnWorkPublisher() {
       return this.iscnData?.contentMetadata?.publisher?.trim();
     },
@@ -531,6 +534,12 @@ export default {
     nftIsCustomMessageEnabled() {
       return this.getNFTBookStoreInfoByClassId(this.classId)
         ?.enableCustomMessagePage;
+    },
+    nftTableContent() {
+      return this.getNFTBookStoreInfoByClassId(this.classId)?.tableOfContents;
+    },
+    nftBookBlurb() {
+      return this.getNFTBookStoreInfoByClassId(this.classId)?.blurb;
     },
     userCollectedNFTList() {
       const collectedList = this.collectorMap[this.getAddress];

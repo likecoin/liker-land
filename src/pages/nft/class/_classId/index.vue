@@ -39,6 +39,7 @@
             preset="details"
             @click-avatar="handleNFTCardClickAvatar"
             @clickTooltip="handleNFTCardClickTooltip"
+            @expand="handleBookInfoExpand"
           >
             <template #column-left>
               <ul
@@ -1936,6 +1937,15 @@ export default {
         this,
         'NFT',
         'nft_class_details_card_tooltip_clicked',
+        this.classId,
+        1
+      );
+    },
+    handleBookInfoExpand() {
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_class_details_book_info_expand',
         this.classId,
         1
       );
