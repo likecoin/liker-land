@@ -186,11 +186,6 @@
                 :content="iscnWorkAuthorDescription"
               />
               <NFTBookContentBlock
-                v-if="nftBookBlurb"
-                :title="$t('nft_details_page_label_author_description')"
-                :content="nftBookBlurb"
-              />
-              <NFTBookContentBlock
                 v-if="nftTableContent"
                 :title="$t('nft_details_page_label_table_content')"
                 :content="nftTableContent"

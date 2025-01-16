@@ -538,9 +538,6 @@ export default {
     nftTableContent() {
       return this.getNFTBookStoreInfoByClassId(this.classId)?.tableOfContents;
     },
-    nftBookBlurb() {
-      return this.getNFTBookStoreInfoByClassId(this.classId)?.blurb;
-    },
     userCollectedNFTList() {
       const collectedList = this.collectorMap[this.getAddress];
       return collectedList ? Object.values(collectedList) : [];
