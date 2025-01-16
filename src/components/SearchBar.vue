@@ -39,7 +39,6 @@
         'bg-shade-gray',
         'gap-[12px]',
         'h-full',
-        'group',
         isSearchOpen && 'pl-[16px] pr-[4px]',
         'rounded-[0px] desktop:rounded-[10px]',
         'transition-[width]',
@@ -105,7 +104,7 @@ export default {
     searchButtonProps() {
       if (!this.isSearchOpen) return null;
       switch (this.searchActionState) {
-        case 'typing':
+        case SEARCH_ACTIONS.TYPING:
           return {
             size: 'small',
             preset: 'tertiary',
@@ -114,8 +113,8 @@ export default {
             text: this.$t('listing_page_search'),
             onClick: this.handleSubmit,
           };
-        case 'submitted':
-        case 'idle':
+        case SEARCH_ACTIONS.SUBMITTED:
+        case SEARCH_ACTIONS.IDLE:
           return {
             size: 'tiny',
             preset: 'plain',
