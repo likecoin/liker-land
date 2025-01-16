@@ -172,7 +172,7 @@
             >
               <p
                 :class="[
-                  'blick',
+                  'block',
                   'text-14',
                   'whitespace-pre-line',
                   'text-dark-gray',
@@ -192,7 +192,7 @@
               />
               <div
                 v-if="!isExpanded"
-                class="absolute bottom-0 w-full h-[80px] bg-gradient-to-b from-transparent to-white"
+                class="absolute bottom-0 w-full h-[80px] bg-gradient-to-b from-transparent to-white pointer-events-none"
               />
             </div>
             <div
