@@ -797,7 +797,7 @@ export default {
       });
       schemas.push(bookSchema);
       // disable og product for testnet to avoid pixel auto fetch
-      if (!IS_TESTNET && this.nftEdition?.price) {
+      if (!IS_TESTNET && this.nftEdition) {
         const e = this.nftEdition;
         [
           {
