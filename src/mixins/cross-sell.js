@@ -55,7 +55,7 @@ export default {
       );
     },
     isCrossSellEnabled() {
-      const crossSellInfo = !CROSS_SELL_WHITE_LIST.find(item => {
+      const crossSellInfo = CROSS_SELL_WHITE_LIST.find(item => {
         const id = item?.id || item;
         return id === this.classId || id === this.collectionId;
       });
