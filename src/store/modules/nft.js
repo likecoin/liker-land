@@ -114,6 +114,7 @@ const mutations = {
       mustClaimToView,
       hideDownload,
       enableCustomMessagePage,
+      tableOfContents,
     }
   ) {
     Vue.set(state.nftBookStoreInfoByClassIdMap, classId, {
@@ -122,6 +123,7 @@ const mutations = {
       mustClaimToView,
       hideDownload,
       enableCustomMessagePage,
+      tableOfContents,
     });
   },
   [TYPES.NFT_SET_NFT_COLLECTION_INFO](state, { collectionId, data }) {
@@ -528,6 +530,7 @@ const actions = {
         signedMessageText: bookstoreInfo.signedMessageText,
         enableSignatureImage: bookstoreInfo.enableSignatureImage,
         isHidden: bookstoreInfo.isHidden,
+        tableOfContents: bookstoreInfo.tableOfContents,
       };
       commit(TYPES.NFT_BOOK_STORE_INFO_BY_CLASS_ID_MAP_SET, payload);
     }
@@ -879,6 +882,7 @@ const actions = {
       signedMessageText: data.signedMessageText,
       enableSignatureImage: data.enableSignatureImage,
       isHidden: data.isHidden,
+      tableOfContents: data.tableOfContents,
     };
     commit(TYPES.NFT_BOOK_STORE_INFO_BY_CLASS_ID_MAP_SET, payload);
     return payload;

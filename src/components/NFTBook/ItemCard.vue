@@ -152,10 +152,63 @@
             :class="['text-[24px]', 'font-600', titleStyle]"
             v-text="NFTName"
           />
-          <p :class="['text-14', 'whitespace-pre-line', descriptionStyle]">
+          <p
+            v-if="!isDetailsPreset"
+            :class="['text-14', 'whitespace-pre-line', descriptionStyle]"
+          >
             {{ bookDescriptionTrimmed }}
           </p>
-          <NFTBookSpecTable class="mt-[12px]">
+          <template v-else>
+            <div
+              v-if="isDetailsPreset"
+              :class="[
+                'relative',
+                'h-full',
+                { 'max-h-[240px]': !isExpanded },
+                'overflow-y-hidden',
+                'flex flex-col',
+                'gap-[40px]',
+              ]"
+            >
+              <p
+                :class="[
+                  'block',
+                  'text-14',
+                  'whitespace-pre-line',
+                  'text-dark-gray',
+                ]"
+              >
+                {{ bookDescriptionTrimmed }}
+              </p>
+              <NFTBookContentBlock
+                v-if="iscnWorkAuthorDescription"
+                :title="$t('nft_details_page_label_author_description')"
+                :content="iscnWorkAuthorDescription"
+              />
+              <NFTBookContentBlock
+                v-if="nftTableContent"
+                :title="$t('nft_details_page_label_table_content')"
+                :content="nftTableContent"
+              />
+              <div
+                v-if="!isExpanded"
+                class="absolute bottom-0 w-full h-[80px] bg-gradient-to-b from-transparent to-white pointer-events-none"
+              />
+            </div>
+            <div
+              v-if="!isExpanded"
+              class="group flex items-center justify-start w-auto cursor-pointer gap-[12px] text-[14px]"
+              @click="clickShowMore"
+            >
+              <div
+                class="group-hover:underline"
+                v-text="$t('nft_details_page_label_show_more')"
+              />
+              <IconArrowDown class="mt-[-2px]" />
+            </div>
+          </template>
+
+          <NFTBookSpecTable class="mt-[30px]">
             <li
               v-if="iscnWorkAuthorName"
               class="flex flex-col justify-center min-w-0"
@@ -382,6 +435,7 @@ export default {
   data() {
     return {
       isLoading: false,
+      isExpanded: false,
     };
   },
   computed: {
@@ -515,6 +569,10 @@ export default {
     },
     onClickAvatar() {
       this.$emit('click-avatar', this.iscnOwner);
+    },
+    clickShowMore() {
+      this.$emit('expand');
+      this.isExpanded = true;
     },
   },
 };
