@@ -55,13 +55,16 @@ export default {
       );
     },
     isCrossSellEnabled() {
+      const crossSellInfo = CROSS_SELL_WHITE_LIST.find(item => {
+        const id = item?.id || item;
+        return id === this.classId || id === this.collectionId;
+      });
+      const isCrossSellBlocked = !!crossSellInfo;
+      const probability =
+        crossSellInfo?.probability || CROSS_SELL_PRODUCT_PROBABILITY;
       const shouldAttemptCrossSell = IS_TESTNET
         ? true
-        : Math.random() < CROSS_SELL_PRODUCT_PROBABILITY;
-
-      const isCrossSellBlocked = !CROSS_SELL_WHITE_LIST.find(
-        id => id === this.classId || id === this.collectionId
-      );
+        : Math.random() < probability;
 
       return shouldAttemptCrossSell && !isCrossSellBlocked;
     },

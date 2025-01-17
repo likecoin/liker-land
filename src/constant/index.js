@@ -378,7 +378,11 @@ export const CROSS_SELL_WHITE_LIST = IS_TESTNET
       'likenft14jz77ywl6hmfxlus6qrat36c2y7l5xkxhlzp76tdvk06mw69pjzsy5zu9l',
       'likenft154xhw0qyds5pgvsyc7379lnkyvwqkvv2zvmmh2gn5qrewljeqwys2sju6x',
       'likenft1ekvx3en9l0640kv9fd5n5hvltwyfl443ymyu2cnhmalvjfy0cdcqqa3l6h',
-      'likenft1dpegnjnklnh5g66nn06gz64wv0ec6k04f4v5lx69qlv6xlh493eqdq454j',
+      {
+        id:
+          'likenft1dpegnjnklnh5g66nn06gz64wv0ec6k04f4v5lx69qlv6xlh493eqdq454j',
+        probability: 1,
+      },
     ];
 
 export const AFFILIATION_CHANNEL_LEGACY_STRINGS = {
