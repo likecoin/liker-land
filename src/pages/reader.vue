@@ -36,7 +36,7 @@ import { LIKECOIN_API_BASE } from '~/constant';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
-  name: 'PDFReaderPage',
+  name: 'ReaderPage',
   mixins: [nftMixin, walletMixin],
   beforeRouteLeave(to, from, next) {
     this.trackReaderClose();
@@ -104,7 +104,7 @@ export default {
       if (address) {
         await Promise.all([
           this.fetchUserCollectedCount(),
-          this.updateNFTOwners(),
+          this.lazyFetchNFTOwners(),
         ]);
         if (
           (!this.userCollectedCount && this.isLoginRequired) ||
@@ -138,7 +138,7 @@ export default {
       if (this.getSessionWallet) {
         await Promise.all([
           this.fetchUserCollectedCount(),
-          this.updateNFTOwners(),
+          this.lazyFetchNFTOwners(),
         ]);
         if (
           (!this.userCollectedCount && this.isLoginRequired) ||
