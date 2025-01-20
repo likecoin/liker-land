@@ -1608,7 +1608,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import { CrispMixinFactory } from '~/mixins/crisp';
 import Logo from '~/assets/icons/logo.svg?inline';
 import heroSectionBgImage from '~/assets/images/index/grain.png';
 import staticBookCover from '~/assets/images/index/nft-book-cover.jpg';
@@ -1620,7 +1619,6 @@ import {
   LIKECOIN_NFT_BOOK_INDEX_FEATURED_ITEMS,
 } from '~/constant';
 import { logTrackerEvent } from '~/util/EventLogger';
-import { checkIsMobileClient } from '~/util/client';
 
 export default {
   name: 'IndexPageV2',
@@ -1630,7 +1628,6 @@ export default {
   resizeListener: null,
   heroSectionTimeline: null,
   heroSectionScrollAnimation: null,
-  mixins: [CrispMixinFactory()],
   data() {
     return {
       isDesktop: true,
