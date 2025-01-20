@@ -1004,7 +1004,7 @@
   },
   "shopping_cart_checkout_button_by_card": "Checkout by card",
   "shopping_cart_checkout_button_by_LIKE": "Checkout by LIKE",
-  "shopping_cart_checkoutd": "Checkout",
+  "shopping_cart_checkout": "Checkout",
   "shopping_cart_empty_notice": "Shopping cart is empty",
   "shopping_cart_empty_notice_button": "Browse Bookstore",
   "shopping_cart_error_insufficient_balance": "Insufficient balance, you only have {balance}",
