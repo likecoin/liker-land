@@ -551,7 +551,6 @@ export default {
               .dispatch('lazyFetchBookstoreCMSProductsByTagId', { tagId, t })
               .catch(() => ({ records: [] }))
         ),
-        store.dispatch('fetchBookstoreLatestItems'),
       ];
 
       if (route.query.tag) {
@@ -563,10 +562,7 @@ export default {
             })
             .catch(err => {
               if (err.response?.data === 'TAG_NOT_FOUND') {
-                if (
-                  route.query.tag !== BOOKSTORE_CORE_TAG.LATEST &&
-                  route.query.tag !== BOOKSTORE_CORE_TAG.FEATURED
-                ) {
+                if (route.query.tag !== BOOKSTORE_CORE_TAG.FEATURED) {
                   throw error({
                     statusCode: 404,
                     message: i18n.t('listing_page_tag_not_found'),
@@ -695,7 +691,6 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'nftBookstoreLatestItems',
       'nftGetBookstoreCMSProductsByTagId',
       'nftGetBookstoreCMSProductsByTagIdIsFetching',
       'getNFTBookStorePricesByClassId',
@@ -856,26 +851,18 @@ export default {
       return this.$t('listing_page_header_sort', { sort: this.$t(text) });
     },
 
-    recommendedBookstoreItems() {
-      // Return 100 books for each locale
-      return getCMSTagIdsForRecommendedBookstoreItemsByLocale(this.$i18n.locale)
-        .map(tagId => this.nftGetBookstoreCMSProductsByTagId(tagId))
-        .flat()
-        .map((item, index) => ({ ...item, order: index + 1 }));
-    },
-
     bookstoreItems() {
       switch (this.selectedTagId) {
         case BOOKSTORE_CORE_TAG.FEATURED:
-          // Return recommended books from CMS by default
-          return this.recommendedBookstoreItems;
+          // Return 100 books for each locale
+          return getCMSTagIdsForRecommendedBookstoreItemsByLocale(
+            this.$i18n.locale
+          )
+            .map(tagId => this.nftGetBookstoreCMSProductsByTagId(tagId))
+            .flat()
+            .map((item, index) => ({ ...item, order: index + 1 }));
 
         case BOOKSTORE_CORE_TAG.LATEST:
-          // Return the latest 100 published books & fill up with recommended books from CMS
-          return this.nftBookstoreLatestItems.concat(
-            this.recommendedBookstoreItems
-          );
-
         default:
           // Return books with particular tag from CMS
           return this.nftGetBookstoreCMSProductsByTagId(this.selectedTagId);
@@ -1322,10 +1309,7 @@ export default {
     },
     async handleTagClick(tag) {
       logTrackerEvent(this, 'listing', 'tag_click', tag.id, 1);
-      if (
-        tag.id !== BOOKSTORE_CORE_TAG.FEATURED &&
-        tag.id !== BOOKSTORE_CORE_TAG.LATEST
-      ) {
+      if (tag.id !== BOOKSTORE_CORE_TAG.FEATURED) {
         try {
           await this.lazyFetchBookstoreCMSProductsByTagId({
             tagId: tag.id,
