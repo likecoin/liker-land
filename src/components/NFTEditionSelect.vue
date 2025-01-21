@@ -21,9 +21,7 @@
     </div>
     <div class="flex items-center gap-[12px] w-full mt-[12px]">
       <ButtonV2
-        v-if="
-          !isAllSoldOut && selectedItem.price > 0 && !selectedItem.hasShipping
-        "
+        v-if="!isAllSoldOut && !selectedItem.hasShipping"
         :is-disabled="!selectedItem"
         preset="primary"
         class="w-[58%] h-[56px] laptop:w-[260px]"

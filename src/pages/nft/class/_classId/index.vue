@@ -1495,10 +1495,6 @@ export default {
       const customPriceInDecimal = this.customPrice
         ? this.formatCustomPrice(this.customPrice, edition.price)
         : undefined;
-      if (edition.price === 0 && !this.customPrice) {
-        this.uiPromptErrorAlert(this.$t('cart_item_free_not_supported'));
-        return;
-      }
       this.addBookProductToShoppingCart({
         classId: this.classId,
         priceIndex: edition.index,
@@ -1531,67 +1527,51 @@ export default {
           this.isOpeningCheckoutPage = true;
           const purchaseEventParams = this.getPurchaseEventParams(edition);
           logPurchaseFlowEvent(this, 'add_to_cart', purchaseEventParams);
-          if (edition.price === 0 && !this.customPrice) {
-            logPurchaseFlowEvent(this, 'begin_checkout', purchaseEventParams);
-            this.$router.push(
-              this.localeLocation({
-                name: 'nft-claim',
-                query: {
-                  class_id: this.classId,
-                  type: 'nft_book',
-                  free: true,
-                  price_index: edition.index,
-                  from: this.platform,
-                },
-              })
-            );
-          } else {
-            const customPriceInDecimal = this.customPrice
-              ? this.formatCustomPrice(this.customPrice, edition.price)
-              : undefined;
-            const gaClientId = this.getGaClientId;
-            const gaSessionId = this.getGaSessionId;
-            const link = getNFTBookPurchaseLink({
-              classId: this.classId,
-              priceIndex: edition.index,
-              platform: this.platform,
-            });
-            const { url, paymentId } = await this.$axios.$post(
-              link,
-              {
-                gaClientId,
-                gaSessionId,
-                giftInfo,
-                coupon: this.getApplicableCoupon({
-                  checkoutPrice: edition.price,
-                }),
-                customPriceInDecimal,
-                utmCampaign: this.utmCampaign,
-                utmSource: this.utmSource,
-                utmMedium: this.utmMedium,
-                referrer: this.documentReferrer,
-                gadClickId: this.gadClickId,
-                gadSource: this.gadSource,
-                fbClickId: this.fbClickId,
-                email: this.walletEmail,
+          const customPriceInDecimal = this.customPrice
+            ? this.formatCustomPrice(this.customPrice, edition.price)
+            : undefined;
+          const gaClientId = this.getGaClientId;
+          const gaSessionId = this.getGaSessionId;
+          const link = getNFTBookPurchaseLink({
+            classId: this.classId,
+            priceIndex: edition.index,
+            platform: this.platform,
+          });
+          const { url, paymentId } = await this.$axios.$post(
+            link,
+            {
+              gaClientId,
+              gaSessionId,
+              giftInfo,
+              coupon: this.getApplicableCoupon({
+                checkoutPrice: edition.price,
+              }),
+              customPriceInDecimal,
+              utmCampaign: this.utmCampaign,
+              utmSource: this.utmSource,
+              utmMedium: this.utmMedium,
+              referrer: this.documentReferrer,
+              gadClickId: this.gadClickId,
+              gadSource: this.gadSource,
+              fbClickId: this.fbClickId,
+              email: this.walletEmail,
+            },
+            {
+              headers: {
+                Authorization: this.getAccessToken
+                  ? `Bearer ${this.getAccessToken}`
+                  : undefined,
               },
-              {
-                headers: {
-                  Authorization: this.getAccessToken
-                    ? `Bearer ${this.getAccessToken}`
-                    : undefined,
-                },
-              }
-            );
-            logPurchaseFlowEvent(this, 'begin_checkout', {
-              ...purchaseEventParams,
-              paymentId,
-            });
-            if (url) {
-              window.location.href = url;
-            } else {
-              throw new Error('Failed to get purchase link');
             }
+          );
+          logPurchaseFlowEvent(this, 'begin_checkout', {
+            ...purchaseEventParams,
+            paymentId,
+          });
+          if (url) {
+            window.location.href = url;
+          } else {
+            throw new Error('Failed to get purchase link');
           }
         } catch (error) {
           // eslint-disable-next-line no-console
