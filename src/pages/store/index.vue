@@ -65,12 +65,7 @@
                 >
                   <ButtonV2
                     class="pointer-event-auto"
-                    :preset="
-                      tag.id === selectedTagId ||
-                      (!selectedTagId && tag.id === 'featured')
-                        ? 'secondary'
-                        : 'outline'
-                    "
+                    :preset="tag.id === selectedTagId ? 'secondary' : 'outline'"
                     :text="tag.name"
                     :alt="tag.name"
                     size="mini"
@@ -269,7 +264,7 @@
             ]"
           >
             <li
-              v-if="!searchQuery && !selectedTagId"
+              v-if="shouldShowBooxBanner"
               :class="['row-start-4', 'sm:row-start-3', 'col-span-full']"
             >
               <ListingPageBooxBanner />
@@ -508,6 +503,12 @@ import { parseNFTMetadataURL } from '~/util/nft';
 
 const TAGS_CONTAINER_SCROLL_BY_SIZE = 100;
 
+const BOOKSTORE_CORE_TAG = {
+  FEATURED: 'featured',
+  LATEST: 'latest',
+  FREE: 'free',
+};
+
 function getCMSTagIdsForRecommendedBookstoreItemsByLocale(locale = '') {
   const languages = ['zh', 'en'];
   // Return language matches with locale first
@@ -558,8 +559,8 @@ export default {
             .catch(err => {
               if (err.response?.data === 'TAG_NOT_FOUND') {
                 if (
-                  route.query.tag !== 'latest' &&
-                  route.query.tag !== 'featured'
+                  route.query.tag !== BOOKSTORE_CORE_TAG.LATEST &&
+                  route.query.tag !== BOOKSTORE_CORE_TAG.FEATURED
                 ) {
                   throw error({
                     statusCode: 404,
@@ -791,7 +792,11 @@ export default {
     availableSorting() {
       const options = [];
 
-      if (!['latest', 'free'].includes(this.selectedTagId)) {
+      if (
+        ![BOOKSTORE_CORE_TAG.LATEST, BOOKSTORE_CORE_TAG.FREE].includes(
+          this.selectedTagId
+        )
+      ) {
         options.push({
           text: this.$t('listing_page_header_sort_default'),
           value: SORTING_OPTIONS.DEFAULT,
@@ -805,7 +810,7 @@ export default {
 
       if (
         this.selectedPriceFilter !== PRICE_OPTIONS.FREE &&
-        this.selectedTagId !== 'free'
+        this.selectedTagId !== BOOKSTORE_CORE_TAG.FREE
       ) {
         options.push(
           {
@@ -855,27 +860,21 @@ export default {
     },
 
     bookstoreItems() {
-      if (
-        this.selectedTagId &&
-        this.selectedTagId !== 'latest' &&
-        this.selectedTagId !== 'featured'
-      ) {
-        // Return books with particular tag from CMS
-        return this.nftGetBookstoreCMSProductsByTagId(this.selectedTagId);
-      }
+      switch (this.selectedTagId) {
+        case BOOKSTORE_CORE_TAG.FEATURED:
+          // Return recommended books from CMS by default
+          return this.recommendedBookstoreItems;
 
-      if (this.selectedTagId === 'latest') {
-        // Return the latest 100 published books & fill up with recommended books from CMS
-        return this.nftBookstoreLatestItems
-          .map(item => ({
-            ...item,
-            id: item.classId, // Imitate items from CMS that have id keys
-          }))
-          .concat(this.recommendedBookstoreItems);
-      }
+        case BOOKSTORE_CORE_TAG.LATEST:
+          // Return the latest 100 published books & fill up with recommended books from CMS
+          return this.nftBookstoreLatestItems.concat(
+            this.recommendedBookstoreItems
+          );
 
-      // Return recommended books from CMS by default
-      return this.recommendedBookstoreItems;
+        default:
+          // Return books with particular tag from CMS
+          return this.nftGetBookstoreCMSProductsByTagId(this.selectedTagId);
+      }
     },
     uniqueBookstoreItems() {
       const uniqueIds = new Set();
@@ -996,68 +995,50 @@ export default {
         description: tag.description[lang],
       }));
     },
-    bookstoreTagButtons() {
+    bookstoreTags() {
       return [
         {
-          id: 'featured',
+          id: BOOKSTORE_CORE_TAG.FEATURED,
           name: this.$t('tag_all_featured'),
-          route: this.localeLocation({
-            query: {
-              ...this.$route.query,
-              tag: 'featured',
-              ll_medium: 'tag_featured',
-            },
-          }),
+          isPublic: true,
         },
         {
-          id: 'latest',
+          id: BOOKSTORE_CORE_TAG.LATEST,
           name: this.$t('tag_all_latest'),
+          isPublic: true,
+        },
+        ...this.localizedBookstoreCMSTags,
+      ].map((tag, index) => ({ ...tag, index }));
+    },
+    bookstoreTagButtons() {
+      return this.bookstoreTags
+        .filter(tag => tag.isPublic)
+        .map(tag => ({
+          id: tag.id,
+          name: tag.name,
           route: this.localeLocation({
             query: {
               ...this.$route.query,
-              tag: 'latest',
-              ll_medium: 'tag_latest',
+              q: undefined,
+              sort: undefined,
+              price: undefined,
+              drm_free: undefined,
+              lang: undefined,
+              tag: tag.id,
+              ll_medium: `tag_${tag.id}`,
             },
           }),
-        },
-        ...this.localizedBookstoreCMSTags
-          .filter(tag => tag.isPublic)
-          .map(tag => ({
-            id: tag.id,
-            name: tag.name,
-            route: this.localeLocation({
-              query: {
-                ...this.$route.query,
-                q: undefined,
-                sort: undefined,
-                price: undefined,
-                drm_free: undefined,
-                lang: undefined,
-                tag: tag.id,
-                ll_medium: `tag_${tag.id}`,
-              },
-            }),
-          })),
-      ];
+        }));
     },
 
     selectedTagId() {
-      return this.$route.query.tag || '';
+      return this.$route.query.tag || this.bookstoreTags[0]?.id;
     },
     selectedTag() {
-      return this.localizedBookstoreCMSTags.find(
-        tag => tag.id === this.selectedTagId
-      );
+      return this.bookstoreTags.find(tag => tag.id === this.selectedTagId);
     },
     selectedTagTitle() {
-      switch (this.selectedTagId) {
-        case 'featured':
-          return this.$t('tag_all_featured');
-        case 'latest':
-          return this.$t('tag_all_latest');
-        default:
-          return this.selectedTag?.name;
-      }
+      return this.selectedTag?.name;
     },
     selectedTagDescription() {
       return this.selectedTag?.description;
@@ -1082,6 +1063,9 @@ export default {
         this.isSearching ||
         this.nftGetBookstoreCMSProductsByTagIdIsFetching(this.selectedTagId)
       );
+    },
+    shouldShowBooxBanner() {
+      return !this.searchQuery && this.selectedTag?.index === 0;
     },
   },
   watch: {
@@ -1333,7 +1317,10 @@ export default {
     },
     async handleTagClick(tag) {
       logTrackerEvent(this, 'listing', 'tag_click', tag.id, 1);
-      if (tag.id !== 'latest' && tag.id !== 'featured') {
+      if (
+        tag.id !== BOOKSTORE_CORE_TAG.FEATURED &&
+        tag.id !== BOOKSTORE_CORE_TAG.LATEST
+      ) {
         try {
           await this.lazyFetchBookstoreCMSProductsByTagId(tag.id);
         } catch (error) {
