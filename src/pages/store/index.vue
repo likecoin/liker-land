@@ -506,8 +506,6 @@ import { checkIsForcedInAppPage } from '~/util/client';
 import { logPurchaseFlowEvent, logTrackerEvent } from '~/util/EventLogger';
 import { parseNFTMetadataURL } from '~/util/nft';
 
-import crispMixin from '~/mixins/crisp';
-
 const TAGS_CONTAINER_SCROLL_BY_SIZE = 100;
 
 function getCMSTagIdsForRecommendedBookstoreItemsByLocale(locale = '') {
@@ -523,7 +521,6 @@ function getCMSTagIdsForRecommendedBookstoreItemsByLocale(locale = '') {
 
 export default {
   name: 'ListingPage',
-  mixins: [crispMixin],
   layout: 'default',
   defaultPrice: PRICE_OPTIONS.ALL,
   defaultLanguage: LANGUAGE_OPTIONS.ALL,

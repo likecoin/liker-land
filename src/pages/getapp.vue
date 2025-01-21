@@ -9,14 +9,13 @@
 <script>
 import GetAppPage from '~/components/GetAppPage/GetAppPage';
 
-import { CrispMixinFactory } from '~/mixins/crisp';
 import utmMixin from '~/mixins/utm';
 
 export default {
   components: {
     GetAppPage,
   },
-  mixins: [CrispMixinFactory(), utmMixin],
+  mixins: [utmMixin],
   layout: 'default',
   head() {
     return {
