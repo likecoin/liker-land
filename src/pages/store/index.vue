@@ -791,15 +791,10 @@ export default {
     availableSorting() {
       const options = [];
 
-      if (this.selectedTagId === 'featured' || !this.selectedTagId) {
+      if (!['latest', 'free'].includes(this.selectedTagId)) {
         options.push({
           text: this.$t('listing_page_header_sort_default'),
           value: SORTING_OPTIONS.DEFAULT,
-        });
-      } else if (this.selectedTagId !== 'latest') {
-        options.push({
-          text: this.$t('listing_page_header_sort_recommend'),
-          value: SORTING_OPTIONS.RECOMMEND,
         });
       }
 
@@ -808,7 +803,10 @@ export default {
         value: SORTING_OPTIONS.LATEST,
       });
 
-      if (this.selectedPriceFilter !== PRICE_OPTIONS.FREE) {
+      if (
+        this.selectedPriceFilter !== PRICE_OPTIONS.FREE &&
+        this.selectedTagId !== 'free'
+      ) {
         options.push(
           {
             text: this.$t('listing_page_header_sort_lower_price'),
@@ -824,20 +822,20 @@ export default {
       return options;
     },
     defaultSorting() {
-      return this.selectedTagId === 'latest'
-        ? SORTING_OPTIONS.LATEST
-        : SORTING_OPTIONS.DEFAULT;
+      return this.availableSorting[0].value;
     },
     selectedSorting: {
       get() {
-        return this.$route.query.sort || this.defaultSorting;
+        return (
+          this.availableSorting.find(
+            sort => sort.value === this.$route.query.sort
+          )?.value || this.defaultSorting
+        );
       },
       set(value) {
         const query = {
           ...this.$route.query,
-          sort: Object.values(SORTING_OPTIONS).includes(value)
-            ? value
-            : undefined,
+          sort: this.availableSorting.find(sort => sort.value === value)?.value,
         };
 
         this.$router.push({ query });
@@ -931,7 +929,6 @@ export default {
       items.sort((a, b) => {
         switch (this.selectedSorting) {
           case SORTING_OPTIONS.DEFAULT:
-          case SORTING_OPTIONS.RECOMMEND:
             if (a.order && b.order) {
               return a.order - b.order;
             }
