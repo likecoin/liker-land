@@ -97,7 +97,7 @@ export default {
           this.fbClickId = fbc;
         } else if (this.formattedFbcQs) {
           this.fbClickId = this.formattedFbcQs;
-          this.$cookie.set('_fbc', this.fbClickId, { expires: '90D' });
+          this.$cookie.set('_fbc', this.formattedFbcQs, { expires: '90D' });
         }
       } catch (error) {
         // eslint-disable-next-line no-console
