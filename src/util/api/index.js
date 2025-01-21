@@ -609,8 +609,19 @@ export const fetchBookstoreItemSearchResults = q => {
 export const fetchBookstoreCMSTags = ({ limit = 100 } = {}) =>
   `${EXTERNAL_HOST}/api/bookstore/tags?limit=${limit}`;
 
-export const fetchBookstoreCMSProductsByTagId = (tagId, { limit = 100 } = {}) =>
-  `${EXTERNAL_HOST}/api/bookstore/products?tag=${tagId}&limit=${limit}&t=1718841600`;
+export const fetchBookstoreCMSProductsByTagId = (
+  tagId,
+  { t, limit = 100 } = {}
+) => {
+  const qsPayload = {
+    tag: tagId,
+    limit,
+    t,
+  };
+  return `${EXTERNAL_HOST}/api/bookstore/products?${querystring.stringify(
+    qsPayload
+  )}`;
+};
 
 export const fetchGutenbergCsv = () =>
   `${EXTERNAL_HOST}/csv/gutenberg-audio-books_v3.csv`;

@@ -988,8 +988,11 @@ const actions = {
     }
     await dispatch('fetchLatestAndTrendingWNFTClassIdList');
   },
-  async fetchBookstoreCMSProductsForLandingPage({ dispatch }) {
-    await dispatch('lazyFetchBookstoreCMSProductsByTagId', 'landing');
+  async fetchBookstoreCMSProductsForLandingPage({ dispatch }, { t }) {
+    await dispatch('lazyFetchBookstoreCMSProductsByTagId', {
+      tagId: 'landing',
+      t,
+    });
   },
   async fetchBookstoreLatestItems({ commit, state }) {
     if (state.bookstoreLatestItems.length) return;
@@ -1003,7 +1006,7 @@ const actions = {
       }))
     );
   },
-  async fetchBookstoreCMSProductsByTagId({ commit }, tagId) {
+  async fetchBookstoreCMSProductsByTagId({ commit }, { tagId, t }) {
     try {
       commit(TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID_IS_FETCHING, {
         id: tagId,
@@ -1011,7 +1014,7 @@ const actions = {
       });
 
       const { data } = await this.$api.get(
-        api.fetchBookstoreCMSProductsByTagId(tagId)
+        api.fetchBookstoreCMSProductsByTagId(tagId, { t })
       );
 
       commit(TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID, {
@@ -1030,7 +1033,10 @@ const actions = {
       });
     }
   },
-  async lazyFetchBookstoreCMSProductsByTagId({ dispatch, getters }, tagId) {
+  async lazyFetchBookstoreCMSProductsByTagId(
+    { dispatch, getters },
+    { tagId, t }
+  ) {
     if (
       !tagId ||
       getters.nftGetBookstoreCMSProductsByTagIdHasFetched(tagId) ||
@@ -1039,7 +1045,7 @@ const actions = {
       return;
     }
 
-    await dispatch('fetchBookstoreCMSProductsByTagId', tagId);
+    await dispatch('fetchBookstoreCMSProductsByTagId', { tagId, t });
   },
 };
 
