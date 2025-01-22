@@ -163,8 +163,7 @@ export default {
       }
       return this.$t('gutenberg_search_placeholder');
     },
-    handleInput(event) {
-      this.currentSearchQuery = event.target.value;
+    handleInput() {
       if (!this.currentSearchQuery) {
         this.searchActionState = SEARCH_ACTIONS.IDLE;
       } else {
