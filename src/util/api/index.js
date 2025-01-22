@@ -9,6 +9,7 @@ import {
   LIKECOIN_NFT_API_WALLET,
   NFT_BOOK_PLATFORM_LIKER_LAND,
   BOOKSTORE_LIST_EXCLUDED_WALLET,
+  BOOKSTORE_CMS_CACHE_RESET_TIMESTAMP,
 } from '../../constant';
 import { normalizeLocaleForLikeCo } from '../../locales';
 
@@ -611,7 +612,7 @@ export const fetchBookstoreCMSTags = ({ limit = 100 } = {}) =>
 
 export const fetchBookstoreCMSProductsByTagId = (
   tagId,
-  { t, limit = 100 } = {}
+  { t = BOOKSTORE_CMS_CACHE_RESET_TIMESTAMP, limit = 100 } = {}
 ) => {
   const qsPayload = {
     tag: tagId,
