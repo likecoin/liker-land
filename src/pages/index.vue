@@ -903,14 +903,15 @@ export default {
       searchQuery: '',
     };
   },
-  async fetch({ store }) {
+  async fetch({ store, route }) {
+    const { t } = route.query;
     try {
       await Promise.all([
-        store.dispatch('fetchBookstoreCMSProductsForLandingPage'),
-        store.dispatch(
-          'lazyFetchBookstoreCMSProductsByTagId',
-          'landing-latest'
-        ),
+        store.dispatch('fetchBookstoreCMSProductsForLandingPage', { t }),
+        store.dispatch('lazyFetchBookstoreCMSProductsByTagId', {
+          tagId: 'landing-latest',
+          t,
+        }),
       ]);
     } catch (error) {
       // eslint-disable-next-line no-console

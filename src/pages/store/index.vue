@@ -539,6 +539,8 @@ export default {
       return {};
     }
 
+    const { t } = route.query;
+
     let bookstoreCMSTags = [];
     try {
       const fetches = [
@@ -546,7 +548,7 @@ export default {
         ...getCMSTagIdsForRecommendedBookstoreItemsByLocale(i18n.locale).map(
           tagId =>
             store
-              .dispatch('lazyFetchBookstoreCMSProductsByTagId', tagId)
+              .dispatch('lazyFetchBookstoreCMSProductsByTagId', { tagId, t })
               .catch(() => ({ records: [] }))
         ),
         store.dispatch('fetchBookstoreLatestItems'),
@@ -555,7 +557,10 @@ export default {
       if (route.query.tag) {
         fetches.push(
           store
-            .dispatch('lazyFetchBookstoreCMSProductsByTagId', route.query.tag)
+            .dispatch('lazyFetchBookstoreCMSProductsByTagId', {
+              tagId: route.query.tag,
+              t,
+            })
             .catch(err => {
               if (err.response?.data === 'TAG_NOT_FOUND') {
                 if (
@@ -1322,7 +1327,10 @@ export default {
         tag.id !== BOOKSTORE_CORE_TAG.LATEST
       ) {
         try {
-          await this.lazyFetchBookstoreCMSProductsByTagId(tag.id);
+          await this.lazyFetchBookstoreCMSProductsByTagId({
+            tagId: tag.id,
+            t: this.$route.query.t,
+          });
         } catch (error) {
           // eslint-disable-next-line no-console
           console.error(error);

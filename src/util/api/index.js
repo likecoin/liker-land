@@ -9,6 +9,7 @@ import {
   LIKECOIN_NFT_API_WALLET,
   NFT_BOOK_PLATFORM_LIKER_LAND,
   BOOKSTORE_LIST_EXCLUDED_WALLET,
+  BOOKSTORE_CMS_CACHE_RESET_TIMESTAMP,
 } from '../../constant';
 import { normalizeLocaleForLikeCo } from '../../locales';
 
@@ -609,8 +610,19 @@ export const fetchBookstoreItemSearchResults = q => {
 export const fetchBookstoreCMSTags = ({ limit = 100 } = {}) =>
   `${EXTERNAL_HOST}/api/bookstore/tags?limit=${limit}`;
 
-export const fetchBookstoreCMSProductsByTagId = (tagId, { limit = 100 } = {}) =>
-  `${EXTERNAL_HOST}/api/bookstore/products?tag=${tagId}&limit=${limit}&t=1718841600`;
+export const fetchBookstoreCMSProductsByTagId = (
+  tagId,
+  { t = BOOKSTORE_CMS_CACHE_RESET_TIMESTAMP, limit = 100 } = {}
+) => {
+  const qsPayload = {
+    tag: tagId,
+    limit,
+    t,
+  };
+  return `${EXTERNAL_HOST}/api/bookstore/products?${querystring.stringify(
+    qsPayload
+  )}`;
+};
 
 export const fetchGutenbergCsv = () =>
   `${EXTERNAL_HOST}/csv/gutenberg-audio-books_v3.csv`;
