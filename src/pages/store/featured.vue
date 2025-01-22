@@ -4,7 +4,7 @@ export default {
     redirect(
       localeLocation({
         name: 'store',
-        query: { ...query },
+        query,
       })
     );
   },
