@@ -43,7 +43,7 @@
         {{ iscnWorkAuthorName | ellipsis }}
       </NuxtLink>
       <NuxtLink
-        v-else
+        v-else-if="productOwner"
         :to="
           localeLocation({
             name: 'id',
