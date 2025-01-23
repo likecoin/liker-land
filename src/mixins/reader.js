@@ -12,6 +12,14 @@ export default {
       type: String,
       default: '',
     },
+    nftId: {
+      type: String,
+      default: '',
+    },
+    fileIndex: {
+      type: String,
+      default: '0',
+    },
     fileSrc: {
       type: String,
       default: '',

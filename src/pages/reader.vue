@@ -18,6 +18,8 @@
       <NuxtChild
         v-else-if="canRead"
         :class-id="classId"
+        :nft-id="nftId"
+        :file-index="index"
         :file-src="fileSrc"
         :cors-url="corsUrl"
         :cache-key="cacheKey"
