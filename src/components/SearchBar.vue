@@ -39,7 +39,7 @@
         'bg-shade-gray',
         'gap-[12px]',
         'h-full',
-        isSearchOpen && 'pl-[16px] pr-[4px]',
+        { 'pl-[16px] pr-[4px]': isSearchOpen },
         'rounded-[0px] desktop:rounded-[10px]',
         'transition-[width]',
         'duration-[300]',
