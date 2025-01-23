@@ -612,7 +612,7 @@ export const fetchBookstoreCMSTags = ({ limit = 100 } = {}) =>
 
 export const fetchBookstoreCMSProductsByTagId = (
   tagId,
-  { offset, t = BOOKSTORE_CMS_CACHE_RESET_TIMESTAMP, limit = 100 } = {}
+  { offset, t = BOOKSTORE_CMS_CACHE_RESET_TIMESTAMP, limit = 30 } = {}
 ) => {
   const qsPayload = {
     tag: tagId,
