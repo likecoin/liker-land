@@ -274,7 +274,9 @@ export default {
       this.type !== NFT_TYPE.WRITING_NFT
     ) {
       if (!this.bookstoreListItemForLandingPage?.length) {
-        this.fetchBookstoreCMSProductsForLandingPage();
+        this.fetchBookstoreCMSProductsForLandingPage({
+          t: this.$route.query.t,
+        });
       }
     }
   },
