@@ -815,12 +815,11 @@ export default {
     },
   },
   async mounted() {
-    const { redirect, free, from, state, ...query } = this.$route.query;
+    const { redirect, from, state, ...query } = this.$route.query;
     if (
-      !free &&
-      ((!this.classId && !this.collectionId && !this.cartId) ||
-        !this.token ||
-        !this.paymentId)
+      (!this.classId && !this.collectionId && !this.cartId) ||
+      !this.token ||
+      !this.paymentId
     ) {
       this.$nuxt.error({
         statusCode: 400,
@@ -903,16 +902,9 @@ export default {
           console.error(err);
         }
       }
-    } else {
-      // free purchase?
-      await this.lazyFetchNFTBookInfoByClassId(this.classId);
-      const { prices } = this.getNFTBookStoreInfoByClassId(this.classId);
-      const data = prices[this.priceIndex];
-      const { isPhysicalOnly, autoMemo, isAutoDeliver } = data;
-      this.isPhysicalOnly = isPhysicalOnly;
-      this.isAutoDeliver = isAutoDeliver;
-      this.creatorMessage = parseAutoMemo(autoMemo);
     }
+
+    const free = this.isFreePurchase || !price;
 
     try {
       if (this.cartItems.length) {
