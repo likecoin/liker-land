@@ -38,40 +38,50 @@
         'items-center',
         'bg-shade-gray',
         'gap-[12px]',
-        isSearchOpen && 'pl-[16px] pr-[4px]',
         'h-full',
+        { 'pl-[16px] pr-[4px]': isSearchOpen },
         'rounded-[0px] desktop:rounded-[10px]',
         'transition-[width]',
-        'duration-[5000]',
+        'duration-[300]',
         'ease-in-out',
       ]"
     >
       <IconSearch />
       <input
         ref="searchInput"
+        v-model="currentSearchQuery"
         class="w-full bg-transparent border-0 focus-visible:outline-none"
         type="text"
-        :value="searchQuery"
         :placeholder="placeholderText"
-        @input="debouncedUpdateSearchKeyword"
-        @keyup.enter="handleEnter"
+        @input="handleInput"
+        @keyup.enter="handleSubmit"
       />
       <ButtonV2
-        v-if="isSearchOpen"
-        size="tiny"
-        preset="plain"
-        class="!rounded-[10px]"
-        @click="toggleSearch"
+        v-if="searchButtonProps"
+        :size="searchButtonProps.size"
+        :preset="searchButtonProps.preset"
+        :class="searchButtonProps.class"
+        :content-class="searchButtonProps.contentClass"
+        :text="searchButtonProps.text"
+        @click="searchButtonProps.onClick"
       >
-        <IconClose class="cursor-auto" />
+        <template v-if="searchButtonProps.icon">
+          <component :is="searchButtonProps.icon" class="cursor-auto" />
+        </template>
       </ButtonV2>
     </div>
   </div>
 </template>
 
 <script>
-import debounce from 'lodash.debounce';
 import { SEARCH_SUGGESTIONS } from '@/constant/index';
+import IconClose from '@/components/Icon/Close';
+
+const SEARCH_ACTIONS = {
+  IDLE: 'idle',
+  TYPING: 'typing',
+  SUBMITTED: 'submitted',
+};
 
 export default {
   name: 'SearchBar',
@@ -86,32 +96,62 @@ export default {
       isSearchOpen: false,
       placeholderText: this.$t('gutenberg_search_placeholder'),
       randomKeywords: [],
+      currentSearchQuery: this.searchQuery,
+      searchActionState: SEARCH_ACTIONS.IDLE,
     };
+  },
+  computed: {
+    searchButtonProps() {
+      if (!this.isSearchOpen) return null;
+      switch (this.searchActionState) {
+        case SEARCH_ACTIONS.TYPING:
+          return {
+            size: 'small',
+            preset: 'tertiary',
+            class: '!rounded-[10px] ml-auto',
+            contentClass: 'whitespace-nowrap',
+            text: this.$t('listing_page_search'),
+            onClick: this.handleSubmit,
+          };
+        case SEARCH_ACTIONS.SUBMITTED:
+        case SEARCH_ACTIONS.IDLE:
+          return {
+            size: 'tiny',
+            preset: 'plain',
+            class: '!rounded-[10px]',
+            contentClass: '',
+            icon: IconClose,
+            onClick: this.closeSearch,
+          };
+        default:
+          return null;
+      }
+    },
   },
   mounted() {
     if (this.searchQuery) {
       this.isSearchOpen = true;
+      this.placeholderText = this.getRandomPlaceholder();
+      this.searchActionState = SEARCH_ACTIONS.SUBMITTED;
     }
   },
+
   methods: {
     toggleSearch() {
-      if (this.isSearchOpen) {
-        this.$emit('clear');
-      } else {
-        this.$emit('open');
-        this.placeholderText = this.getRandomPlaceholder();
-        this.$nextTick(() => {
-          this.$refs.searchInput?.focus();
-        });
-      }
       this.isSearchOpen = !this.isSearchOpen;
+      if (this.isSearchOpen) {
+        this.placeholderText = this.getRandomPlaceholder();
+        this.$nextTick(() => this.$refs.searchInput?.focus());
+      }
+      this.searchActionState = SEARCH_ACTIONS.IDLE;
+      this.$emit('open');
     },
-    debouncedUpdateSearchKeyword: debounce(
-      function debouncedUpdateSearchKeyword(event) {
-        this.$emit('input', event.target.value);
-      },
-      200
-    ),
+    closeSearch() {
+      this.isSearchOpen = false;
+      this.currentSearchQuery = '';
+      this.searchActionState = SEARCH_ACTIONS.IDLE;
+      this.$emit('clear');
+    },
     getRandomPlaceholder() {
       if (this.$i18n.locale === 'zh-Hant') {
         const shuffled = [...SEARCH_SUGGESTIONS].sort(
@@ -123,12 +163,22 @@ export default {
       }
       return this.$t('gutenberg_search_placeholder');
     },
-    handleEnter() {
-      if (!this.searchQuery || this.searchQuery.trim() === '') {
-        const fallbackKeyword =
-          this.randomKeywords?.[0] || this.$t('gutenberg_search_placeholder');
-        this.$emit('input', fallbackKeyword);
+    handleInput() {
+      if (!this.currentSearchQuery) {
+        this.searchActionState = SEARCH_ACTIONS.IDLE;
+      } else {
+        this.searchActionState = SEARCH_ACTIONS.TYPING;
       }
+    },
+    handleSubmit() {
+      const trimmedQuery = this.currentSearchQuery?.trim();
+      const query =
+        trimmedQuery ||
+        this.randomKeywords?.[0] ||
+        this.$t('gutenberg_search_placeholder');
+      this.currentSearchQuery = query;
+      this.$emit('input', query);
+      this.searchActionState = SEARCH_ACTIONS.SUBMITTED;
     },
   },
 };
