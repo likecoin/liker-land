@@ -23,7 +23,7 @@ export const CrispMixinFactory = (options = { isBootAtMounted: true }) => ({
         const email = this.walletEmail;
         const wallet = this.loginAddress || this.getAddress;
         const displayName = this.getLikerInfo?.displayName || wallet;
-        if (email && !$crisp.get('user:email')) {
+        if (email) {
           $crisp.push(['set', 'user:email', [email]]);
         }
         if (displayName) {
