@@ -1010,7 +1010,7 @@ const actions = {
     }
     await dispatch('fetchLatestAndTrendingWNFTClassIdList');
   },
-  async fetchBookstoreCMSProductsForLandingPage({ dispatch }, { t }) {
+  async fetchBookstoreCMSProductsForLandingPage({ dispatch }, { t } = {}) {
     await dispatch('lazyFetchBookstoreCMSProductsByTagId', {
       tagId: 'landing',
       t,
