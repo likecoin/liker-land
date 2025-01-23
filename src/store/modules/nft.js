@@ -44,7 +44,9 @@ const state = () => ({
   trendingNFTClassIdList: [],
   bookstoreLatestItems: [],
   bookstoreCMSProductsByTagIdMap: {},
+  bookstoreCMSProductsPaginationOffsetByTagIdMap: {},
   bookstoreCMSProductsByTagIdIsFetchingMap: {},
+  bookstoreCMSProductsByTagIdIsFetchingMoreMap: {},
 });
 
 const mutations = {
@@ -145,14 +147,28 @@ const mutations = {
   [TYPES.NFT_SET_BOOKSTORE_LATEST_ITEMS](state, items) {
     state.bookstoreLatestItems = items;
   },
-  [TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID](state, { id, value = [] }) {
-    Vue.set(state.bookstoreCMSProductsByTagIdMap, id, value);
+  [TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID](
+    state,
+    { id, offset, value = [], isAppend = false }
+  ) {
+    if (isAppend) {
+      state.bookstoreCMSProductsByTagIdMap[id].push(...value);
+    } else {
+      Vue.set(state.bookstoreCMSProductsByTagIdMap, id, value);
+    }
+    Vue.set(state.bookstoreCMSProductsPaginationOffsetByTagIdMap, id, offset);
   },
   [TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID_IS_FETCHING](
     state,
     { id, value = false }
   ) {
     Vue.set(state.bookstoreCMSProductsByTagIdIsFetchingMap, id, value);
+  },
+  [TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID_IS_FETCHING_MORE](
+    state,
+    { id, value = false }
+  ) {
+    Vue.set(state.bookstoreCMSProductsByTagIdIsFetchingMoreMap, id, value);
   },
 };
 
@@ -427,10 +443,16 @@ const getters = {
       ...item,
       order: index + 1,
     })) || [],
+  nftGetBookstoreCMSProductsPaginationOffsetByTagId: state => tagId =>
+    state.bookstoreCMSProductsPaginationOffsetByTagIdMap[tagId],
+  nftGetBookstoreCMSProductsHasMoreByTagId: (_, getters) => tagId =>
+    !!getters.nftGetBookstoreCMSProductsPaginationOffsetByTagId(tagId),
   nftGetBookstoreCMSProductsByTagIdHasFetched: state => tagId =>
     !!state.bookstoreCMSProductsByTagIdMap[tagId],
   nftGetBookstoreCMSProductsByTagIdIsFetching: state => tagId =>
-    state.bookstoreCMSProductsByTagIdIsFetchingMap[tagId],
+    !!state.bookstoreCMSProductsByTagIdIsFetchingMap[tagId],
+  nftGetBookstoreCMSProductsByTagIdIsFetchingMore: state => tagId =>
+    !!state.bookstoreCMSProductsByTagIdIsFetchingMoreMap[tagId],
 };
 
 const actions = {
@@ -1006,20 +1028,34 @@ const actions = {
       }))
     );
   },
-  async fetchBookstoreCMSProductsByTagId({ commit }, { tagId, t }) {
+  async fetchBookstoreCMSProductsByTagId(
+    { commit, getters },
+    { tagId, t, offset }
+  ) {
+    if (
+      !tagId ||
+      getters.nftGetBookstoreCMSProductsByTagIdIsFetching(tagId) ||
+      getters.nftGetBookstoreCMSProductsByTagIdIsFetchingMore(tagId)
+    ) {
+      return;
+    }
+
+    const isFetchingMore = !!offset;
+    const fetchingMutation = isFetchingMore
+      ? TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID_IS_FETCHING_MORE
+      : TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID_IS_FETCHING;
     try {
-      commit(TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID_IS_FETCHING, {
-        id: tagId,
-        value: true,
-      });
+      commit(fetchingMutation, { id: tagId, value: true });
 
       const { data } = await this.$api.get(
-        api.fetchBookstoreCMSProductsByTagId(tagId, { t })
+        api.fetchBookstoreCMSProductsByTagId(tagId, { t, offset })
       );
 
       commit(TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID, {
         id: tagId,
         value: data.records,
+        isAppend: isFetchingMore,
+        offset: data.offset,
       });
 
       if (!data.records?.length) {
@@ -1027,21 +1063,21 @@ const actions = {
         console.warn(`CMS did not return any products for tag: ${tagId}`);
       }
     } finally {
-      commit(TYPES.NFT_SET_BOOKSTORE_CMS_PRODUCTS_BY_TAG_ID_IS_FETCHING, {
-        id: tagId,
-        value: false,
-      });
+      commit(fetchingMutation, { id: tagId, value: false });
     }
+  },
+  async fetchMoreBookstoreCMSProductsByTagId({ dispatch, getters }, { tagId }) {
+    const offset = getters.nftGetBookstoreCMSProductsPaginationOffsetByTagId(
+      tagId
+    );
+    if (!offset) return;
+    await dispatch('fetchBookstoreCMSProductsByTagId', { tagId, offset });
   },
   async lazyFetchBookstoreCMSProductsByTagId(
     { dispatch, getters },
     { tagId, t }
   ) {
-    if (
-      !tagId ||
-      getters.nftGetBookstoreCMSProductsByTagIdHasFetched(tagId) ||
-      getters.nftGetBookstoreCMSProductsByTagIdIsFetching(tagId)
-    ) {
+    if (!tagId || getters.nftGetBookstoreCMSProductsByTagIdHasFetched(tagId)) {
       return;
     }
 

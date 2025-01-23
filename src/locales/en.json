@@ -456,6 +456,7 @@
   "listing_page_cant_find_books_button": "Tell Us",
   "listing_page_cant_find_books_prefilled_message": "I want to find ",
   "listing_page_clear_filter": "Clear filters",
+  "listing_page_fetch_more": "View More",
   "listing_page_filter": "Filter",
   "listing_page_filter_drm_free_label": "DRM-free",
   "listing_page_filter_language_label": "Language: {language}",

@@ -232,7 +232,7 @@
       >
         <!-- Loading -->
         <div
-          v-if="shouldShowProgressIndicator"
+          v-if="shouldShowFullPageFetchingIndicator"
           class="flex justify-center items-center min-h-[70vh]"
         >
           <ProgressIndicator />
@@ -277,6 +277,34 @@
                 :is-link-disabled="item.isMultiple"
                 :link-medium="linkMedium"
                 @click-cover="handleClickItem($event, item)"
+              />
+            </li>
+
+            <li
+              v-if="hasMoreBookstoreItems"
+              :key="bookstoreItemsPaginationOffset"
+              :class="[
+                'flex',
+                'items-center',
+                'justify-center',
+
+                'col-span-2',
+                'sm:col-span-3',
+                'laptop:col-span-3',
+                'desktop:col-span-4',
+                'desktopLg:col-span-5',
+                'full-hd:col-span-6',
+
+                'min-h-[44px]',
+                'mb-[120px]',
+              ]"
+            >
+              <ProgressIndicator v-if="shouldShowFetchingMoreIndicator" />
+              <ButtonV2
+                v-else
+                preset="secondary"
+                :text="$t('listing_page_fetch_more')"
+                @click="fetchMoreBookstoreItems"
               />
             </li>
           </ul>
@@ -551,7 +579,6 @@ export default {
               .dispatch('lazyFetchBookstoreCMSProductsByTagId', { tagId, t })
               .catch(() => ({ records: [] }))
         ),
-        store.dispatch('fetchBookstoreLatestItems'),
       ];
 
       if (route.query.tag) {
@@ -563,10 +590,7 @@ export default {
             })
             .catch(err => {
               if (err.response?.data === 'TAG_NOT_FOUND') {
-                if (
-                  route.query.tag !== BOOKSTORE_CORE_TAG.LATEST &&
-                  route.query.tag !== BOOKSTORE_CORE_TAG.FEATURED
-                ) {
+                if (route.query.tag !== BOOKSTORE_CORE_TAG.FEATURED) {
                   throw error({
                     statusCode: 404,
                     message: i18n.t('listing_page_tag_not_found'),
@@ -695,9 +719,11 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'nftBookstoreLatestItems',
       'nftGetBookstoreCMSProductsByTagId',
       'nftGetBookstoreCMSProductsByTagIdIsFetching',
+      'nftGetBookstoreCMSProductsByTagIdIsFetchingMore',
+      'nftGetBookstoreCMSProductsHasMoreByTagId',
+      'nftGetBookstoreCMSProductsPaginationOffsetByTagId',
       'getNFTBookStorePricesByClassId',
       'getNFTClassMetadataById',
     ]),
@@ -856,29 +882,47 @@ export default {
       return this.$t('listing_page_header_sort', { sort: this.$t(text) });
     },
 
-    recommendedBookstoreItems() {
-      // Return 100 books for each locale
-      return getCMSTagIdsForRecommendedBookstoreItemsByLocale(this.$i18n.locale)
-        .map(tagId => this.nftGetBookstoreCMSProductsByTagId(tagId))
-        .flat()
-        .map((item, index) => ({ ...item, order: index + 1 }));
-    },
-
     bookstoreItems() {
       switch (this.selectedTagId) {
         case BOOKSTORE_CORE_TAG.FEATURED:
-          // Return recommended books from CMS by default
-          return this.recommendedBookstoreItems;
+          // Return 100 books for each locale
+          return getCMSTagIdsForRecommendedBookstoreItemsByLocale(
+            this.$i18n.locale
+          )
+            .map(tagId => this.nftGetBookstoreCMSProductsByTagId(tagId))
+            .flat()
+            .map((item, index) => ({ ...item, order: index + 1 }));
 
         case BOOKSTORE_CORE_TAG.LATEST:
-          // Return the latest 100 published books & fill up with recommended books from CMS
-          return this.nftBookstoreLatestItems.concat(
-            this.recommendedBookstoreItems
-          );
-
         default:
           // Return books with particular tag from CMS
           return this.nftGetBookstoreCMSProductsByTagId(this.selectedTagId);
+      }
+    },
+    bookstoreItemsPaginationOffset() {
+      switch (this.selectedTagId) {
+        case BOOKSTORE_CORE_TAG.FEATURED:
+          // Not implemented yet
+          return false;
+
+        case BOOKSTORE_CORE_TAG.LATEST:
+        default:
+          return this.nftGetBookstoreCMSProductsPaginationOffsetByTagId(
+            this.selectedTagId
+          );
+      }
+    },
+    hasMoreBookstoreItems() {
+      switch (this.selectedTagId) {
+        case BOOKSTORE_CORE_TAG.FEATURED:
+          // Not implemented yet
+          return false;
+
+        case BOOKSTORE_CORE_TAG.LATEST:
+        default:
+          return this.nftGetBookstoreCMSProductsHasMoreByTagId(
+            this.selectedTagId
+          );
       }
     },
     uniqueBookstoreItems() {
@@ -1063,10 +1107,15 @@ export default {
       ];
     },
 
-    shouldShowProgressIndicator() {
+    shouldShowFullPageFetchingIndicator() {
       return (
         this.isSearching ||
         this.nftGetBookstoreCMSProductsByTagIdIsFetching(this.selectedTagId)
+      );
+    },
+    shouldShowFetchingMoreIndicator() {
+      return this.nftGetBookstoreCMSProductsByTagIdIsFetchingMore(
+        this.selectedTagId
       );
     },
     shouldShowBooxBanner() {
@@ -1126,7 +1175,10 @@ export default {
     window.removeEventListener('resize', this.checkTagsContainerOverflow);
   },
   methods: {
-    ...mapActions(['lazyFetchBookstoreCMSProductsByTagId']),
+    ...mapActions([
+      'lazyFetchBookstoreCMSProductsByTagId',
+      'fetchMoreBookstoreCMSProductsByTagId',
+    ]),
 
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1322,10 +1374,7 @@ export default {
     },
     async handleTagClick(tag) {
       logTrackerEvent(this, 'listing', 'tag_click', tag.id, 1);
-      if (
-        tag.id !== BOOKSTORE_CORE_TAG.FEATURED &&
-        tag.id !== BOOKSTORE_CORE_TAG.LATEST
-      ) {
+      if (tag.id !== BOOKSTORE_CORE_TAG.FEATURED) {
         try {
           await this.lazyFetchBookstoreCMSProductsByTagId({
             tagId: tag.id,
@@ -1349,6 +1398,23 @@ export default {
         })),
         isNFTBook: true,
       });
+    },
+    async fetchMoreBookstoreItems() {
+      logTrackerEvent(
+        this,
+        'listing',
+        'listing_fetch_more_items',
+        this.selectedTagId,
+        1
+      );
+      try {
+        await this.fetchMoreBookstoreCMSProductsByTagId({
+          tagId: this.selectedTagId,
+        });
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
     },
     checkTagsContainerOverflow() {
       const container = this.$refs.tagsContainer;

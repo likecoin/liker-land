@@ -612,13 +612,14 @@ export const fetchBookstoreCMSTags = ({ limit = 100 } = {}) =>
 
 export const fetchBookstoreCMSProductsByTagId = (
   tagId,
-  { t = BOOKSTORE_CMS_CACHE_RESET_TIMESTAMP, limit = 100 } = {}
+  { offset, t = BOOKSTORE_CMS_CACHE_RESET_TIMESTAMP, limit = 100 } = {}
 ) => {
   const qsPayload = {
     tag: tagId,
     limit,
     t,
   };
+  if (offset) qsPayload.offset = offset;
   return `${EXTERNAL_HOST}/api/bookstore/products?${querystring.stringify(
     qsPayload
   )}`;
