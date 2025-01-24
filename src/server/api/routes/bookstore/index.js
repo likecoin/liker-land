@@ -55,7 +55,10 @@ router.get('/bookstore/products', async (req, res, next) => {
 
     res.json(result);
   } catch (error) {
-    if (error.response?.status === 422) {
+    if (
+      error.response?.status === 422 &&
+      error.response?.data?.error?.type === 'VIEW_NAME_NOT_FOUND'
+    ) {
       res.status(404).send('TAG_NOT_FOUND');
       return;
     }
