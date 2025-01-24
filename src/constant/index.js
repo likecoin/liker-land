@@ -332,11 +332,6 @@ export const RECOMMENDATION_GROUPS = IS_TESTNET
         'likenft139537w38zlyhk9yvha4n3fz386kaakq6t3p62t23z3xs8f3v257q4k6mw4',
       ],
       [
-        'likenft154xhw0qyds5pgvsyc7379lnkyvwqkvv2zvmmh2gn5qrewljeqwys2sju6x',
-        'likenft17zq3r5t2qwfatle04sz680vl3ka0l8wfeu4n5jv26mnvawnfqs4qd773ny',
-        'likenft1mppyvyuvvft62yc66saee28q8nyl6xuh8vg332d8y9fn6gz9qtssj4trzl',
-      ],
-      [
         'likenft1ekvx3en9l0640kv9fd5n5hvltwyfl443ymyu2cnhmalvjfy0cdcqqa3l6h',
         'likenft16cns9jk7cathhpe62v6jpyxam6z8ltdk3jw08xpmkrz53s3cknxqulpd0u',
       ],
@@ -381,6 +376,16 @@ export const CROSS_SELL_WHITE_LIST = IS_TESTNET
       {
         id:
           'likenft1dpegnjnklnh5g66nn06gz64wv0ec6k04f4v5lx69qlv6xlh493eqdq454j',
+        probability: 1,
+      },
+      {
+        id:
+          'likenft17zq3r5t2qwfatle04sz680vl3ka0l8wfeu4n5jv26mnvawnfqs4qd773ny',
+        probability: 1,
+      },
+      {
+        id:
+          'likenft154xhw0qyds5pgvsyc7379lnkyvwqkvv2zvmmh2gn5qrewljeqwys2sju6x',
         probability: 1,
       },
     ];
