@@ -271,7 +271,7 @@ export function formatNFTEvent(event) {
 
 const queryAllDataFromChain = async (axios, api, field, input = {}) => {
   let data;
-  let nextKey;
+  let nextKey = input.key;
   let count;
   const result = [];
   do {
@@ -314,12 +314,14 @@ export function formatNFTClassInfo(classData) {
 
 export const fetchAllNFTClassFromChain = async (
   axios,
-  { iscnOwner, nftOwner, nocache = false }
+  { iscnOwner, nftOwner, nocache = false, reverse = false, key }
 ) => {
   const params = {
     iscnOwner,
     nftOwner,
     nocache,
+    reverse,
+    key,
   };
   const classes = await queryAllDataFromChain(
     axios,

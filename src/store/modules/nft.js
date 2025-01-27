@@ -767,18 +767,23 @@ const actions = {
     return owners;
   },
   async fetchCreatedNFTClassesByAddress({ commit, dispatch }, address) {
-    const promise = fetchAllNFTClassFromChain(this.$api, {
-      iscnOwner: address,
-    });
+    // fetch first page only
+    let promise = this.$api.$get(
+      api.getNFTClassesPartial({
+        nftOwner: address,
+        reverse: true,
+      })
+    );
     commit(TYPES.NFT_SET_USER_CREATED_CLASSES_MAP, {
       address,
       classesOrPromise: promise,
     });
-    const classes = await promise;
-    const formatted = classes.map(formatNFTClassInfo);
+
+    const res = await promise;
+    let { classes } = res;
     commit(TYPES.NFT_SET_USER_CREATED_CLASSES_MAP, {
       address,
-      classesOrPromise: formatted,
+      classesOrPromise: classes.map(formatNFTClassInfo),
     });
 
     classes.forEach(c => {
@@ -787,24 +792,50 @@ const actions = {
         classData: c,
       });
     });
+
+    if (res.pagination.next_key) {
+      // fetch all pages
+      promise = fetchAllNFTClassFromChain(this.$api, {
+        iscnOwner: address,
+        key: res.pagination.next_key,
+        reverse: true,
+      });
+      classes = await promise;
+      commit(TYPES.NFT_SET_USER_CREATED_CLASSES_MAP, {
+        address,
+        classesOrPromise: classes.map(formatNFTClassInfo),
+      });
+
+      classes.forEach(c => {
+        dispatch('parseAndStoreNFTClassMetadata', {
+          classId: c.id,
+          classData: c,
+        });
+      });
+    }
   },
   async fetchCollectedNFTClassesByAddress(
     { commit, dispatch },
     { address, nocache = false }
   ) {
-    const promise = fetchAllNFTClassFromChain(this.$api, {
-      nftOwner: address,
-      nocache,
-    });
+    // fetch first page only
+    let promise = this.$api.$get(
+      api.getNFTClassesPartial({
+        nftOwner: address,
+        nocache,
+        reverse: true,
+      })
+    );
     commit(TYPES.NFT_SET_USER_COLLECTED_CLASSES_MAP, {
       address,
       classesOrPromise: promise,
     });
-    const classes = await promise;
-    const formatted = classes.map(formatNFTClassInfo);
+
+    const res = await promise;
+    let { classes } = res;
     commit(TYPES.NFT_SET_USER_COLLECTED_CLASSES_MAP, {
       address,
-      classesOrPromise: formatted,
+      classesOrPromise: classes.map(formatNFTClassInfo),
     });
 
     classes.forEach(c => {
@@ -813,6 +844,28 @@ const actions = {
         classData: c,
       });
     });
+
+    if (res.pagination.next_key) {
+      // fetch all pages
+      promise = fetchAllNFTClassFromChain(this.$api, {
+        nftOwner: address,
+        key: res.pagination.next_key,
+        nocache,
+        reverse: true,
+      });
+      classes = await promise;
+      commit(TYPES.NFT_SET_USER_COLLECTED_CLASSES_MAP, {
+        address,
+        classesOrPromise: classes.map(formatNFTClassInfo),
+      });
+
+      classes.forEach(c => {
+        dispatch('parseAndStoreNFTClassMetadata', {
+          classId: c.id,
+          classData: c,
+        });
+      });
+    }
 
     // load class metadata for top 5 gems
     classes
