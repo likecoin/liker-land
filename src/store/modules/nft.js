@@ -753,7 +753,7 @@ const actions = {
     }
     return info;
   },
-  async fetchNFTOwners({ commit }, { classId, nocache = true }) {
+  async fetchNFTOwners({ commit }, { classId, nocache = false }) {
     const { owners } = await this.$api.$get(api.getNFTOwners(classId, nocache));
     const info = formatOwnerInfoFromChain(owners);
     commit(TYPES.NFT_SET_NFT_CLASS_OWNER_INFO, { classId, info });

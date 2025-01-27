@@ -1147,7 +1147,10 @@ export default {
           );
         }
       } finally {
-        this.fetchCollectedNFTClassesByAddress({ address: this.getAddress });
+        this.fetchCollectedNFTClassesByAddress({
+          address: this.getAddress,
+          nocache: true,
+        });
         this.lazyFetchNFTClassAggregatedData();
         this.updateNFTHistory({ getAllUserInfo: false });
         this.walletFetchLIKEBalance();
@@ -1288,7 +1291,10 @@ export default {
           );
         }
       } finally {
-        this.fetchCollectedNFTClassesByAddress({ address: this.getAddress });
+        this.fetchCollectedNFTClassesByAddress({
+          address: this.getAddress,
+          nocache: true,
+        });
         this.lazyFetchNFTClassAggregatedData();
         this.updateNFTHistory({ getAllUserInfo: false });
         this.walletFetchLIKEBalance();

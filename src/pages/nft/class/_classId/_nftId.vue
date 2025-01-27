@@ -602,7 +602,7 @@ export default {
     try {
       this.lazyGetUserInfoByAddresses(this.iscnOwner);
       this.fetchIscnOwnerNFTDisplayStateList();
-      this.updateNFTOwners();
+      this.lazyGetNFTOwners();
       this.updateNFTHistory({ getAllUserInfo: false });
       this.fetchUserCollectedCount();
       if (this.nftClassCollectionType === nftClassCollectionType.NFTBook) {
