@@ -838,7 +838,6 @@ const actions = {
     } else {
       await dispatch('fetchCollectedNFTClassesByAddress', {
         address,
-        nocache: true,
       });
     }
   },
