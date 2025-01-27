@@ -1050,7 +1050,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['restoreAuthSession', 'clearBookProductShoppingCart']),
+    ...mapActions([
+      'restoreAuthSession',
+      'clearBookProductShoppingCart',
+      'fetchNFTOwners',
+    ]),
     isValidAddress,
     parseNFTMetadataURL,
     getIscnData(classId) {
@@ -1162,10 +1166,26 @@ export default {
       }
 
       if (this.isAutoDeliver || this.cartId) {
-        await this.fetchCollectedNFTClassesByAddress({
+        this.fetchCollectedNFTClassesByAddress({
           address: this.claimingAddress,
           nocache: true,
         });
+        if (this.classId) {
+          this.fetchNFTOwners({
+            classId: this.classId,
+            nocache: true,
+          });
+        }
+        if (this.cartItems?.length) {
+          this.cartItems.forEach(item => {
+            if (item.classId) {
+              this.fetchNFTOwners({
+                classId: item.classId,
+                nocache: true,
+              });
+            }
+          });
+        }
       }
     },
     async claimFiatPurchase() {

@@ -1153,7 +1153,7 @@ export default {
     try {
       this.lazyGetUserInfoByAddress(this.iscnOwner);
       this.fetchIscnOwnerNFTDisplayStateList();
-      this.updateNFTOwners();
+      this.lazyFetchNFTOwners();
       this.fetchUserCollectedCount();
       if (this.nftClassCollectionType === nftClassCollectionType.NFTBook) {
         this.lazyFetchNFTBookInfoByClassId(this.classId).catch();

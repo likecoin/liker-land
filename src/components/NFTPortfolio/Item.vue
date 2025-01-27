@@ -119,7 +119,7 @@ export default {
     async fetchInfo() {
       await Promise.all([
         this.lazyFetchNFTClassAggregatedData({ excludeOptions: ['owner'] }),
-        this.updateNFTOwners(),
+        this.lazyFetchNFTOwners(),
       ]);
     },
     async handleClickCollect() {
