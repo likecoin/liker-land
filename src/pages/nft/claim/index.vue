@@ -1430,26 +1430,28 @@ export default {
         this.claimingAddress
       );
 
-      for (let attempts = 0; attempts < MAX_ATTEMPT; attempts += 1) {
-        try {
-          // eslint-disable-next-line no-await-in-loop
-          await this.fetchCollectedNFTClassesByAddress({
-            address: this.claimingAddress,
-            nocache: true,
-          });
+      if (!collectedNFTs?.some(item => item.classId === this.classId)) {
+        for (let attempts = 0; attempts < MAX_ATTEMPT; attempts += 1) {
+          try {
+            // eslint-disable-next-line no-await-in-loop
+            await this.fetchCollectedNFTClassesByAddress({
+              address: this.claimingAddress,
+              nocache: true,
+            });
 
-          collectedNFTs = this.getCollectedNFTClassesByAddress(
-            this.claimingAddress
-          );
+            collectedNFTs = this.getCollectedNFTClassesByAddress(
+              this.claimingAddress
+            );
 
-          if (collectedNFTs?.some(item => item.classId === this.classId)) {
-            break;
+            if (collectedNFTs?.some(item => item.classId === this.classId)) {
+              break;
+            }
+            // eslint-disable-next-line no-await-in-loop
+            await sleep(1000);
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
           }
-          // eslint-disable-next-line no-await-in-loop
-          await sleep(1000);
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.error(error);
         }
       }
 
@@ -1463,7 +1465,7 @@ export default {
         this.productId,
         1
       );
-      if (this.cartItemsCount <= 1 && this.isAutoDeliver) {
+      if (this.classId && this.isAutoDeliver) {
         await this.ensureClassIdInCollected();
       }
       this.$router.push(
