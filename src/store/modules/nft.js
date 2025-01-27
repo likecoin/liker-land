@@ -800,7 +800,7 @@ const actions = {
         key: res.pagination.next_key,
         reverse: true,
       });
-      classes = await promise;
+      classes = classes.concat(await promise);
       commit(TYPES.NFT_SET_USER_CREATED_CLASSES_MAP, {
         address,
         classesOrPromise: classes.map(formatNFTClassInfo),
@@ -853,7 +853,7 @@ const actions = {
         nocache,
         reverse: true,
       });
-      classes = await promise;
+      classes = classes.concat(await promise);
       commit(TYPES.NFT_SET_USER_COLLECTED_CLASSES_MAP, {
         address,
         classesOrPromise: classes.map(formatNFTClassInfo),
