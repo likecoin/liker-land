@@ -1465,11 +1465,12 @@ export default {
           );
           return;
         }
+        const edition = this.getEdition(selectedValue);
         if (this.isAddingToCart) {
           this.handleAddToCart(selectedValue);
         } else if (
           this.shouldCrossSell ||
-          (this.hasCrossSell && this.edition.price === 0)
+          (this.hasCrossSell && edition.price === 0)
         ) {
           this.selectedValue = selectedValue;
           this.openCrossSellDialog();
@@ -1513,10 +1514,8 @@ export default {
       this.addToCart(selectedValue);
       this.uiPromptSuccessAlert(this.$t('cart_item_added'));
 
-      if (
-        this.shouldCrossSell ||
-        (this.hasCrossSell && this.edition.price === 0)
-      ) {
+      const edition = this.getEdition(selectedValue);
+      if (this.shouldCrossSell || (this.hasCrossSell && edition.price === 0)) {
         this.isAddingToCart = true;
         this.openCrossSellDialog();
       } else {
@@ -1808,11 +1807,12 @@ export default {
         1
       );
       this.isTippingDialogOpen = false;
+      const edition = this.getEdition(this.selectedValue);
       if (this.isAddingToCart) {
         this.handleAddToCart();
       } else if (
         this.shouldCrossSell ||
-        (this.hasCrossSell && this.edition.price === 0)
+        (this.hasCrossSell && edition.price === 0)
       ) {
         this.openCrossSellDialog();
       } else {
