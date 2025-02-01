@@ -56,10 +56,10 @@ export default {
     },
     isCrossSellEnabled() {
       const crossSellInfo = CROSS_SELL_WHITE_LIST.find(item => {
-        const id = item?.id || item;
+        const id = item.id || item;
         return id === this.classId || id === this.collectionId;
       });
-      const isCrossSellBlocked = !!crossSellInfo;
+      const isCrossSellBlocked = !crossSellInfo;
       const probability =
         crossSellInfo?.probability || CROSS_SELL_PRODUCT_PROBABILITY;
       const shouldAttemptCrossSell = IS_TESTNET
