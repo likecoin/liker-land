@@ -13,6 +13,7 @@ router.get('/reader/epub/cfi', authenticateV2Login, async (req, res, next) => {
     const { class_id: classId, nft_id: nftId, index } = req.query;
     if (!classId || !nftId || !index) {
       res.status(400).send('MISSING_PARAMS');
+      return;
     }
     const key = `${classId}-${nftId}-${index}`;
     const readerDoc = await walletUserCollection
@@ -41,9 +42,11 @@ router.post('/reader/epub/cfi', authenticateV2Login, async (req, res, next) => {
     const { currentCfi } = req.body;
     if (!classId || !nftId || !index) {
       res.status(400).send('MISSING_PARAMS');
+      return;
     }
     if (!currentCfi) {
       res.status(400).send('MISSING_BODY');
+      return;
     }
     const key = `${classId}-${nftId}-${index}`;
     await walletUserCollection
