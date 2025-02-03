@@ -14,9 +14,16 @@
           class="w-[42px] h-[42px] rounded-[50%] bg-shade-gray border-[2px] border-white"
         />
         <Label class="text-medium-gray mt-[12px]" :text="cardText" />
+        <NuxtLink
+          v-if="shouldShowCrisp"
+          class="mt-[12px] text-like-green font-600"
+          :to="localeLocation({ name: 'bookstore' })"
+        >
+          {{ $t('portfolio_collected_tab_get_more_item') }}
+        </NuxtLink>
         <i18n
           v-if="shouldShowCrisp"
-          class="flex items-center text-medium-gray text-[14px] mt-[12px]"
+          class="flex items-center text-medium-gray text-[14px] mt-[24px]"
           path="nft_claim_claimed_empty_collected_help"
         >
           <button
