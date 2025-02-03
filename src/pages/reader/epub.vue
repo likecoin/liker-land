@@ -258,6 +258,7 @@ import readerMixin from '~/mixins/reader';
 
 import { logTrackerEvent } from '~/util/EventLogger';
 import { getDownloadFilenameFromURL } from '~/util/nft-book';
+import { getReaderEpubCfi, postReaderEpubCfi } from '~/util/api';
 
 import { READER_ALLOW_SCRIPTED_CONTENT_OWNER_WALLET_LIST } from '~/constant';
 
@@ -348,7 +349,19 @@ export default {
     async initRendition() {
       try {
         this.isLoading = true;
-        const buffer = await this.getFileBuffer('reader-epub');
+        const [buffer, cfiData] = await Promise.all([
+          this.getFileBuffer('reader-epub'),
+          this.$axios
+            .$get(
+              getReaderEpubCfi({
+                classId: this.classId,
+                nftId: this.nftId,
+                index: this.fileIndex,
+              })
+            )
+            // eslint-disable-next-line no-console
+            .catch(err => console.error(err)),
+        ]);
         if (this.book) return;
         this.book = Epub(buffer);
         await this.book.ready;
@@ -367,7 +380,7 @@ export default {
             this.creatorWallet
           ),
         });
-        const cfi = this.resumeFromLocalStorage();
+        const cfi = cfiData?.currentCfi || this.resumeFromLocalStorage();
 
         const metadata = await this.book.loaded.metadata;
         const bodyCSS = {
@@ -396,7 +409,21 @@ export default {
         });
 
         this.rendition.on('relocated', location => {
-          this.saveToLocalStorage(location.start.cfi);
+          const currentCfi = location.start.cfi;
+          try {
+            this.$axios.$post(
+              postReaderEpubCfi({
+                classId: this.classId,
+                nftId: this.nftId,
+                index: this.fileIndex,
+              }),
+              { currentCfi }
+            );
+          } catch (err) {
+            // eslint-disable-next-line no-console
+            console.error(err);
+          }
+          this.saveToLocalStorage(currentCfi);
         });
         this.rendition.on('keydown', this.keyListener);
         this.rendition.on(

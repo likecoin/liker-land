@@ -459,6 +459,14 @@ export const getShoppingCart = () => '/api/v2/users/cart';
 export const postShoppingCart = getShoppingCart;
 export const deleteShoppingCart = getShoppingCart;
 
+export const getReaderEpubCfi = ({ classId, nftId, index }) =>
+  `/api/v2/users/reader/epub/cfi?${querystring.stringify({
+    class_id: classId,
+    nft_id: nftId,
+    index,
+  })}`;
+export const postReaderEpubCfi = getReaderEpubCfi;
+
 export const postUserV2WalletEmail = ({
   email,
   followee,
