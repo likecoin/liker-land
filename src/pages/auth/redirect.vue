@@ -34,7 +34,7 @@ export default {
 
     if (method && code) {
       try {
-        const { user, idToken } = await this.handleConnectorRedirect({
+        const { isNew, user, idToken } = await this.handleConnectorRedirect({
           method,
           params: { code },
         });
@@ -55,6 +55,9 @@ export default {
           }
         }
         this.$router.replace(postAuthRoute);
+        if (!isNew && this.$route.name.startsWith('index')) {
+          this.$router.push(this.localeLocation({ name: 'bookshelf' }));
+        }
       } catch (err) {
         const errData = err.response || err;
         const errMessage = errData.data || errData.message || errData;
