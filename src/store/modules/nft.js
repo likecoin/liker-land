@@ -770,7 +770,7 @@ const actions = {
     // fetch first page only
     let promise = this.$api.$get(
       api.getNFTClassesPartial({
-        nftOwner: address,
+        iscnOwner: address,
         reverse: true,
       })
     );
