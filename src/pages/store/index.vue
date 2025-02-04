@@ -576,7 +576,11 @@ export default {
         ...getCMSTagIdsForRecommendedBookstoreItemsByLocale(i18n.locale).map(
           tagId =>
             store
-              .dispatch('lazyFetchBookstoreCMSProductsByTagId', { tagId, t })
+              .dispatch('lazyFetchBookstoreCMSProductsByTagId', {
+                tagId,
+                t,
+                limit: 100,
+              })
               .catch(() => ({ records: [] }))
         ),
       ];
