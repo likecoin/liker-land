@@ -351,7 +351,7 @@ const actions = {
 
   async initWalletAndLogin({ dispatch, getters }, connection) {
     const isInited = await dispatch('initWallet', connection);
-    if (!isInited) return false;
+    if (!isInited) return null;
 
     try {
       if (getters.walletIsMatchedSession) {
@@ -362,16 +362,19 @@ const actions = {
         });
         // Do not await here to prevent blocking
         dispatch('walletFetchSessionUserData');
-      } else if (getters.getAddress) {
+        return { isNew: false };
+      }
+      if (getters.getAddress) {
         // Re-login if the wallet address is different from session
-        await dispatch('signLogin');
+        const res = await dispatch('signLogin');
+        return { isNew: res.isNew };
       }
     } catch (err) {
       const msg = (err.response && err.response.data) || err;
       // eslint-disable-next-line no-console
       console.error(msg);
     }
-    return true;
+    return null;
   },
 
   async getConnector({ state, commit, dispatch }) {
@@ -390,9 +393,10 @@ const actions = {
     const connector = await dispatch('getConnector');
     const connection = await connector.handleRedirect(method, params);
     if (connection) {
-      await dispatch('initWalletAndLogin', connection);
+      const res = await dispatch('initWalletAndLogin', connection);
+      return { isNew: res.isNew, ...connection };
     }
-    return connection;
+    return null;
   },
 
   async openConnectWalletModal(
@@ -870,7 +874,7 @@ const actions = {
   },
   async signLogin({ state, commit, dispatch, getters }) {
     // Do not trigger login if the window is not focused
-    if (document.hidden) return;
+    if (document.hidden) return null;
     if (!state.signer) {
       await dispatch('initIfNecessary');
     }
@@ -901,6 +905,7 @@ const actions = {
         event: result.isNew ? 'signup' : 'login',
       });
       await dispatch('walletFetchSessionUserData');
+      return result;
     } catch (error) {
       commit(WALLET_SET_USER_INFO, null);
       dispatch('disconnectWallet');
@@ -912,6 +917,7 @@ const actions = {
         console.error(error);
         throw error;
       }
+      return null;
     } finally {
       commit(WALLET_SET_IS_LOGGING_IN, false);
     }

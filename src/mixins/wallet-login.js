@@ -60,6 +60,9 @@ export default {
             'connect_wallet_done',
             1
           );
+          if (this.$route.name.startsWith('index') && !res.isNew) {
+            this.$router.push(this.localeLocation({ name: 'bookshelf' }));
+          }
         }
 
         return res;

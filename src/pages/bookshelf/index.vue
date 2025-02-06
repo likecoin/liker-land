@@ -197,23 +197,13 @@ export default {
     },
   },
   watch: {
-    isLoading(isLoading) {
-      if (!isLoading) {
-        if (
-          // If collected tab is empty
-          this.isCurrentTabCollected &&
-          !this.nftClassListOfFilteredCollectedByType.length
-        ) {
-          this.changeTab(tabOptions.created);
-        }
-      }
-    },
     wallet() {
       this.fetchData();
     },
   },
   mounted() {
     this.syncRouteForTab();
+    this.changeTab(tabOptions.collected);
     this.fetchData();
   },
   methods: {
