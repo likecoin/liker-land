@@ -200,7 +200,11 @@
               >
                 <h3
                   class="text-[28px] font-600 text-center text-like-green"
-                  v-text="$t('nft_collector_message_label')"
+                  v-text="
+                    `${$t('nft_collector_message_label')} (${
+                      filterCollectorsWithReplies.length
+                    })`
+                  "
                 />
                 <ButtonV2
                   preset="tertiary"
