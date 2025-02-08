@@ -849,6 +849,7 @@ export default {
         nftId: this.nftId,
         actionType,
         ignoreToList,
+        getAll: true,
       });
 
       const nftBookLatestBatchEvents = [];
