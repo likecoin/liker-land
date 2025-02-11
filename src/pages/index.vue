@@ -955,7 +955,7 @@ export default {
 
     const script = [
       {
-        hid: 'schema',
+        hid: 'schema-faq',
         innerHTML: JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'FAQPage',
@@ -971,6 +971,7 @@ export default {
           })),
         }),
         type: 'application/ld+json',
+        body: true,
       },
       {
         hid: 'elfsight',
