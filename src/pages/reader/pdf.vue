@@ -1,8 +1,53 @@
 <template>
-  <div class="w-full h-full">
+  <div class="fixed inset-0 flex flex-col">
+    <header class="border-b border-[#ccc]">
+      <div class="flex items-center justify-between px-[16px] py-[8px]">
+        <div class="flex items-center gap-4">
+          <NuxtLink
+            :to="
+              localeLocation(
+                getAddress
+                  ? {
+                      name: 'id',
+                      params: { id: getAddress },
+                      query: { tab: 'collected' },
+                    }
+                  : { name: 'index' }
+              )
+            "
+            :alt="$t('main_menu_my_portfolio')"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-20"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+              />
+            </svg>
+          </NuxtLink>
+        </div>
+      </div>
+    </header>
+
+    <main class="relative grow">
+      <iframe
+        ref="pdfIframe"
+        class="absolute inset-0 w-full h-full"
+        :src="pdfIframeSrc"
+        style="border:none"
+      />
+    </main>
+
     <div
       v-if="isLoading"
-      class="fixed inset-0 flex flex-col justify-center items-center gap-[16px] bg-like-green"
+      class="z-[10] fixed inset-0 flex flex-col justify-center items-center gap-[16px] bg-like-green"
     >
       <ProgressIndicator
         :type="progressIndicatorType"
@@ -10,24 +55,18 @@
       />
       <span class="text-center text-white">{{ progressLabelText }}</span>
     </div>
-    <iframe
-      ref="pdfIframe"
-      :src="pdfIframeSrc"
-      width="100%"
-      height="100%"
-      style="border:none"
-    />
   </div>
 </template>
 
 <script>
 import nftMixin from '~/mixins/nft';
+import walletMixin from '~/mixins/wallet';
 import readerMixin from '~/mixins/reader';
 import { logTrackerEvent } from '~/util/EventLogger';
 
 export default {
   name: 'PDFReaderPage',
-  mixins: [nftMixin, readerMixin],
+  mixins: [nftMixin, walletMixin, readerMixin],
   data() {
     return {
       isLoading: false,
