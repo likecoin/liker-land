@@ -24,6 +24,9 @@ export default {
         this.linkMedium
       );
     },
+    googleOrganicId() {
+      return this.$route.query.srsltid;
+    },
     gadClickId() {
       return this.$route.query.gclid;
     },
@@ -37,6 +40,10 @@ export default {
   },
   mounted() {
     this.documentReferrer = document.referrer;
+    if (this.googleOrganicId) {
+      if (!this.utmSource) this.utmSource = 'google';
+      if (!this.utmMedium) this.utmMedium = 'organic';
+    }
     this.restoreUTMFromSessionStorage();
     this.storeUTMToSessionStorage();
     this.getFbClickIdFromCookie();
