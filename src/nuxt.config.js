@@ -183,7 +183,7 @@ const nuxtConfig = {
             '@context': 'http://www.schema.org',
             '@type': 'OnlineStore',
             name: 'Liker Land Bookstore',
-            alternateName: ['Liker Land 電子書店', 'Liker.Land'],
+            alternateName: ['Liker Land 電子書店', 'Liker.Land', 'Liker Land'],
             description:
               'Liker Land is a Web3 bookstore with a decentralized publishing stack that assists authors in registering and storing their articles, ebooks on the blockchain and decentralized networks',
             url: 'https://liker.land',

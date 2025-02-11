@@ -155,7 +155,7 @@ export default {
       ],
       script: [
         {
-          hid: 'schema',
+          hid: 'schema-store',
           innerHTML: JSON.stringify(schema),
           type: 'application/ld+json',
           body: true,
