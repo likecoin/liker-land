@@ -12,7 +12,7 @@ import {
   NFT_AUTO_DELIVER_DEFAULT_MESSAGE,
   USD_TO_HKD_RATIO,
   NFT_BOOK_WITH_SIGN_IMAGE_SET,
-  NFT_BOOK_WITH_EVENT_BANNER_LIST,
+  NFT_BOOK_WITH_EVENT_BANNER_SET,
 } from '~/constant';
 
 import {
@@ -711,11 +711,21 @@ export default {
       );
     },
 
-    nftShouldShowEventBanner() {
-      return (
-        !this.nftShouldHideEventBanner &&
-        NFT_BOOK_WITH_EVENT_BANNER_LIST.includes(this.classId)
+    nftEventBanner() {
+      const set = NFT_BOOK_WITH_EVENT_BANNER_SET.find(set =>
+        set.classIds.includes(this.classId)
       );
+
+      if (!set) return undefined;
+
+      return {
+        ...set,
+        imgSrc: `/images/event-banners/${set.id}.png`,
+        imgSrcForMobile: `/images/event-banners/${set.id}-mobile.png`,
+      };
+    },
+    nftShouldShowEventBanner() {
+      return !!this.nftEventBanner && !this.nftShouldHideEventBanner;
     },
   },
   watch: {
