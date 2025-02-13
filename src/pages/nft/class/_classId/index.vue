@@ -6,7 +6,7 @@
     <div v-else class="px-[12px] laptop:px-[24px] pb-[120px] w-full">
       <div class="flex flex-col gap-[24px] w-full max-w-[962px] mx-auto">
         <a
-          v-if="nftShouldShowEventBanner && !nftShouldHideEventBanner"
+          v-if="nftShouldShowEventBanner"
           :class="[
             'phone:relative fixed',
             'z-[100]',

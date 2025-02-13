@@ -712,7 +712,10 @@ export default {
     },
 
     nftShouldShowEventBanner() {
-      return NFT_BOOK_WITH_EVENT_BANNER_LIST.includes(this.classId);
+      return (
+        !this.nftShouldHideEventBanner &&
+        NFT_BOOK_WITH_EVENT_BANNER_LIST.includes(this.classId)
+      );
     },
   },
   watch: {
