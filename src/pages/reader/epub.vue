@@ -6,12 +6,12 @@
           <NuxtLink
             :to="
               localeLocation({
-                name: 'id',
-                params: { id: getAddress },
-                query: { tab: 'collected' },
+                name: 'nft-class-classId',
+                params: { classId: classId },
+                query: { ll_medium: 'reader' },
               })
             "
-            :alt="$t('main_menu_my_portfolio')"
+            :alt="$t('back')"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
