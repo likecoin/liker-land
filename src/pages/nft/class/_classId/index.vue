@@ -6,7 +6,7 @@
     <div v-else class="px-[12px] laptop:px-[24px] pb-[120px] w-full">
       <div class="flex flex-col gap-[24px] w-full max-w-[962px] mx-auto">
         <a
-          v-if="nftShouldShowEventBanner && !nftShouldHideEventBanner"
+          v-if="nftShouldShowEventBanner"
           :class="[
             'phone:relative fixed',
             'z-[100]',
@@ -20,9 +20,9 @@
             'transition-all',
             'duration-500',
           ]"
-          href="https://docs.google.com/forms/d/e/1FAIpQLSc2ZvcopT5OP4m9g8U_T95V3UluyqqlsJOY-_mIq1nAZ54tqQ/viewform"
+          :href="nftEventBanner?.href"
           target="_blank"
-          rel="noopener noreferrer"
+          rel="noopener"
           @click="handleClickEventBanner"
         >
           <button
@@ -51,15 +51,13 @@
 
           <picture>
             <source
-              srcset="~/assets/images/misc/bottleshiu/20250215-bookclub-desktop.png"
+              :srcset="nftEventBanner?.imgSrc"
               media="(min-width: 528px)"
             />
-            <source
-              srcset="~/assets/images/misc/bottleshiu/20250215-bookclub-mobile.png"
-            />
+            <source :srcset="nftEventBanner?.imgSrcForMobile" />
             <img
               src="~/assets/images/misc/bottleshiu/20250215-bookclub-mobile.png"
-              alt="邵家臻先生著作讀書會"
+              :alt="nftEventBanner?.imgAlt"
             />
           </picture>
         </a>
