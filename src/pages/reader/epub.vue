@@ -5,11 +5,19 @@
         <div class="flex items-center gap-4">
           <NuxtLink
             :to="
-              localeLocation({
-                name: 'nft-class-classId',
-                params: { classId: classId },
-                query: { ll_medium: 'reader' },
-              })
+              localeLocation(
+                getSessionWallet
+                  ? {
+                      name: 'id',
+                      params: { id: getSessionWallet },
+                      query: { tab: 'collected' },
+                    }
+                  : {
+                      name: 'nft-class-classId',
+                      params: { classId: classId },
+                      query: { ll_medium: 'reader' },
+                    }
+              )
             "
             :alt="$t('back')"
           >
