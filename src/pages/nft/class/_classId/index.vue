@@ -5,6 +5,63 @@
     }}</CardV2>
     <div v-else class="px-[12px] laptop:px-[24px] pb-[120px] w-full">
       <div class="flex flex-col gap-[24px] w-full max-w-[962px] mx-auto">
+        <a
+          v-if="nftShouldShowEventBanner"
+          :class="[
+            'phone:relative fixed',
+            'z-[100]',
+            'sm:left-[30px]',
+            'sm:bottom-[30px]',
+
+            'sm:w-[240px] sm:hover:w-[300px]',
+            'sm:h-[240px] sm:hover:h-[300px]',
+            'sm:hover:rotate-[-3deg]',
+
+            'transition-all',
+            'duration-500',
+          ]"
+          :href="nftEventBanner?.href"
+          target="_blank"
+          rel="noopener"
+          @click="handleClickEventBanner"
+        >
+          <button
+            :class="[
+              'absolute',
+              'top-[28px]',
+              'right-[12px]',
+
+              'phone:hidden flex',
+              'items-center',
+              'justify-center',
+
+              'w-[30px]',
+              'h-[30px]',
+
+              'bg-white',
+              'bg-opacity-[0.1] hover:bg-opacity-25',
+              'rounded-full',
+
+              'transition-all',
+            ]"
+            @click.prevent="handleClickEventBannerCloseButton"
+          >
+            <IconClose class="w-[16px] h-[16px] text-white" />
+          </button>
+
+          <picture>
+            <source
+              :srcset="nftEventBanner?.imgSrc"
+              media="(min-width: 528px)"
+            />
+            <source :srcset="nftEventBanner?.imgSrcForMobile" />
+            <img
+              src="~/assets/images/misc/bottleshiu/20250215-bookclub-mobile.png"
+              :alt="nftEventBanner?.imgAlt"
+            />
+          </picture>
+        </a>
+
         <NFTPageControlBar
           :collected-count="ownCount"
           :class-id="classId"

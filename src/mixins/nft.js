@@ -12,6 +12,7 @@ import {
   NFT_AUTO_DELIVER_DEFAULT_MESSAGE,
   USD_TO_HKD_RATIO,
   NFT_BOOK_WITH_SIGN_IMAGE_SET,
+  NFT_BOOK_WITH_EVENT_BANNER_SET,
 } from '~/constant';
 
 import {
@@ -81,6 +82,8 @@ export default {
 
       isOwnerInfoLoading: false,
       isHistoryInfoLoading: false,
+
+      nftShouldHideEventBanner: false,
     };
   },
   computed: {
@@ -706,6 +709,23 @@ export default {
       return (
         customAuthor || this.iscnWorkAuthorName || this.creatorDisplayNameFull
       );
+    },
+
+    nftEventBanner() {
+      const set = NFT_BOOK_WITH_EVENT_BANNER_SET.find(set =>
+        set.classIds.includes(this.classId)
+      );
+
+      if (!set) return undefined;
+
+      return {
+        ...set,
+        imgSrc: `/images/event-banners/${set.id}.png`,
+        imgSrcForMobile: `/images/event-banners/${set.id}-mobile.png`,
+      };
+    },
+    nftShouldShowEventBanner() {
+      return !!this.nftEventBanner && !this.nftShouldHideEventBanner;
     },
   },
   watch: {
@@ -1426,6 +1446,13 @@ export default {
     },
     getEditionByIndex(index) {
       return this.getNFTBookStorePriceByClassIdAndIndex(this.classId, index);
+    },
+    handleClickEventBannerCloseButton() {
+      this.nftShouldHideEventBanner = true;
+      logTrackerEvent(this, 'NFT', 'NFTEventBannerHide', this.classId, 1);
+    },
+    handleClickEventBanner() {
+      logTrackerEvent(this, 'NFT', 'NFTEventBannerClick', this.classId, 1);
     },
   },
 };
