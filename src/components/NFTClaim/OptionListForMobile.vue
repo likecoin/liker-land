@@ -3,7 +3,8 @@
     <div
       class="fixed left-0 bottom-0 flex flex-col items-center gap-[8px] w-full bg-white pt-[12px] pb-[28px]"
     >
-      <div class="flex self-end">
+      <div class="flex justify-between items-center w-full pl-[16px] pr-[8px]">
+        <div v-text="$t('nft_claim_option_list_title')" />
         <ButtonV2 preset="plain" @click.prevent="close">
           <IconClose class="w-[20px]" />
         </ButtonV2>
@@ -20,8 +21,7 @@
               preset="plain"
               :download="getDownloadFilenameFromURL(contentUrl)"
               @click="e => handleClickViewContentURL(e, contentUrl, index)"
-            >
-              {{
+              >{{
                 getFilenameFromURL(contentUrl) ||
                   getContentUrlButtonText(contentUrl)
               }}&nbsp;<IconLinkExternal />
