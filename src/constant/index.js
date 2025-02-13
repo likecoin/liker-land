@@ -365,6 +365,16 @@ export const CROSS_SELL_WHITE_LIST = IS_TESTNET
       'likenft10e4gsezx2xfujwkl89e0vv07j8x3ha4hreulc77p4wm4manag4rqk6zeq8',
       'likenft1akaqh0pd9wv8lfy3xyd9tnc4mk8vmy7ehzg7ssgczqxcq3hzc2vqugtvty',
       'likenft1npx3sthlcff3qqmk9tvv454my7h79z7eehqe6cfqp9ccsrem9kvqv6ymzz',
+      {
+        id:
+          'likenft1emvvd04ynymxn7d62mmmqxr7xrye92wqxxgh394r2jnznnl0uneqapg60l',
+        probability: 1,
+      },
+      {
+        id:
+          'likenft1vwm4ze65h5vv84uahwd3x52xp8t9q5xqex3d58mvgeurrm0dk0yqcwd6d8',
+        probability: 1,
+      },
     ]
   : [
       'likenft1wrskn9a683stkje3wdmcwuvpuqrp5eevjsnn9y4f55wlystzxausuhj3em',
