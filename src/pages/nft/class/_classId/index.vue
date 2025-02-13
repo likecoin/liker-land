@@ -22,7 +22,7 @@
           ]"
           href="https://docs.google.com/forms/d/e/1FAIpQLSc2ZvcopT5OP4m9g8U_T95V3UluyqqlsJOY-_mIq1nAZ54tqQ/viewform"
           target="_blank"
-          rel="noopener noreferrer"
+          rel="noopener"
           @click="handleClickEventBanner"
         >
           <button
