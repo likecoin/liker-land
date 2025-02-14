@@ -303,6 +303,10 @@ export const RECOMMENDATION_GROUPS = IS_TESTNET
         'likenft1h2ze9wd80gqkwnt54ueqkruhe2kshed7pjhuwrqjytg5jcy6639sqqmdcv',
         'likenft1qq06n42guzvt087wxunaajvz3alx6wadq6mfz0yz57gffwsrgrasl2m59x',
       ],
+      [
+        'likenft1vwm4ze65h5vv84uahwd3x52xp8t9q5xqex3d58mvgeurrm0dk0yqcwd6d8',
+        'likenft1emvvd04ynymxn7d62mmmqxr7xrye92wqxxgh394r2jnznnl0uneqapg60l',
+      ],
     ]
   : [
       // FengHouShanLin
@@ -358,6 +362,11 @@ export const RECOMMENDATION_GROUPS = IS_TESTNET
         'likenft15entdx6z5l2r7wqc93fz32g53ve6lfk4tgqqzl8ereg7tvs3t9nq82n5m3',
         'likenft19ul7dkwj2p8fs3m6t4gy77p7mlgnyy3ehcmran2f4us8ctn6yw5sk7fx2z',
       ],
+      [
+        'likenft1d7m9zdw3zmd6jfvu0l6zgr3f4pz3me49ahzgl20wujwus6jtc2zq7ekm6u',
+        'likenft17zq3r5t2qwfatle04sz680vl3ka0l8wfeu4n5jv26mnvawnfqs4qd773ny',
+        'likenft154xhw0qyds5pgvsyc7379lnkyvwqkvv2zvmmh2gn5qrewljeqwys2sju6x',
+      ],
     ];
 
 export const CROSS_SELL_WHITE_LIST = IS_TESTNET
@@ -394,6 +403,11 @@ export const CROSS_SELL_WHITE_LIST = IS_TESTNET
       {
         id:
           'likenft154xhw0qyds5pgvsyc7379lnkyvwqkvv2zvmmh2gn5qrewljeqwys2sju6x',
+        probability: 1,
+      },
+      {
+        id:
+          'likenft1d7m9zdw3zmd6jfvu0l6zgr3f4pz3me49ahzgl20wujwus6jtc2zq7ekm6u',
         probability: 1,
       },
     ];
@@ -465,6 +479,23 @@ export const NFT_BOOK_WITH_EVENT_BANNER_SET = [
         ],
   },
 ];
+
+export const NFT_BOOK_PRODUCT_PAGE_OVERRIDE = IS_TESTNET
+  ? {}
+  : {
+      likenft1d7m9zdw3zmd6jfvu0l6zgr3f4pz3me49ahzgl20wujwus6jtc2zq7ekm6u: {
+        authorQuery: '邵家臻',
+        isOwnerHidden: true,
+        recommendedClassIds: IS_TESTNET
+          ? [
+              'likenft1emvvd04ynymxn7d62mmmqxr7xrye92wqxxgh394r2jnznnl0uneqapg60l',
+            ]
+          : [
+              'likenft17zq3r5t2qwfatle04sz680vl3ka0l8wfeu4n5jv26mnvawnfqs4qd773ny',
+              'likenft154xhw0qyds5pgvsyc7379lnkyvwqkvv2zvmmh2gn5qrewljeqwys2sju6x',
+            ],
+      },
+    };
 
 export const SIGN_AUTHORIZATION_PERMISSIONS = [
   'profile',

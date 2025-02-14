@@ -218,7 +218,7 @@
                 :to="
                   localeLocation({
                     name: 'store',
-                    query: { q: iscnWorkAuthorName },
+                    query: { q: authorQuery || iscnWorkAuthorName },
                   })
                 "
               >
@@ -251,7 +251,7 @@
                 />
               </NuxtLink>
             </li>
-            <client-only>
+            <client-only v-if="!isOwnerHidden">
               <li>
                 <NuxtLink
                   class="flex items-center text-like-green group"
@@ -428,6 +428,14 @@ export default {
       default: false,
     },
     componentClass: {
+      type: String,
+      default: '',
+    },
+    isOwnerHidden: {
+      type: Boolean,
+      default: false,
+    },
+    authorQuery: {
       type: String,
       default: '',
     },

@@ -123,6 +123,10 @@ export default {
       type: String,
       default: '',
     },
+    overrideClassIds: {
+      type: Array,
+      default: () => [],
+    },
   },
   computed: {
     ...mapGetters(['walletHasLoggedIn', 'walletFollowees']),
@@ -171,6 +175,10 @@ export default {
       return this.defaultFeaturedBooks;
     },
     recommendedList() {
+      if (this.overrideClassIds.length) {
+        return this.overrideClassIds.map(classId => ({ classId }));
+      }
+
       if (this.shouldShowDefaultRecommendation) {
         return this.defaultFeaturedBooks;
       }

@@ -10,7 +10,12 @@
     <Component
       :is="isLoginRequired ? 'AuthRequiredView' : 'div'"
       v-else
-      class="w-full h-full"
+      :class="[
+        'w-full h-full',
+        {
+          'flex items-center justify-center': !isLoginRequired,
+        },
+      ]"
       :login-label="$t('dashboard_login_in')"
       :login-button-label="$t('header_button_connect_to_wallet')"
     >
