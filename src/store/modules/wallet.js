@@ -367,7 +367,7 @@ const actions = {
       if (getters.getAddress) {
         // Re-login if the wallet address is different from session
         const res = await dispatch('signLogin');
-        return { isNew: res.isNew };
+        return { isNew: res?.isNew };
       }
     } catch (err) {
       const msg = (err.response && err.response.data) || err;
@@ -874,7 +874,7 @@ const actions = {
   },
   async signLogin({ state, commit, dispatch, getters }) {
     // Do not trigger login if the window is not focused
-    if (document.hidden) return null;
+    if (state.methodType !== 'liker-id' && document.hidden) return null;
     if (!state.signer) {
       await dispatch('initIfNecessary');
     }
