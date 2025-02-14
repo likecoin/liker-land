@@ -480,6 +480,23 @@ export const NFT_BOOK_WITH_EVENT_BANNER_SET = [
   },
 ];
 
+export const NFT_BOOK_PRODUCT_PAGE_OVERRIDE = IS_TESTNET
+  ? {}
+  : {
+      likenft1d7m9zdw3zmd6jfvu0l6zgr3f4pz3me49ahzgl20wujwus6jtc2zq7ekm6u: {
+        authorQuery: '邵家臻',
+        isOwnerHidden: true,
+        recommendedClassIds: IS_TESTNET
+          ? [
+              'likenft1emvvd04ynymxn7d62mmmqxr7xrye92wqxxgh394r2jnznnl0uneqapg60l',
+            ]
+          : [
+              'likenft17zq3r5t2qwfatle04sz680vl3ka0l8wfeu4n5jv26mnvawnfqs4qd773ny',
+              'likenft154xhw0qyds5pgvsyc7379lnkyvwqkvv2zvmmh2gn5qrewljeqwys2sju6x',
+            ],
+      },
+    };
+
 export const SIGN_AUTHORIZATION_PERMISSIONS = [
   'profile',
   'read:nftbook',

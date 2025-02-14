@@ -94,8 +94,8 @@
           <NFTBookItemCard
             :class-id="classId"
             preset="details"
-            :author-query="isBottleShiuFuneralBooklet ? '邵家臻' : ''"
-            :is-owner-hidden="isBottleShiuFuneralBooklet"
+            :author-query="authorQueryOverride"
+            :is-owner-hidden="isOwnerHidden"
             @click-avatar="handleNFTCardClickAvatar"
             @clickTooltip="handleNFTCardClickTooltip"
             @expand="handleBookInfoExpand"
@@ -304,7 +304,7 @@
           <!-- recommend -->
           <NFTPageRecommendation
             :class-id="classId"
-            :override-class-ids="recommendedClassIdsForBottleShiuFuneralBooklet"
+            :override-class-ids="recommendedClassIdsOverride"
             @header-avatar-click="handleRecommendationHeaderAvatarClick"
             @follow-button-click="handleFollowButtonClick"
             @item-click="handleRecommendedItemClick"
@@ -543,6 +543,7 @@ import {
   NFT_BOOK_PLATFORM_LIKER_LAND,
   LIKECOIN_API_BASE,
   LIKECOIN_BUTTON_BASE,
+  NFT_BOOK_PRODUCT_PAGE_OVERRIDE,
 } from '@/constant/index';
 import { nftClassCollectionType, parseNFTMetadataURL } from '~/util/nft';
 import { getNFTBookPurchaseLink, postNewStripeFiatPayment } from '~/util/api';
@@ -1011,21 +1012,6 @@ export default {
     classId() {
       return this.$route.params.classId;
     },
-    isBottleShiuFuneralBooklet() {
-      return (
-        this.classId ===
-        'likenft1d7m9zdw3zmd6jfvu0l6zgr3f4pz3me49ahzgl20wujwus6jtc2zq7ekm6u'
-      );
-    },
-    recommendedClassIdsForBottleShiuFuneralBooklet() {
-      if (!this.isBottleShiuFuneralBooklet) return [];
-      return IS_TESTNET
-        ? ['likenft1emvvd04ynymxn7d62mmmqxr7xrye92wqxxgh394r2jnznnl0uneqapg60l']
-        : [
-            'likenft17zq3r5t2qwfatle04sz680vl3ka0l8wfeu4n5jv26mnvawnfqs4qd773ny',
-            'likenft154xhw0qyds5pgvsyc7379lnkyvwqkvv2zvmmh2gn5qrewljeqwys2sju6x',
-          ];
-    },
     selectedValue: {
       get() {
         return Number(this.$route.query.price_index) || 0;
@@ -1222,6 +1208,18 @@ export default {
         'hidden',
         'laptop:block',
       ];
+    },
+    pageOverride() {
+      return NFT_BOOK_PRODUCT_PAGE_OVERRIDE[this.classId];
+    },
+    authorQueryOverride() {
+      return this.pageOverride?.authorQuery || '';
+    },
+    isOwnerHidden() {
+      return this.pageOverride?.isOwnerHidden || false;
+    },
+    recommendedClassIdsOverride() {
+      return this.pageOverride?.recommendedClassIds || [];
     },
   },
   async mounted() {
