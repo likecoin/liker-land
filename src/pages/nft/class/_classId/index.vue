@@ -1018,6 +1018,7 @@ export default {
       );
     },
     recommendedClassIdsForBottleShiuFuneralBooklet() {
+      if (!this.isBottleShiuFuneralBooklet) return [];
       return IS_TESTNET
         ? ['likenft1emvvd04ynymxn7d62mmmqxr7xrye92wqxxgh394r2jnznnl0uneqapg60l']
         : [
