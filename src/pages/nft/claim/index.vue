@@ -663,6 +663,7 @@ export default {
       'getNFTBookStoreInfoByClassId',
       'getNFTCollectionInfoByCollectionId',
       'getIsHideNFTBookDownload',
+      'getNFTClassOwnerInfoById',
       'walletMethodType',
     ]),
     state: {
@@ -1437,21 +1438,34 @@ export default {
         let collectedNFTs = this.getCollectedNFTClassesByAddress(
           this.claimingAddress
         );
+        let ownCount =
+          this.getNFTClassOwnerInfoById(this.classId)[this.claimingAddress]
+            ?.length || 0;
 
         if (!collectedNFTs?.some(item => item.classId === this.classId)) {
           for (let attempts = 0; attempts < MAX_ATTEMPT; attempts += 1) {
             try {
               // eslint-disable-next-line no-await-in-loop
-              await this.fetchCollectedNFTClassesByAddress({
-                address: this.claimingAddress,
-                nocache: true,
-              });
+              await Promise.all([
+                this.fetchCollectedNFTClassesByAddress({
+                  address: this.claimingAddress,
+                  nocache: true,
+                }),
+                this.fetchNFTOwners({ classId: this.classId, nocache: true }),
+              ]);
 
               collectedNFTs = this.getCollectedNFTClassesByAddress(
                 this.claimingAddress
               );
+              ownCount =
+                this.getNFTClassOwnerInfoById(this.classId)[
+                  this.claimingAddress
+                ]?.length || 0;
 
-              if (collectedNFTs?.some(item => item.classId === this.classId)) {
+              if (
+                collectedNFTs?.some(item => item.classId === this.classId) &&
+                ownCount > 0
+              ) {
                 break;
               }
               // eslint-disable-next-line no-await-in-loop
