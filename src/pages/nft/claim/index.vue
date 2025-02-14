@@ -529,7 +529,11 @@
             v-if="shouldShowStartReadingButton"
             class="phoneLg:w-full phoneLg:max-w-[480px]"
             :content-class="['px-[48px]']"
-            :text="$t('nft_claim_claimed_button_start_reading')"
+            :text="
+              isStartReadingLoading
+                ? $t('nft_claim_loading')
+                : $t('nft_claim_claimed_button_start_reading')
+            "
             @click="handleStartReading"
           />
           <ButtonV2
@@ -644,6 +648,7 @@ export default {
       collectionId: this.$route.query.collection_id,
       cartItems: [],
       isViewCollectionLoading: false,
+      isStartReadingLoading: false,
     };
   },
   computed: {
@@ -1397,7 +1402,7 @@ export default {
       this.isLoginLoading = false;
     },
 
-    handleStartReading() {
+    async handleStartReading() {
       logTrackerEvent(
         this,
         'NFT',
@@ -1407,6 +1412,11 @@ export default {
       );
 
       if (this.nftId) {
+        if (this.classId && this.isAutoDeliver) {
+          this.isStartReadingLoading = true;
+          await this.ensureClassIdInCollected();
+          this.isStartReadingLoading = false;
+        }
         this.$router.push(
           this.localeLocation({
             name: 'nft-class-classId-nftId',
@@ -1424,8 +1434,6 @@ export default {
       }
     },
     async ensureClassIdInCollected() {
-      this.isViewCollectionLoading = true;
-
       let collectedNFTs = this.getCollectedNFTClassesByAddress(
         this.claimingAddress
       );
@@ -1454,8 +1462,6 @@ export default {
           }
         }
       }
-
-      this.isViewCollectionLoading = false;
     },
     async handleViewCollection() {
       logTrackerEvent(
@@ -1466,7 +1472,9 @@ export default {
         1
       );
       if (this.classId && this.isAutoDeliver) {
+        this.isViewCollectionLoading = true;
         await this.ensureClassIdInCollected();
+        this.isViewCollectionLoading = false;
       }
       this.$router.push(
         this.localeLocation({
