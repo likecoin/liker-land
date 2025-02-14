@@ -109,9 +109,10 @@ export default {
           this.lazyFetchNFTOwners(),
         ]);
         if (
-          (!this.userCollectedCount && this.isLoginRequired) ||
-          (this.nftCollectorWalletAddress &&
-            this.nftCollectorWalletAddress !== this.getSessionWallet)
+          this.isLoginRequired &&
+          (!this.userCollectedCount ||
+            (this.nftCollectorWalletAddress &&
+              this.nftCollectorWalletAddress !== this.getSessionWallet))
         ) {
           this.$router.replace(
             this.localeLocation({
@@ -143,9 +144,10 @@ export default {
           this.lazyFetchNFTOwners(),
         ]);
         if (
-          (!this.userCollectedCount && this.isLoginRequired) ||
-          (this.nftCollectorWalletAddress &&
-            this.nftCollectorWalletAddress !== this.getSessionWallet)
+          this.isLoginRequired &&
+          (!this.userCollectedCount ||
+            (this.nftCollectorWalletAddress &&
+              this.nftCollectorWalletAddress !== this.getSessionWallet))
         ) {
           this.$router.replace(
             this.localeLocation({
