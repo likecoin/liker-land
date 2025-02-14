@@ -94,6 +94,8 @@
           <NFTBookItemCard
             :class-id="classId"
             preset="details"
+            :author-query="isBottleShiuFuneralBooklet ? '邵家臻' : ''"
+            :is-owner-hidden="isBottleShiuFuneralBooklet"
             @click-avatar="handleNFTCardClickAvatar"
             @clickTooltip="handleNFTCardClickTooltip"
             @expand="handleBookInfoExpand"
@@ -1007,6 +1009,12 @@ export default {
     ]),
     classId() {
       return this.$route.params.classId;
+    },
+    isBottleShiuFuneralBooklet() {
+      return (
+        this.classId ===
+        'likenft1d7m9zdw3zmd6jfvu0l6zgr3f4pz3me49ahzgl20wujwus6jtc2zq7ekm6u'
+      );
     },
     selectedValue: {
       get() {
