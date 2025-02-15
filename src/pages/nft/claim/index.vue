@@ -105,7 +105,10 @@
                   {{ iscnWorkPublisher }}
                 </p>
               </div>
-              <div v-if="creatorDisplayName" class="flex flex-col w-full">
+              <div
+                v-if="creatorDisplayName && !nftIsOwnerHidden"
+                class="flex flex-col w-full"
+              >
                 <Label
                   preset="h6"
                   :text="

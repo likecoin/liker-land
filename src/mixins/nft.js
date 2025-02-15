@@ -13,6 +13,7 @@ import {
   USD_TO_HKD_RATIO,
   NFT_BOOK_WITH_SIGN_IMAGE_SET,
   NFT_BOOK_WITH_EVENT_BANNER_SET,
+  NFT_BOOK_PRODUCT_PAGE_OVERRIDE,
 } from '~/constant';
 
 import {
@@ -726,6 +727,18 @@ export default {
     },
     nftShouldShowEventBanner() {
       return !!this.nftEventBanner && !this.nftShouldHideEventBanner;
+    },
+    nftPageOverride() {
+      return NFT_BOOK_PRODUCT_PAGE_OVERRIDE[this.classId];
+    },
+    nftAuthorQueryOverride() {
+      return this.nftPageOverride?.authorQuery || '';
+    },
+    nftIsOwnerHidden() {
+      return this.nftPageOverride?.isOwnerHidden || false;
+    },
+    nftRecommendedClassIdsOverride() {
+      return this.nftPageOverride?.recommendedClassIds || [];
     },
   },
   watch: {
