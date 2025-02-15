@@ -94,8 +94,8 @@
           <NFTBookItemCard
             :class-id="classId"
             preset="details"
-            :author-query="authorQueryOverride"
-            :is-owner-hidden="isOwnerHidden"
+            :author-query="nftAuthorQueryOverride"
+            :is-owner-hidden="nftIsOwnerHidden"
             @click-avatar="handleNFTCardClickAvatar"
             @clickTooltip="handleNFTCardClickTooltip"
             @expand="handleBookInfoExpand"
@@ -304,7 +304,7 @@
           <!-- recommend -->
           <NFTPageRecommendation
             :class-id="classId"
-            :override-class-ids="recommendedClassIdsOverride"
+            :override-class-ids="nftRecommendedClassIdsOverride"
             @header-avatar-click="handleRecommendationHeaderAvatarClick"
             @follow-button-click="handleFollowButtonClick"
             @item-click="handleRecommendedItemClick"
@@ -543,7 +543,6 @@ import {
   NFT_BOOK_PLATFORM_LIKER_LAND,
   LIKECOIN_API_BASE,
   LIKECOIN_BUTTON_BASE,
-  NFT_BOOK_PRODUCT_PAGE_OVERRIDE,
 } from '@/constant/index';
 import { nftClassCollectionType, parseNFTMetadataURL } from '~/util/nft';
 import { getNFTBookPurchaseLink, postNewStripeFiatPayment } from '~/util/api';
@@ -1208,18 +1207,6 @@ export default {
         'hidden',
         'laptop:block',
       ];
-    },
-    pageOverride() {
-      return NFT_BOOK_PRODUCT_PAGE_OVERRIDE[this.classId];
-    },
-    authorQueryOverride() {
-      return this.pageOverride?.authorQuery || '';
-    },
-    isOwnerHidden() {
-      return this.pageOverride?.isOwnerHidden || false;
-    },
-    recommendedClassIdsOverride() {
-      return this.pageOverride?.recommendedClassIds || [];
     },
   },
   async mounted() {
