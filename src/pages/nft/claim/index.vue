@@ -1434,17 +1434,27 @@ export default {
           this.getNFTClassOwnerInfoById(this.classId)[this.claimingAddress]
             ?.length || 0;
 
-        if (!collectedNFTs?.some(item => item.classId === this.classId)) {
+        if (
+          !collectedNFTs?.some(item => item.classId === this.classId) ||
+          !ownCount
+        ) {
           for (let attempts = 0; attempts < MAX_ATTEMPT; attempts += 1) {
             try {
-              // eslint-disable-next-line no-await-in-loop
-              await Promise.all([
+              const fetchPromises = [
                 this.fetchCollectedNFTClassesByAddress({
                   address: this.claimingAddress,
                   nocache: true,
                 }),
-                this.fetchNFTOwners({ classId: this.classId, nocache: true }),
-              ]);
+              ];
+
+              if (ownCount === 0) {
+                fetchPromises.push(
+                  this.fetchNFTOwners({ classId: this.classId, nocache: true })
+                );
+              }
+
+              // eslint-disable-next-line no-await-in-loop
+              await Promise.all(fetchPromises);
 
               collectedNFTs = this.getCollectedNFTClassesByAddress(
                 this.claimingAddress
