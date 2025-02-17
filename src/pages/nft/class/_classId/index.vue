@@ -1266,7 +1266,7 @@ export default {
       logTrackerEvent(
         this,
         'NFT',
-        this.isEnableCrossSell
+        this.isCrossSellEnabled
           ? 'nft_class_details_cross_sell_enabled'
           : 'nft_class_details_cross_sell_disabled',
         this.classId,
