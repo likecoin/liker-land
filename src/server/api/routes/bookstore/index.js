@@ -25,7 +25,7 @@ router.get('/bookstore/tags', async (req, res, next) => {
     if (!IS_TESTNET) {
       res.set(
         'Cache-Control',
-        'public, max-age=3600, stale-if-error=604800, stale-while-revalidate=604800'
+        'public, max-age=60, stale-if-error=3600, stale-while-revalidate=3600'
       );
     }
 
@@ -49,7 +49,7 @@ router.get('/bookstore/products', async (req, res, next) => {
     if (!IS_TESTNET) {
       res.set(
         'Cache-Control',
-        'public, max-age=3600, stale-if-error=604800, stale-while-revalidate=604800'
+        'public, max-age=60, stale-if-error=3600, stale-while-revalidate=3600'
       );
     }
 
