@@ -531,23 +531,15 @@
               v-if="shouldShowStartReadingButton"
               class="phoneLg:w-full phoneLg:max-w-[480px]"
               :content-class="['px-[48px]']"
-              :text="
-                isViewCollectionLoading
-                  ? $t('nft_claim_loading')
-                  : $t('nft_claim_claimed_button_start_reading')
-              "
+              :text="$t('nft_claim_claimed_button_start_reading')"
               @click="handleStartReading"
             />
             <ButtonV2
               v-if="claimingAddress"
               :content-class="['px-[48px]']"
               class="phoneLg:w-full phoneLg:max-w-[480px]"
-              :preset="isViewCollectionLoading ? 'plain' : 'tertiary'"
-              :text="
-                isViewCollectionLoading
-                  ? $t('nft_claim_loading')
-                  : $t('nft_claim_claimed_button_view_collection')
-              "
+              preset="'tertiary'"
+              :text="$t('nft_claim_claimed_button_view_collection')"
               @click="handleViewCollection"
             />
             <ProgressIndicator v-else-if="isLoginLoading" />
