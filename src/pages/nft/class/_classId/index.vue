@@ -9,7 +9,7 @@
           v-if="nftShouldShowEventBanner"
           :class="[
             'phone:relative fixed',
-            'z-[100]',
+            'sm:z-[60]',
             'sm:left-[30px]',
             'sm:bottom-[30px]',
 
@@ -56,7 +56,7 @@
             />
             <source :srcset="nftEventBanner?.imgSrcForMobile" />
             <img
-              src="~/assets/images/misc/bottleshiu/20250215-bookclub-mobile.png"
+              :src="nftEventBanner?.imgSrcForMobile"
               :alt="nftEventBanner?.imgAlt"
             />
           </picture>
