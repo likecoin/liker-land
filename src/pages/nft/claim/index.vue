@@ -528,34 +528,33 @@
           />
         </template>
         <template #footer>
-          <ButtonV2
-            v-if="shouldShowStartReadingButton"
-            class="phoneLg:w-full phoneLg:max-w-[480px]"
-            :content-class="['px-[48px]']"
-            :text="$t('nft_claim_claimed_button_start_reading')"
-            @click="handleStartReading"
-          />
-          <ButtonV2
-            v-if="claimingAddress"
-            :content-class="['px-[48px]']"
-            class="phoneLg:w-full phoneLg:max-w-[480px]"
-            :preset="isViewCollectionLoading ? 'plain' : 'tertiary'"
-            :text="
-              isViewCollectionLoading
-                ? $t('nft_claim_loading')
-                : $t('nft_claim_claimed_button_view_collection')
-            "
-            @click="handleViewCollection"
-          />
-          <ProgressIndicator v-else-if="isLoginLoading" />
-          <ButtonV2
-            v-else
-            :content-class="['px-[48px]']"
-            class="phoneLg:w-full phoneLg:max-w-[480px]"
-            preset="tertiary"
-            :text="$t('nft_claim_claimed_button_view_collection_sign_in')"
-            @click="handleClickSignIn"
-          />
+          <ProgressIndicator v-if="isViewCollectionLoading" />
+          <div v-else class="flex items-center w-full gap-[12px]">
+            <ButtonV2
+              v-if="shouldShowStartReadingButton"
+              class="phoneLg:w-full phoneLg:max-w-[480px]"
+              :content-class="['px-[48px]']"
+              :text="$t('nft_claim_claimed_button_start_reading')"
+              @click="handleStartReading"
+            />
+            <ButtonV2
+              v-if="claimingAddress"
+              :content-class="['px-[48px]']"
+              class="phoneLg:w-full phoneLg:max-w-[480px]"
+              preset="'tertiary'"
+              :text="$t('nft_claim_claimed_button_view_collection')"
+              @click="handleViewCollection"
+            />
+            <ProgressIndicator v-else-if="isLoginLoading" />
+            <ButtonV2
+              v-else
+              :content-class="['px-[48px]']"
+              class="phoneLg:w-full phoneLg:max-w-[480px]"
+              preset="tertiary"
+              :text="$t('nft_claim_claimed_button_view_collection_sign_in')"
+              @click="handleClickSignIn"
+            />
+          </div>
         </template>
       </NFTClaimMainSection>
     </div>
@@ -659,6 +658,7 @@ export default {
       'getNFTBookStoreInfoByClassId',
       'getNFTCollectionInfoByCollectionId',
       'getIsHideNFTBookDownload',
+      'getNFTClassOwnerInfoById',
       'walletMethodType',
     ]),
     state: {
@@ -1400,7 +1400,7 @@ export default {
       this.isLoginLoading = false;
     },
 
-    handleStartReading() {
+    async handleStartReading() {
       logTrackerEvent(
         this,
         'NFT',
@@ -1410,6 +1410,7 @@ export default {
       );
 
       if (this.nftId) {
+        await this.ensureClassIdInCollected();
         this.$router.push(
           this.localeLocation({
             name: 'nft-class-classId-nftId',
@@ -1427,38 +1428,61 @@ export default {
       }
     },
     async ensureClassIdInCollected() {
-      this.isViewCollectionLoading = true;
+      if (this.classId && this.isAutoDeliver) {
+        this.isViewCollectionLoading = true;
+        let collectedNFTs = this.getCollectedNFTClassesByAddress(
+          this.claimingAddress
+        );
+        let ownCount =
+          this.getNFTClassOwnerInfoById(this.classId)[this.claimingAddress]
+            ?.length || 0;
 
-      let collectedNFTs = this.getCollectedNFTClassesByAddress(
-        this.claimingAddress
-      );
+        if (
+          !collectedNFTs?.some(item => item.classId === this.classId) ||
+          !ownCount
+        ) {
+          for (let attempts = 0; attempts < MAX_ATTEMPT; attempts += 1) {
+            try {
+              const fetchPromises = [
+                this.fetchCollectedNFTClassesByAddress({
+                  address: this.claimingAddress,
+                  nocache: true,
+                }),
+              ];
 
-      if (!collectedNFTs?.some(item => item.classId === this.classId)) {
-        for (let attempts = 0; attempts < MAX_ATTEMPT; attempts += 1) {
-          try {
-            // eslint-disable-next-line no-await-in-loop
-            await this.fetchCollectedNFTClassesByAddress({
-              address: this.claimingAddress,
-              nocache: true,
-            });
+              if (ownCount === 0) {
+                fetchPromises.push(
+                  this.fetchNFTOwners({ classId: this.classId, nocache: true })
+                );
+              }
 
-            collectedNFTs = this.getCollectedNFTClassesByAddress(
-              this.claimingAddress
-            );
+              // eslint-disable-next-line no-await-in-loop
+              await Promise.all(fetchPromises);
 
-            if (collectedNFTs?.some(item => item.classId === this.classId)) {
-              break;
+              collectedNFTs = this.getCollectedNFTClassesByAddress(
+                this.claimingAddress
+              );
+              ownCount =
+                this.getNFTClassOwnerInfoById(this.classId)[
+                  this.claimingAddress
+                ]?.length || 0;
+
+              if (
+                collectedNFTs?.some(item => item.classId === this.classId) &&
+                ownCount > 0
+              ) {
+                break;
+              }
+              // eslint-disable-next-line no-await-in-loop
+              await sleep(1000);
+            } catch (error) {
+              // eslint-disable-next-line no-console
+              console.error(error);
             }
-            // eslint-disable-next-line no-await-in-loop
-            await sleep(1000);
-          } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
           }
         }
+        this.isViewCollectionLoading = false;
       }
-
-      this.isViewCollectionLoading = false;
     },
     async handleViewCollection() {
       logTrackerEvent(
@@ -1468,9 +1492,7 @@ export default {
         this.productId,
         1
       );
-      if (this.classId && this.isAutoDeliver) {
-        await this.ensureClassIdInCollected();
-      }
+      await this.ensureClassIdInCollected();
       this.$router.push(
         this.localeLocation({
           name: 'bookshelf',

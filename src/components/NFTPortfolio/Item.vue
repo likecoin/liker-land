@@ -81,7 +81,7 @@ export default {
       return this.getAddress === this.portfolioWallet;
     },
     isContentViewable() {
-      return (
+      return !!(
         this.nftIsNFTBook &&
         (this.isBookshelf || this.isCurrentUserPortfolio) &&
         this.nftIdCollectedFirstByUser
