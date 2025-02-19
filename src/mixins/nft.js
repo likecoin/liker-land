@@ -229,7 +229,7 @@ export default {
     NFTImageUrl() {
       const { image = '' } = this.NFTClassMetadata;
       let url = image;
-      if (!url.startsWith('ar://') && this.iscnThumbnailUrl) {
+      if (this.iscnThumbnailUrl) {
         url = this.iscnThumbnailUrl;
       }
       return parseNFTMetadataURL(url);
@@ -237,7 +237,7 @@ export default {
     nftImageURL() {
       const { image = '' } = this.nftMetadata;
       let url = image;
-      if (!url.startsWith('ar://') && this.iscnThumbnailUrl) {
+      if (this.iscnThumbnailUrl) {
         url = this.iscnThumbnailUrl;
       }
       return parseNFTMetadataURL(url) || this.NFTImageUrl;
