@@ -16,7 +16,7 @@
     "@cosmjs/stargate": "^0.30.1",
     "@google-cloud/firestore": "^6.2.0",
     "@google-cloud/pubsub": "^3.2.1",
-    "@likecoin/edm": "^8.2.0-beta.1",
+    "@likecoin/edm": "^8.4.0",
     "@likecoin/iscn-js": "^0.7.0",
     "@likecoin/ui-vue": "^0.7.1",
     "@likecoin/wallet-connector": "^0.27.2",
