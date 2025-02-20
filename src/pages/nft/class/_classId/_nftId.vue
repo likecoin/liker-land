@@ -381,14 +381,6 @@ export default {
       await Promise.all([
         store.dispatch('lazyGetNFTClassMetadata', classId),
         store.dispatch('lazyGetNFTMetadata', { classId, nftId }),
-        store
-          .dispatch('lazyGetNFTPurchaseAndListingInfo', classId)
-          .catch(err => {
-            if (err.response?.data !== 'NFT_CLASS_NOT_FOUND') {
-              // eslint-disable-next-line no-console
-              console.error(JSON.stringify(err));
-            }
-          }),
       ]);
     } catch (err) {
       if (err.response?.data?.code === 3) {

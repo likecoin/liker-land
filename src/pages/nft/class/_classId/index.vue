@@ -621,14 +621,6 @@ export default {
       await Promise.all([
         store.dispatch('lazyGetNFTClassMetadata', classId),
         store
-          .dispatch('lazyGetNFTPurchaseAndListingInfo', classId)
-          .catch(err => {
-            if (err.response?.data !== 'NFT_CLASS_NOT_FOUND') {
-              // eslint-disable-next-line no-console
-              console.error(JSON.stringify(err));
-            }
-          }),
-        store
           .dispatch('lazyFetchNFTBookInfoByClassId', classId)
           .catch(error => {
             if (

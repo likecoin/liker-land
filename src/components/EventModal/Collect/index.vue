@@ -571,7 +571,7 @@ export default {
       return 'https://faucet.like.co/purchase';
     },
     isShowAddToShoppingCartButton() {
-      return this.canPayByLIKE && !this.nftIsUseListingPrice;
+      return this.canPayByLIKE;
     },
     shoppingCartQuantity() {
       return this.getShoppingCartNFTClassQuantity(this.classId);

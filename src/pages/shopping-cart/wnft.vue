@@ -162,7 +162,6 @@ export default {
   computed: {
     ...mapGetters([
       'getNFTClassPurchaseInfoById',
-      'getNFTClassListingInfoById',
       'getNFTClassMetadataById',
       'shoppingCartNFTClassList',
     ]),
