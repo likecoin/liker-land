@@ -9,7 +9,6 @@ const { db } = require('../modules/firebase');
 const users = require('./routes/users');
 const usersV2 = require('./routes/users/v2');
 const civic = require('./routes/civic');
-const reader = require('./routes/reader');
 const bookstore = require('./routes/bookstore');
 const { COOKIE_SECRET } = require('../config/config');
 const { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTION } = require('./constant');
@@ -74,7 +73,6 @@ router.use(cookieParser());
 router.use(users);
 router.use('/v2/users', usersV2);
 router.use(civic);
-router.use(reader);
 router.use(bookstore);
 router.get('/healthz', (_, res) => {
   res.sendStatus(200);

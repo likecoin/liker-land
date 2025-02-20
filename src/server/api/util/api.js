@@ -86,46 +86,6 @@ const apiFetchUserSuperLikeStatus = (req, tz = 8) =>
       headers: { Authorization },
     })
   );
-const apiFetchUserSuperlike = (user, { limit, after, before, filter }) =>
-  axios.get(`${LIKECOIN_API_BASE}/like/share/user/${user}/latest`, {
-    params: {
-      limit,
-      after,
-      before,
-      filter,
-    },
-  });
-const apiFetchFollowedUser = req =>
-  sendAuthorizedRequest(req, Authorization =>
-    axios.get(`${LIKECOIN_API_BASE}/users/follow/users`, {
-      headers: { Authorization },
-    })
-  );
-const apiFetchBookmarks = req =>
-  sendAuthorizedRequest(req, Authorization =>
-    axios.get(`${LIKECOIN_API_BASE}/users/bookmarks`, {
-      headers: { Authorization },
-    })
-  );
-const apiPostBookmarks = (url, req) =>
-  sendAuthorizedRequest(req, Authorization =>
-    axios.post(
-      `${LIKECOIN_API_BASE}/users/bookmarks`,
-      { url },
-      {
-        headers: { Authorization },
-      }
-    )
-  );
-const apiDeleteBookmarks = (url, req) =>
-  sendAuthorizedRequest(req, Authorization =>
-    axios.delete(
-      `${LIKECOIN_API_BASE}/users/bookmarks/?url=${encodeURIComponent(url)}`,
-      {
-        headers: { Authorization },
-      }
-    )
-  );
 const apiCivicLikerGetStaking = req =>
   sendAuthorizedRequest(req, Authorization =>
     axios.get(
@@ -181,11 +141,6 @@ module.exports = {
   apiFetchUserPreferences,
   apiUpdateUserPreferences,
   apiFetchUserSuperLikeStatus,
-  apiFetchUserSuperlike,
-  apiFetchBookmarks,
-  apiPostBookmarks,
-  apiDeleteBookmarks,
-  apiFetchFollowedUser,
   apiCivicLikerGetStaking,
   apiCivicLikerGetStakingInfo,
   getOAuthURL,
