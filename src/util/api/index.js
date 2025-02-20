@@ -440,13 +440,6 @@ export const getNFTClassMetadata = (classId, excludeOptions = []) => {
   return `${baseUrl}${queryParams ? `&${queryParams}` : ''}`;
 };
 
-export const nftMintSubscriptionAPI = ({ id, email, wallet, language }) => {
-  const qsPayload = { email, wallet, language };
-  return `${EXTERNAL_HOST}/api/nft/mint-subscription${
-    id ? `/${id}` : ''
-  }?${querystring.stringify(qsPayload)}`;
-};
-
 export const getUserV2Self = () => '/api/v2/users/self';
 export const postUserV2Login = () => '/api/v2/users/login';
 export const postUserV2Logout = () => '/api/v2/users/logout';

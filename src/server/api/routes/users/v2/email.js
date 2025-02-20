@@ -8,7 +8,6 @@ const {
   db,
   FieldValue,
   walletUserCollection,
-  nftMintSubscriptionCollection,
 } = require('../../../../modules/firebase');
 const { authenticateV2Login } = require('../../../middleware/auth');
 const { handleRestfulError } = require('../../../middleware/error');
@@ -204,25 +203,6 @@ router.put('/email', async (req, res, next) => {
       return { ...userData, email: emailUnconfirmed };
     });
     const { email, displayName, lastLoginMethod: loginMethod } = userInfo;
-
-    const legacyQuery = nftMintSubscriptionCollection
-      .where('subscriberEmail', '==', email)
-      .limit(499);
-    let querySnapshot = await legacyQuery.get();
-    while (querySnapshot.size) {
-      const batch = db.batch();
-      const legacyFollowees = querySnapshot.docs.map(
-        doc => doc.data().subscribedWallet
-      );
-      batch.update(userRef, {
-        followees: FieldValue.arrayUnion(...legacyFollowees),
-      });
-      querySnapshot.docs.forEach(doc => batch.delete(doc.ref));
-      // eslint-disable-next-line no-await-in-loop
-      await batch.commit();
-      // eslint-disable-next-line no-await-in-loop
-      querySnapshot = await legacyQuery.get();
-    }
 
     publisher.publish(PUBSUB_TOPIC_MISC, req, {
       logType: 'UserEmailVerified',

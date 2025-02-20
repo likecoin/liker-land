@@ -1,7 +1,6 @@
 const admin = require('firebase-admin');
 const {
   FIRESTORE_USER_ROOT,
-  FIRESTORE_NFT_MINT_SUBSCRIPTION_ROOT,
   FIRESTORE_WALLET_USER_ROOT,
 } = require('../config/config');
 
@@ -29,9 +28,6 @@ const getCollectionIfDefined = root =>
 
 const userCollection = getCollectionIfDefined(FIRESTORE_USER_ROOT);
 const walletUserCollection = getCollectionIfDefined(FIRESTORE_WALLET_USER_ROOT);
-const nftMintSubscriptionCollection = getCollectionIfDefined(
-  FIRESTORE_NFT_MINT_SUBSCRIPTION_ROOT
-);
 
 module.exports = {
   db,
@@ -39,5 +35,4 @@ module.exports = {
   Timestamp,
   userCollection,
   walletUserCollection,
-  nftMintSubscriptionCollection,
 };
