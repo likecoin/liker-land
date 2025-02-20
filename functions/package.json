@@ -79,6 +79,7 @@
     "uuid": "^8.3.2",
     "v-dropdown-menu": "git+ssh://git@github.com:likecoin/v-dropdown-menu.git#9ab8dd0320125c105ae99df096ed3fcb477fe0e0",
     "v-tooltip": "^2.0.2",
+    "viem": "^2.23.3",
     "vue": "2.7.15",
     "vue-awesome-swiper": "^4.1.1",
     "vue-class-component": "^7.2.6",
