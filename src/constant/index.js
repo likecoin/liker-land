@@ -462,23 +462,7 @@ export const NFT_BOOK_WITH_SIGN_IMAGE_SET = new Map(
       ]
 );
 
-export const NFT_BOOK_WITH_EVENT_BANNER_SET = [
-  {
-    id: '20250215-bottleshiu-bookclub',
-    href:
-      'https://docs.google.com/forms/d/e/1FAIpQLSc2ZvcopT5OP4m9g8U_T95V3UluyqqlsJOY-_mIq1nAZ54tqQ/viewform',
-    imgAlt: '邵家臻先生著作讀書會',
-    classIds: IS_TESTNET
-      ? [
-          'likenft1emvvd04ynymxn7d62mmmqxr7xrye92wqxxgh394r2jnznnl0uneqapg60l',
-          'likenft1vwm4ze65h5vv84uahwd3x52xp8t9q5xqex3d58mvgeurrm0dk0yqcwd6d8',
-        ]
-      : [
-          'likenft17zq3r5t2qwfatle04sz680vl3ka0l8wfeu4n5jv26mnvawnfqs4qd773ny',
-          'likenft154xhw0qyds5pgvsyc7379lnkyvwqkvv2zvmmh2gn5qrewljeqwys2sju6x',
-        ],
-  },
-];
+export const NFT_BOOK_WITH_EVENT_BANNER_SET = [];
 
 export const NFT_BOOK_PRODUCT_PAGE_OVERRIDE = IS_TESTNET
   ? {}
