@@ -12,7 +12,6 @@ import * as getters from './getters/user';
 
 const state = () => ({
   user: {},
-  subscriptionInfo: undefined,
   gaClientId: undefined,
   gaSessionId: undefined,
 });

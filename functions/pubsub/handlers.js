@@ -17,11 +17,7 @@ const axios = Axios.create({
   maxContentLength: 50 * 1000 * 1000,
 });
 
-
-const {
-  nftMintSubscriptionCollection,
-  walletUserCollection,
-} = require('../modules/firebase');
+const { walletUserCollection } = require('../modules/firebase');
 const { fetchLikerInfoByWallet } = require('../modules/liker');
 const {
   convertLanguageCodeForEmailTemplate,
@@ -78,14 +74,7 @@ export async function handleMintEvent(message, data) {
 
   const { name, image } = await fetchNFTMetadata(classId);
 
-  const [
-    anonymousUserQuerySnapshot,
-    walletUserQuerySnapshot,
-  ] = await Promise.all([
-    nftMintSubscriptionCollection
-      .where('subscribedWallet', '==', sellerWallet)
-      .where('isVerified', '==', true)
-      .get(),
+  const [walletUserQuerySnapshot] = await Promise.all([
     walletUserCollection
       .where('followees', 'array-contains', sellerWallet)
       .where('email', '>', '')
@@ -99,30 +88,21 @@ export async function handleMintEvent(message, data) {
   } = await fetchLikerInfoByWallet(sellerWallet);
 
   let recipients = [];
-  anonymousUserQuerySnapshot.forEach(doc => {
-    const { subscriberEmail, language = 'en' } = doc.data();
-    recipients.push({
-      email: subscriberEmail,
-      language,
-      subscriptionId: doc.id,
-    });
-  });
   walletUserQuerySnapshot.forEach(async doc => {
     const { email, language = 'en' } = doc.data();
-    recipients.push({
+    return {
       email,
       language,
-    });
+    };
   });
 
   // dedup
   recipients = [...new Map(recipients.map(r => [r.email, r])).values()];
 
   for (let i = 0; i < recipients.length; i += 1) {
-    const { email, language, subscriptionId } = recipients[i];
+    const { email, language } = recipients[i];
     try {
       const getSubscriptionConfirmURL = createSubscriptionConfirmURLFactory({
-        subscriptionId,
         subscribedWallet: sellerWallet,
         subscriberEmail: email,
         language,

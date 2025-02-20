@@ -521,31 +521,6 @@ const nuxtConfig = {
   // },
   router: {
     middleware: 'from-channel',
-    extendRoutes(routes, resolve) {
-      const route = routes.find(r => r.name === 'id');
-      const [subscribeRoute] = route.children;
-      const replaceToUnsubscribe = s => s.replace('subscribe', 'unsubscribe');
-      route.children.push({
-        name: replaceToUnsubscribe(subscribeRoute.name),
-        path: replaceToUnsubscribe(subscribeRoute.path),
-        component: subscribeRoute.component,
-        chunkName: replaceToUnsubscribe(subscribeRoute.chunkName),
-      });
-
-      const civicPageRouteIndex = routes.findIndex(
-        r => r.name === 'civic-from'
-      );
-      routes.splice(
-        civicPageRouteIndex,
-        0,
-        // For Civic Liker Classic
-        {
-          path: '/civic/classic',
-          component: resolve(__dirname, 'pages/_id/civic/index.vue'),
-          name: 'civic-classic',
-        }
-      );
-    },
   },
 
   /*

@@ -142,17 +142,6 @@
               </template>
             </ButtonV2>
           </CardV2>
-          <NFTPortfolioSubscriptionForm
-            v-if="!walletHasLoggedIn"
-            id="creator-follow"
-            class="w-full"
-            :creator-wallet-address="wallet"
-            :creator-display-name="userDisplayName"
-            :is-wallet-connected="!!getAddress"
-            :is-wallet-logged-in="walletHasLoggedIn"
-            :is-followed="isFollowed"
-            :is-empty="false"
-          />
         </template>
       </div>
 

@@ -6,7 +6,6 @@ const {
   db,
   FieldValue,
   walletUserCollection,
-  nftMintSubscriptionCollection,
 } = require('../../../../modules/firebase');
 const { publisher, PUBSUB_TOPIC_MISC } = require('../../../../modules/pubsub');
 
@@ -20,24 +19,7 @@ router.get('/followees', authenticateV2Login, async (req, res, next) => {
       res.json({ followees: [] });
       return;
     }
-    const {
-      followees: walletFollowees = [],
-      email,
-      pastFollowees = [],
-    } = userDoc.data();
-    let legacyFollowees = [];
-    if (email) {
-      const snapshot = await nftMintSubscriptionCollection
-        .where('subscriberEmail', '==', email)
-        .get();
-      legacyFollowees = snapshot.docs.map(doc => {
-        const { subscribedWallet } = doc.data();
-        return subscribedWallet;
-      });
-    }
-    const followees = [
-      ...new Set([...walletFollowees, ...legacyFollowees]).values(),
-    ];
+    const { followees = [], pastFollowees = [] } = userDoc.data();
     res.json({ followees, pastFollowees });
   } catch (err) {
     handleRestfulError(req, res, next, err);
@@ -79,19 +61,6 @@ router.delete('/followees', authenticateV2Login, async (req, res, next) => {
       return;
     }
     await db.runTransaction(async t => {
-      const userDoc = await t.get(walletUserCollection.doc(user));
-      const { email } = userDoc.data();
-      if (email) {
-        const snapshot = await t.get(
-          nftMintSubscriptionCollection
-            .where('subscriberEmail', '==', email)
-            .where('subscribedWallet', '==', creator)
-            .limit(1)
-        );
-        if (snapshot.docs.length > 0) {
-          t.delete(snapshot.docs[0].ref);
-        }
-      }
       await t.update(walletUserCollection.doc(user), {
         followees: FieldValue.arrayRemove(creator),
       });
