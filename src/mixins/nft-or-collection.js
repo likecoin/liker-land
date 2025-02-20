@@ -31,8 +31,7 @@ export default {
       return description;
     },
     productImageUrl() {
-      const image = this.productMetadata?.image;
-      return image ? parseNFTMetadataURL(image) : '';
+      return this.isCollection ? this.collectionImageUrl : this.NFTImageUrl;
     },
     productOwner() {
       return this.isCollection
