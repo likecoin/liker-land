@@ -486,6 +486,7 @@ export const NFT_BOOK_PRODUCT_PAGE_OVERRIDE = IS_TESTNET
       likenft1d7m9zdw3zmd6jfvu0l6zgr3f4pz3me49ahzgl20wujwus6jtc2zq7ekm6u: {
         authorQuery: '邵家臻',
         isOwnerHidden: true,
+        crossSellDialogTitle: '延伸閱讀：家臻的簽名電子書',
         recommendedClassIds: IS_TESTNET
           ? [
               'likenft1emvvd04ynymxn7d62mmmqxr7xrye92wqxxgh394r2jnznnl0uneqapg60l',

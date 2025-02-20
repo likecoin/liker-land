@@ -12,7 +12,7 @@
       <Label
         preset="h4"
         class="text-dark-gray"
-        :text="$t('nft_book_cross_sell_title')"
+        :text="title || $t('nft_book_cross_sell_title')"
       />
 
       <NuxtLink
@@ -91,6 +91,10 @@ export default {
       default: undefined,
     },
     platform: {
+      type: String,
+      default: undefined,
+    },
+    title: {
       type: String,
       default: undefined,
     },

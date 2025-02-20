@@ -515,6 +515,7 @@
       :open="isCrossSellDialogOpen"
       :class-id="crossSellClassId"
       :collection-id="crossSellCollectionId"
+      :title="nftPageOverride?.crossSellDialogTitle"
       @accept="handleCrossSellAccept"
       @reject="handleCrossSellReject"
     />
