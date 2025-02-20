@@ -37,7 +37,6 @@ export default {
   methods: {
     fetchInfo() {
       catchAxiosError(this.lazyGetNFTClassMetadata(this.classId));
-      catchAxiosError(this.lazyGetNFTPurchaseAndListingInfo(this.classId));
     },
     handleClickCollect() {
       this.$emit('collect');

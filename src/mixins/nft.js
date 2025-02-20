@@ -97,7 +97,6 @@ export default {
       'getNFTClassFeaturedSetByAddress',
       'getNFTClassHiddenSetByAddress',
       'getNFTClassPurchaseInfoById',
-      'getNFTClassListingInfoById',
       'getNFTClassMetadataById',
       'getNFTClassOwnerInfoById',
       'getNFTClassPaymentPriceById',
@@ -151,19 +150,6 @@ export default {
         nftId: nextNewNFTId,
         seller: LIKECOIN_NFT_API_WALLET,
       };
-    },
-    listingInfo() {
-      const list = this.getNFTClassListingInfoById(this.classId) || [];
-      if (list.length) {
-        const { price, nftId, seller } = list[0];
-        return {
-          price,
-          classId: this.classId,
-          nftId,
-          seller,
-        };
-      }
-      return {};
     },
     ownerInfo() {
       return this.getNFTClassOwnerInfoById(this.classId) || {};
@@ -296,15 +282,6 @@ export default {
     nftISCNContentFingerprints() {
       return this.iscnData?.contentFingerprints || [];
     },
-    nftIsUseListingPrice() {
-      return (
-        this.listingInfo &&
-        this.listingInfo.price &&
-        (!this.purchaseInfo ||
-          !this.purchaseInfo.price ||
-          this.listingInfo.price < this.purchaseInfo.price)
-      );
-    },
     NFTPrice() {
       return this.nftIsNFTBook
         ? this.nftPaymentPriceInUSD
@@ -414,9 +391,7 @@ export default {
         isPhysicalOnly: false,
         isAllowCustomPrice: false,
         hasShipping: false,
-        stock: this.nftIsCollectable
-          ? this.getNFTClassListingInfoById(this.classId)?.length
-          : 0,
+        stock: 0,
         defaultPrice: 0,
         currency,
       };
@@ -633,9 +608,7 @@ export default {
       return ownNFT?.[0];
     },
     nftIdCollectNext() {
-      return this.nftIsUseListingPrice
-        ? this.listingInfo.nftId
-        : this.purchaseInfo?.nftId;
+      return this.purchaseInfo?.nftId;
     },
     nftCollectRoute() {
       return this.localeLocation({
@@ -786,10 +759,8 @@ export default {
       'lazyGetISCNMetadataById',
       'lazyFetchNFTClassAggregatedInfo',
       'lazyGetNFTClassMetadata',
-      'lazyGetNFTPurchaseAndListingInfo',
       'lazyGetNFTOwners',
       'fetchNFTPurchaseInfo',
-      'fetchNFTListingInfo',
       'fetchNFTClassMetadata',
       'fetchNFTOwners',
       'fetchNFTPaymentPriceInfoByClassId',
@@ -827,7 +798,6 @@ export default {
     },
     async updateNFTPurchaseInfo() {
       await catchAxiosError(this.fetchNFTPurchaseInfo(this.classId));
-      catchAxiosError(this.fetchNFTListingInfo(this.classId));
     },
     async fetchNFTPrices() {
       await catchAxiosError(
@@ -1057,47 +1027,22 @@ export default {
           return undefined;
         }
 
-        const { nftIsUseListingPrice } = this;
         this.uiSetTxStatus(TX_STATUS.SIGN);
         logTrackerEvent(
           this,
           'NFT',
-          nftIsUseListingPrice
-            ? 'NFTCollectSignBuyRequested'
-            : 'NFTCollectSignGrantRequested',
+          'NFTCollectSignGrantRequested',
           classId,
           1
         );
-        let signData;
-        if (nftIsUseListingPrice) {
-          const { price, nftId, seller } = this.listingInfo;
-          signData = await signBuyNFT({
-            senderAddress: this.getAddress,
-            classId,
-            nftId,
-            seller,
-            memo,
-            priceInLIKE: price,
-            signer: this.getSigner,
-          });
-        } else {
-          signData = await signGrant({
-            senderAddress: this.getAddress,
-            amountInLIKE: this.nftPriceInLIKE,
-            signer: this.getSigner,
-            memo,
-          });
-        }
+        const signData = await signGrant({
+          senderAddress: this.getAddress,
+          amountInLIKE: this.nftPriceInLIKE,
+          signer: this.getSigner,
+          memo,
+        });
         this.uiSetTxStatus(TX_STATUS.PROCESSING);
-        logTrackerEvent(
-          this,
-          'NFT',
-          nftIsUseListingPrice
-            ? 'NFTCollectSignBuyApproved'
-            : 'NFTCollectSignGrantApproved',
-          classId,
-          1
-        );
+        logTrackerEvent(this, 'NFT', 'NFTCollectSignGrantApproved', classId, 1);
         const { txHash, code } = await broadcastTx(signData, this.getSigner);
         logTrackerEvent(
           this,
@@ -1116,19 +1061,14 @@ export default {
         }
         if (txHash && this.uiIsOpenCollectModal) {
           logTrackerEvent(this, 'NFT', 'NFTCollectPurchase', classId, 1);
-          let result;
-          if (nftIsUseListingPrice) {
-            result = { data: { nftId: this.listingInfo.nftId } };
-          } else {
-            this.uiSetTxStatus(TX_STATUS.PROCESSING_NON_BLOCKING);
-            result = await this.$api.post(
-              postNFTPurchase({
-                txHash,
-                classId,
-                ts: Date.now(),
-              })
-            );
-          }
+          this.uiSetTxStatus(TX_STATUS.PROCESSING_NON_BLOCKING);
+          const result = await this.$api.post(
+            postNFTPurchase({
+              txHash,
+              classId,
+              ts: Date.now(),
+            })
+          );
           logTrackerEvent(
             this,
             'NFT',

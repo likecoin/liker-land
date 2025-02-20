@@ -30,7 +30,6 @@ const state = () => ({
   iscnMetadataByIdMap: {},
   paymentPriceByClassIdMap: {},
   purchaseInfoByClassIdMap: {},
-  listingInfoByClassIdMap: {},
   metadataByClassIdMap: {},
   metadataByNFTClassAndNFTIdMap: {},
   ownerInfoByClassIdMap: {},
@@ -69,9 +68,6 @@ const mutations = {
   },
   [TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO](state, { classId, info }) {
     Vue.set(state.purchaseInfoByClassIdMap, classId, info);
-  },
-  [TYPES.NFT_SET_NFT_CLASS_LISTING_INFO](state, { classId, info }) {
-    Vue.set(state.listingInfoByClassIdMap, classId, info);
   },
   [TYPES.NFT_SET_NFT_CLASS_METADATA](state, { classId, metadata }) {
     Vue.set(state.metadataByClassIdMap, classId, metadata);
@@ -244,7 +240,6 @@ const getters = {
     (state.userNFTClassDisplayStateSetsMap[address] || {}).hiddenClassIdSet,
   getNFTClassPurchaseInfoById: state => id =>
     state.purchaseInfoByClassIdMap[id],
-  getNFTClassListingInfoById: state => id => state.listingInfoByClassIdMap[id],
   getNFTClassMetadataById: state => id => state.metadataByClassIdMap[id],
   getNFTClassOwnerInfoById: state => id => state.ownerInfoByClassIdMap[id],
   getNFTClassPaymentPriceById: state => id =>
@@ -511,7 +506,6 @@ const actions = {
       classData,
       iscnData,
       ownerInfo,
-      listings,
       purchaseInfo,
       bookstoreInfo,
     } = await this.$api.$get(api.getNFTClassMetadata(classId, excludeOptions));
@@ -526,9 +520,6 @@ const actions = {
     }
     if (shouldCommit('iscn')) {
       commit(TYPES.NFT_SET_ISCN_METADATA, { iscnId, data: iscnData });
-    }
-    if (shouldCommit('listing')) {
-      commit(TYPES.NFT_SET_NFT_CLASS_LISTING_INFO, { classId, info: listings });
     }
     if (shouldCommit('owner')) {
       commit(TYPES.NFT_SET_NFT_CLASS_OWNER_INFO, { classId, info: ownerInfo });
@@ -574,7 +565,6 @@ const actions = {
       metadata,
       getters.getISCNMetadataById(metadata?.parent?.iscn_id_prefix),
       getters.getNFTClassOwnerInfoById(classId),
-      getters.getNFTClassListingInfoById(classId),
     ];
 
     if (fieldsToCheck.some(value => !value)) {
@@ -587,42 +577,6 @@ const actions = {
   async fetchNFTPurchaseInfo({ commit }, classId) {
     const info = await this.$api.$get(api.getNFTPurchaseInfo({ classId }));
     commit(TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO, { classId, info });
-    return info;
-  },
-  async fetchNFTListingInfo({ commit, dispatch }, classId) {
-    const [{ listings }, ownerInfo] = await Promise.all([
-      this.$api.$get(api.getChainNFTClassListingEndpoint(classId)),
-      dispatch('lazyGetNFTOwners', classId),
-    ]);
-    const info = listings
-      .map(l => {
-        const {
-          class_id: classId,
-          nft_id: nftId,
-          seller,
-          price,
-          expiration,
-        } = l;
-        return {
-          classId,
-          nftId,
-          seller,
-          price: new BigNumber(price).shiftedBy(-9).toNumber(),
-          expiration: new Date(expiration),
-        };
-      })
-      .filter(l => ownerInfo[l.seller]?.includes(l.nftId)) // guard listing then sent case
-      .sort((a, b) => a.price - b.price);
-    commit(TYPES.NFT_SET_NFT_CLASS_LISTING_INFO, { classId, info });
-    return info;
-  },
-  async lazyGetNFTPurchaseAndListingInfo({ getters, dispatch }, classId) {
-    let info = getters.getNFTClassPurchaseInfoById(classId);
-    const listingInfo = getters.getNFTClassListingInfoById(classId);
-    if (!listingInfo) dispatch('fetchNFTListingInfo', classId);
-    if (!info) {
-      info = await dispatch('fetchNFTPurchaseInfo', classId);
-    }
     return info;
   },
   async fetchNFTClassMetadata({ dispatch }, classId) {
