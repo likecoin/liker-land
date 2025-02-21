@@ -26,9 +26,7 @@
         :is-civic-liker="isWalletUserCivicLiker"
         @click-avatar="handleClickUserInfoCardAvatar"
         @copy-wallet="handleCopyWallet"
-      >
-        <UserStatsGem :wallet="wallet" />
-      </UserInfoCard>
+      />
 
       <!-- Tab Bar -->
       <nav class="flex justify-center mb-[1.5rem] desktop:hidden">
@@ -87,9 +85,7 @@
           :is-civic-liker="isWalletUserCivicLiker"
           @click-avatar="handleClickUserInfoCardAvatar"
           @copy-wallet="handleCopyWallet"
-        >
-          <UserStatsGem :wallet="wallet" />
-        </UserInfoCard>
+        />
 
         <BalanceCard class="w-full" :balance="walletLIKEBalance" />
 

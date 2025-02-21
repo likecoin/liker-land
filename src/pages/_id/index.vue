@@ -29,9 +29,6 @@
         ]"
       >
         <NFTPortfolioUserInfo :wallet="wallet">
-          <template #gem>
-            <UserStatsGem :wallet="wallet" />
-          </template>
           <template #stats>
             <UserStatsPortfolio
               class="grid grid-cols-2 cursor-default gap-x-8 gap-y-4 text-medium-gray"

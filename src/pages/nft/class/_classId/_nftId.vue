@@ -155,46 +155,44 @@
           <div
             class="flex flex-col gap-[24px] items-center order-first col-span-1 desktop:order-none"
           >
-            <NFTGemWrapper :class-id="classId" :is-nft-book="nftIsNFTBook">
-              <NFTPagePreviewCard
-                :url="externalUrl"
-                :content-urls="iscnContentUrls"
-                :image-bg-color="nftImageBackgroundColor"
-                :image-url="nftImageURL"
-                :animation-url="nftAnimationURL"
-                :avatar-url="creatorAvatar"
-                :avatar-size="40"
-                :is-avatar-outlined="isCreatorCivicLiker"
-                :iscn-owner="iscnOwner"
-                :iscn-work-author-name="iscnWorkAuthorName"
-                :iscn-url="iscnURL"
-                :display-name="creatorDisplayNameFull"
-                :class-id="classId"
-                :nft-id="nftId"
-                :nft-name="nftName"
-                :nft-description="nftDescription"
-                :nft-price="NFTPrice"
-                :collected-count="collectedCount"
-                :collector-count="ownerCount"
-                :class-collection-type="nftClassCollectionType"
-                :class-collection-name="nftClassCollectionName"
-                :is-content-viewable="!(nftIsNFTBook && !isOwningNFT)"
-                :is-content-downloadable="!nftIsDownloadHidden"
-                :is-nft-book="nftIsNFTBook"
-                @view-content="handleViewContent"
-                @view-content-url="handleViewContentUrl"
-              />
-              <NFTFeatured
-                :class-id="classId"
-                :read-only="
-                  !(
-                    nftCollectorWalletAddress &&
-                    nftCollectorWalletAddress.includes(getAddress)
-                  )
-                "
-                :display-state="nftDisplayState"
-              />
-            </NFTGemWrapper>
+            <NFTPagePreviewCard
+              :url="externalUrl"
+              :content-urls="iscnContentUrls"
+              :image-bg-color="nftImageBackgroundColor"
+              :image-url="nftImageURL"
+              :animation-url="nftAnimationURL"
+              :avatar-url="creatorAvatar"
+              :avatar-size="40"
+              :is-avatar-outlined="isCreatorCivicLiker"
+              :iscn-owner="iscnOwner"
+              :iscn-work-author-name="iscnWorkAuthorName"
+              :iscn-url="iscnURL"
+              :display-name="creatorDisplayNameFull"
+              :class-id="classId"
+              :nft-id="nftId"
+              :nft-name="nftName"
+              :nft-description="nftDescription"
+              :nft-price="NFTPrice"
+              :collected-count="collectedCount"
+              :collector-count="ownerCount"
+              :class-collection-type="nftClassCollectionType"
+              :class-collection-name="nftClassCollectionName"
+              :is-content-viewable="!(nftIsNFTBook && !isOwningNFT)"
+              :is-content-downloadable="!nftIsDownloadHidden"
+              :is-nft-book="nftIsNFTBook"
+              @view-content="handleViewContent"
+              @view-content-url="handleViewContentUrl"
+            />
+            <NFTFeatured
+              :class-id="classId"
+              :read-only="
+                !(
+                  nftCollectorWalletAddress &&
+                  nftCollectorWalletAddress.includes(getAddress)
+                )
+              "
+              :display-state="nftDisplayState"
+            />
             <ButtonV2
               class="text-medium-gray phone:hidden"
               content-class="text-[12px]"

@@ -1,5 +1,3 @@
-import { NFT_GEM_NAME } from '../constant';
-
 export const STARTING_PRICE = 8;
 const MIN_USD_PRICE = 0.5;
 const LIKE_TO_USD_CONVERT_RATIO = 1024;
@@ -57,22 +55,4 @@ export function getSoldCountByPrice(price) {
     }
   }
   return n;
-}
-
-export function getGemLevelBySoldCount(soldCount) {
-  const batch = getBatch(soldCount);
-  switch (true) {
-    case batch >= 14 && batch <= 16:
-      return 14;
-
-    case batch >= 17:
-      return 15;
-
-    default:
-      return batch;
-  }
-}
-
-export function getGemName(gemLevel) {
-  return NFT_GEM_NAME[gemLevel];
 }
