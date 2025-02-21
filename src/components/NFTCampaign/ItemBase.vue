@@ -321,8 +321,6 @@ export default {
   },
   computed: {
     hoverClass() {
-      // HACK: avoid handling gem level logic by directly mapping imgBgColor
-      // Hardcode hover color class list for tailwind
       const color = this.imgBgColor.toLowerCase();
       switch (color) {
         case '#f7f7f7':

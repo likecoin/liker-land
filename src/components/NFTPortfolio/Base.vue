@@ -1,87 +1,79 @@
 <template>
-  <NFTGemWrapper :is-nft-book="isNftBook" :class-id="classId">
-    <template #default="gem">
-      <NFTPortfolioCard
-        :gem-level="gem.level"
-        :hover-class="gem.hoverClass"
-        :display-state="displayState"
-      >
-        <NFTBookCoverWithFrame
-          class="w-full rounded-t-[inherit] !rounded-b-[0]"
-          :src="imageSrc"
-          :alt="title"
-          :cover-resize="350"
-          class-aspect-ratio="aspect-[1]"
-          :background-color="imageBgColor"
-          @load="handleCoverLoaded"
+  <NFTPortfolioCard :display-state="displayState">
+    <NFTBookCoverWithFrame
+      class="w-full rounded-t-[inherit] !rounded-b-[0]"
+      :src="imageSrc"
+      :alt="title"
+      :cover-resize="350"
+      class-aspect-ratio="aspect-[1]"
+      :background-color="imageBgColor"
+      @load="handleCoverLoaded"
+    />
+
+    <div
+      :class="[
+        'flex',
+        'flex-col',
+        'text-center',
+        'whitespace-pre-line',
+        'px-[24px]',
+        'pt-[48px]',
+        'py-[24px]',
+        'bg-white',
+        'relative',
+        'rounded-b-[inherit] !rounded-t-[0]',
+      ]"
+    >
+      <div class="flex flex-col items-center justify-center mt-[-70px]">
+        <Identity
+          :avatar-url="userAvatarSrc"
+          :avatar-size="40"
+          :is-avatar-outlined="isUserCivicLiker"
+          :is-lazy-loaded="true"
         />
+        <Label
+          class="w-full mt-[8px] text-like-green font-[600]"
+          content-class="min-w-0"
+          align="center"
+        >
+          <span class="text-medium-gray">by</span>&nbsp;
+          <span class="truncate">{{ userDisplayName }}</span>
+        </Label>
+      </div>
+      <Label preset="h5" class="mt-[12px] break-normal" align="center">{{
+        title
+      }}</Label>
+
+      <div class="z-[48] flex justify-center mt-[16px]">
+        <ProgressIndicator v-if="isCollecting" />
 
         <div
-          :class="[
-            'flex',
-            'flex-col',
-            'text-center',
-            'whitespace-pre-line',
-            'px-[24px]',
-            'pt-[48px]',
-            'py-[24px]',
-            'bg-white',
-            'relative',
-            'rounded-b-[inherit] !rounded-t-[0]',
-          ]"
+          v-else-if="portfolioTab === 'created' || ownCount"
+          class="flex w-full gap-[8px]"
         >
-          <div class="flex flex-col items-center justify-center mt-[-70px]">
-            <Identity
-              :avatar-url="userAvatarSrc"
-              :avatar-size="40"
-              :is-avatar-outlined="isUserCivicLiker"
-              :is-lazy-loaded="true"
-            />
-            <Label
-              class="w-full mt-[8px] text-like-green font-[600]"
-              content-class="min-w-0"
-              align="center"
-            >
-              <span class="text-medium-gray">by</span>&nbsp;
-              <span class="truncate">{{ userDisplayName }}</span>
-            </Label>
-          </div>
-          <Label preset="h5" class="mt-[12px] break-normal" align="center">{{
-            title
-          }}</Label>
-
-          <div class="z-[48] flex justify-center mt-[16px]">
-            <ProgressIndicator v-if="isCollecting" />
-
-            <div
-              v-else-if="portfolioTab === 'created' || ownCount"
-              class="flex w-full gap-[8px]"
-            >
-              <NFTViewOptionList
-                class="flex-grow"
-                :class-id="classId"
-                :url="externalUrl"
-                :content-urls="contentUrls"
-                :iscn-url="iscnUrl"
-                :is-nft-book="isNftBook"
-                :is-content-viewable="isContentViewable"
-                :is-content-downloadable="isContentDownloadable"
-                @view-content="handleClickViewContent"
-              />
-            </div>
-            <CollectButton
-              v-else-if="portfolioTab !== 'collected'"
-              class="text-medium-gray"
-              :button-text="collectButtonText"
-              :is-collectable="isCollectable"
-              :collect-expiry-time="collectExpiryTime"
-              @click-collect-button="handleClickCollect"
-            />
-          </div>
+          <NFTViewOptionList
+            class="flex-grow"
+            :class-id="classId"
+            :url="externalUrl"
+            :content-urls="contentUrls"
+            :iscn-url="iscnUrl"
+            :is-nft-book="isNftBook"
+            :is-content-viewable="isContentViewable"
+            :is-content-downloadable="isContentDownloadable"
+            @view-content="handleClickViewContent"
+          />
         </div>
-      </NFTPortfolioCard>
-    </template>
-  </NFTGemWrapper>
+        <CollectButton
+          v-else-if="portfolioTab !== 'collected'"
+          class="text-medium-gray"
+          :button-text="collectButtonText"
+          :is-collectable="isCollectable"
+          :collect-expiry-time="collectExpiryTime"
+          @click-collect-button="handleClickCollect"
+        />
+      </div>
+    </div>
+  </NFTPortfolioCard>
 </template>
 
 <script>

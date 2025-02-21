@@ -12,7 +12,6 @@ import {
   nftClassCollectionType,
   formatNFTClassInfo,
 } from '~/util/nft';
-import { getGemLevelBySoldCount } from '~/util/writing-nft';
 import {
   NFT_CLASS_LATEST_DISPLAY_COUNT,
   NFT_CLASS_TRENDING_LIMIT_PER_OWNER,
@@ -265,10 +264,6 @@ const getters = {
       .filter(([owner]) => owner !== iscnOwner)
       .reduce((totalCount, [, nftIds]) => totalCount + nftIds.length, 0);
   },
-  getNFTClassGemLevel: state => id =>
-    getGemLevelBySoldCount(
-      state.purchaseInfoByClassIdMap[id]?.metadata?.soldCount || 0
-    ),
   getNFTMetadataByNFTClassAndNFTId: state => (classId, nftId) =>
     state.metadataByNFTClassAndNFTIdMap[`${classId}-${nftId}`],
   getNFTBookStoreInfoByClassId: state => classId =>
@@ -866,15 +861,6 @@ const actions = {
         });
       });
     }
-
-    // load class metadata for top 5 gems
-    classes
-      .filter(c => c.symbol === 'WRITING')
-      .sort((a, b) => b.latest_price - a.latest_price)
-      .slice(0, 5)
-      .forEach(c =>
-        dispatch('lazyFetchNFTClassAggregatedInfo', { classId: c.id })
-      );
   },
   async lazyFetchCreatedNFTClassesByAddress({ state, dispatch }, address) {
     const classesOrPromise = state.createdNFTClassesByAddressMap[address];

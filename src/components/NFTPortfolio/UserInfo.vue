@@ -5,7 +5,6 @@
     :avatar-src="userAvatar"
     :is-civic-liker="isUserCivicLiker"
   >
-    <slot name="gem" />
     <template v-if="userDescription">
       <Label preset="p6" class="break-normal font-200">
         {{ userDescription }}
