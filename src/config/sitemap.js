@@ -25,8 +25,6 @@ const LIKECOIN_CHAIN_API = IS_TESTNET
 const LIKECOIN_NFT_API_WALLET = IS_TESTNET
   ? 'like1yney2cqn5qdrlc50yr5l53898ufdhxafqz9gxp'
   : 'like17m4vwrnhjmd20uu7tst7nv0kap6ee7js69jfrs';
-const getLatestNFTClasses = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/class?reverse=true`;
-const getTopNFTClasses = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/ranking?ignore_list=${LIKECOIN_NFT_API_WALLET}`;
 const getTopCreators = `${LIKECOIN_CHAIN_API}/likechain/likenft/v1/creator?ignore_list=${LIKECOIN_NFT_API_WALLET}`;
 
 const getLatestBooks = `${LIKE_CO_API}/likernft/book/store/list?limit=100`;
@@ -37,8 +35,6 @@ const getBookstoreCMSTags = `${EXTERNAL_HOST}/api/bookstore/tags`;
 /* actual routes logic */
 async function getSitemapRoutes() {
   const [
-    newClassRes,
-    topClassRes,
     creatorRes,
     newBookRes,
     newCollectionRes,
@@ -46,8 +42,6 @@ async function getSitemapRoutes() {
     cmsTagRes,
   ] = await Promise.all(
     [
-      getLatestNFTClasses,
-      getTopNFTClasses,
       getTopCreators,
       getLatestBooks,
       getLatestCollections,
@@ -62,7 +56,6 @@ async function getSitemapRoutes() {
     )
   );
   const classes = [].concat(
-    ...[newClassRes, topClassRes].map(r => (r.data || {}).classes || []),
     ...((newBookRes.data || {}).list || []).map(b => ({ id: b.classId })),
     ...((cmsBookRes.data || {}).records || []).map(b => ({
       id: b.classId,
