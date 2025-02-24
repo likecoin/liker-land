@@ -619,17 +619,6 @@ export default {
     rawDataURL() {
       return `${LIKECOIN_CHAIN_API}/cosmos/nft/v1beta1/classes/${this.classId}`;
     },
-    nftWidgetURL() {
-      return `${LIKECOIN_BUTTON_BASE}/in/like/iscn/?iscn_id=${encodeURIComponent(
-        this.iscnId
-      )}`;
-    },
-    nftWidgetImageURL() {
-      return `${LIKECOIN_BUTTON_BASE}/in/embed/nft/image?class_id=${encodeURIComponent(
-        this.classId
-      )}`;
-    },
-
     getWalletIdentityType() {
       return wallet => (wallet === this.iscnOwner ? 'creator' : 'collector');
     },
