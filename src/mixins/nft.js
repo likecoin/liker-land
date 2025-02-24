@@ -10,7 +10,6 @@ import {
   NFT_LEGACY_DEFAULT_MESSSAGE,
   NFT_AUTO_DELIVER_DEFAULT_MESSAGE,
   NFT_BOOK_WITH_SIGN_IMAGE_SET,
-  NFT_BOOK_PRODUCT_PAGE_OVERRIDE,
 } from '~/constant';
 
 import {
@@ -48,6 +47,7 @@ import walletMixin from '~/mixins/wallet';
 import alertMixin from '~/mixins/alert';
 import utmMixin from '~/mixins/utm';
 import nftEventBannerMixin from '~/mixins/nft-event-banner';
+import nftPageOverrideMixin from '~/mixins/nft-page-override';
 import { createUserInfoMixin } from '~/mixins/user-info';
 import { createNFTClassCollectionMixin } from '~/mixins/nft-class-collection';
 
@@ -70,6 +70,7 @@ export default {
     creatorInfoMixin,
     nftClassCollectionMixin,
     nftEventBannerMixin,
+    nftPageOverrideMixin,
     utmMixin,
   ],
   data() {
@@ -649,19 +650,6 @@ export default {
       return (
         customAuthor || this.iscnWorkAuthorName || this.creatorDisplayNameFull
       );
-    },
-
-    nftPageOverride() {
-      return NFT_BOOK_PRODUCT_PAGE_OVERRIDE[this.classId];
-    },
-    nftAuthorQueryOverride() {
-      return this.nftPageOverride?.authorQuery || '';
-    },
-    nftIsOwnerHidden() {
-      return this.nftPageOverride?.isOwnerHidden || false;
-    },
-    nftRecommendedClassIdsOverride() {
-      return this.nftPageOverride?.recommendedClassIds || [];
     },
   },
   watch: {
