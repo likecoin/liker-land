@@ -191,7 +191,15 @@ export function logRetailEvent(vue, eventType, payload) {
 export function logPurchaseFlowEvent(
   vue,
   event,
-  { txHash, price, currency, items, isNFTBook, paymentId, ...otherPayload }
+  {
+    txHash,
+    price,
+    currency = 'USD',
+    items,
+    isNFTBook,
+    paymentId,
+    ...otherPayload
+  }
 ) {
   try {
     if (
@@ -375,7 +383,7 @@ export function logPurchaseFlowEvent(
 
 export function logPurchaseNFTBookEvent(
   vue,
-  { name, price, currency, classId, collectionId, quantity = 1 }
+  { name, price, currency = 'USD', classId, collectionId, quantity = 1 }
 ) {
   try {
     if (vue.$gtag) {

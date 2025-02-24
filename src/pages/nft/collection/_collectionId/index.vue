@@ -84,7 +84,6 @@
       :open="isTippingDialogOpen"
       :creator-avatar="collectionCreatorAvatar"
       :display-name="collectionCreatorDisplayNameFull"
-      :currency="defaultCurrency"
       :price="formattedNFTPriceInUSD"
       :collection-id="collectionId"
       @on-submit="handleSubmitTipping"
@@ -103,7 +102,6 @@ import {
   IS_TESTNET,
   EXTERNAL_HOST,
   NFT_BOOK_PLATFORM_LIKER_LAND,
-  USD_TO_HKD_RATIO,
 } from '~/constant';
 import { parseNFTMetadataURL } from '~/util/nft';
 
@@ -374,9 +372,6 @@ export default {
     shelfItems() {
       return this.classIds.map(id => ({ classId: id }));
     },
-    defaultCurrency() {
-      return this.collection?.defaultPaymentCurrency;
-    },
     purchaseEventParams() {
       const customPriceInDecimal = this.customPrice
         ? this.formatCustomPrice(this.customPrice, this.collectionPrice)
@@ -592,10 +587,7 @@ export default {
       }
     },
     formatCustomPrice(customPrice, editionPrice) {
-      let newPrice = parseFloat(customPrice);
-      if (this.defaultCurrency === 'HKD') {
-        newPrice /= USD_TO_HKD_RATIO.toFixed(1);
-      }
+      const newPrice = parseFloat(customPrice);
       return Math.floor((newPrice + editionPrice) * 100);
     },
     async handleGiftSubmit({ giftInfo }) {

@@ -484,7 +484,6 @@
       :open="isTippingDialogOpen"
       :creator-avatar="creatorAvatar"
       :display-name="creatorDisplayNameFull"
-      :currency="defaultCurrency"
       :class-id="classId"
       :is-loading="isOpeningCheckoutPage"
       :price="formattedNFTPriceInUSD"
@@ -521,7 +520,6 @@
 import { mapActions, mapGetters } from 'vuex';
 import {
   IS_TESTNET,
-  USD_TO_HKD_RATIO,
   EXTERNAL_HOST,
   NFT_BOOK_PLATFORM_LIKER_LAND,
   LIKECOIN_API_BASE,
@@ -980,7 +978,6 @@ export default {
     ...mapGetters([
       'getGaClientId',
       'getGaSessionId',
-      'getNFTBookStoreBookDefaultPaymentCurrency',
       'getShoppingCartBookProductQuantity',
     ]),
     classId() {
@@ -1018,9 +1015,6 @@ export default {
     },
     isContentViewable() {
       return !(this.nftIsNFTBook && !this.ownCount);
-    },
-    defaultCurrency() {
-      return this.getNFTBookStoreBookDefaultPaymentCurrency(this.classId);
     },
     shouldShowFollowButton() {
       return Boolean(this.iscnOwner !== this.getAddress);
@@ -1624,10 +1618,7 @@ export default {
       }
     },
     formatCustomPrice(customPrice, editionPrice) {
-      let newPrice = parseFloat(customPrice);
-      if (this.defaultCurrency === 'HKD') {
-        newPrice /= USD_TO_HKD_RATIO.toFixed(1);
-      }
+      const newPrice = parseFloat(customPrice);
       return Math.floor((newPrice + editionPrice) * 100);
     },
     handleCollectFromEditionSelector(selectedValue) {

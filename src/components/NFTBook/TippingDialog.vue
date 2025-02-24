@@ -118,7 +118,6 @@ import { logTrackerEvent } from '~/util/EventLogger';
 import Avatar from '../Identity/Identity.avatar';
 
 const DEFAULT_TIPPING_PRICES_BY_CURRENCY = {
-  HKD: [40, 200, 1000],
   USD: [5, 20, 100],
 };
 

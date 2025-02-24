@@ -1,8 +1,7 @@
 import { parseNFTMetadataURL } from '~/util/nft';
 import { mapActions, mapGetters } from 'vuex';
-import { formatNumberWithUSD, formatNumberWithUnit } from '~/util/ui';
+import { formatNumberWithUSD } from '~/util/ui';
 import { catchAxiosError } from '~/util/misc';
-import { USD_TO_HKD_RATIO } from '~/constant';
 import walletMixin from '~/mixins/wallet';
 import { createUserInfoMixin } from '~/mixins/user-info';
 
@@ -21,7 +20,6 @@ export default {
       'getCanViewNFTBookBeforeClaimByClassId',
       'getNFTCollectionInfoByCollectionId',
       'getIsHideNFTBookDownload',
-      'getNFTCollectionDefaultPaymentCurrency',
     ]),
     classIds() {
       return this.collection?.classIds || [];
@@ -43,16 +41,7 @@ export default {
       if (typeof description === 'object') {
         description = description[this.collectionLocale] || '';
       }
-      const currency = this.getNFTCollectionDefaultPaymentCurrency(
-        this.collectionId
-      );
-      const priceLabel =
-        currency === 'HKD'
-          ? formatNumberWithUnit(
-              Number((price * USD_TO_HKD_RATIO).toFixed(1)),
-              'HKD'
-            )
-          : formatNumberWithUSD(price);
+      const priceLabel = formatNumberWithUSD(price);
       image = parseNFTMetadataURL(image);
       return {
         id,
