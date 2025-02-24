@@ -3,7 +3,6 @@ import { mapActions, mapGetters } from 'vuex';
 import {
   APP_LIKE_CO_VIEW,
   LIKECOIN_CHAIN_API,
-  LIKECOIN_BUTTON_BASE,
   TX_STATUS,
   LIKECOIN_NFT_API_WALLET,
   NFT_DISPLAY_STATE,
@@ -32,7 +31,6 @@ import {
   NFT_INDEXER_LIMIT_MAX,
   signTransferNFT,
   signGrant,
-  signBuyNFT,
   broadcastTx,
   getNFTClassCollectionType,
   getFormattedNFTEvents,
@@ -40,7 +38,6 @@ import {
   getNFTHistoryDataMap,
   populateGrantEvent,
   getUniqueAddressesFromEvent,
-  nftClassCollectionType,
 } from '~/util/nft';
 import { getDynamicCovers } from '~/util/nft-book';
 import {
@@ -537,11 +534,6 @@ export default {
     },
     nftCollectorCollectedCount() {
       return this.nftCollectorCollectedNFTList.length || 0;
-    },
-    nftIsNew() {
-      return !Object.values(this.collectorMap)
-        .flat()
-        .includes(this.nftId);
     },
     nftCreatorMessage() {
       return this.NFTClassMetadata?.message || '';
@@ -1365,14 +1357,6 @@ export default {
         this.updateNFTHistory({ getAllUserInfo: false });
         this.walletFetchLIKEBalance();
       }
-    },
-    goNFTDetails() {
-      this.$router.push(
-        this.localeLocation({
-          name: 'nft-class-classId',
-          params: { classId: this.classId },
-        })
-      );
     },
     normalizeNFTMessage(m) {
       if (
