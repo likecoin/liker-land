@@ -468,22 +468,6 @@
                 {{ $t('nft_class_footer_raw') }}
               </a>
             </li>
-            <template v-if="nftIsWritingNFT">
-              <li>
-                <a class="hover:underline" target="_blank" :href="nftWidgetURL">
-                  {{ $t('nft_class_footer_widget') }}
-                </a>
-              </li>
-              <li>
-                <a
-                  class="hover:underline"
-                  target="_blank"
-                  :href="nftWidgetImageURL"
-                >
-                  {{ $t('nft_class_footer_image') }}
-                </a>
-              </li>
-            </template>
           </ul>
         </section>
       </div>
