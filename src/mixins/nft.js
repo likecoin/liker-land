@@ -9,7 +9,6 @@ import {
   NFT_BATCH_COLLECT_MESSSAGE,
   NFT_LEGACY_DEFAULT_MESSSAGE,
   NFT_AUTO_DELIVER_DEFAULT_MESSAGE,
-  USD_TO_HKD_RATIO,
   NFT_BOOK_WITH_SIGN_IMAGE_SET,
   NFT_BOOK_WITH_EVENT_BANNER_SET,
   NFT_BOOK_PRODUCT_PAGE_OVERRIDE,
@@ -105,7 +104,6 @@ export default {
       'getNFTBookStorePricesByClassId',
       'getNFTBookStorePriceByClassIdAndIndex',
       'getNFTCollectionInfoByClassId',
-      'getNFTBookStoreBookDefaultPaymentCurrency',
       'getCanViewNFTBookBeforeClaimByClassId',
       'getIsHideNFTBookDownload',
       'getNFTBookStoreInfoByClassId',
@@ -376,9 +374,6 @@ export default {
       }
       const defaultLocale = 'en';
       const prices = this.getNFTBookStorePricesByClassId(this.classId);
-      const currency = this.getNFTBookStoreBookDefaultPaymentCurrency(
-        this.classId
-      );
       const defaultEdition = {
         name: '',
         description: '',
@@ -390,7 +385,6 @@ export default {
         hasShipping: false,
         stock: 0,
         defaultPrice: 0,
-        currency,
       };
       return prices
         ? prices.map((edition, i) => {
@@ -407,14 +401,7 @@ export default {
             const price =
               this.getNFTClassPaymentPriceById(this.classId, index)
                 ?.fiatPrice || edition.price;
-            let priceLabel = formatNumberWithUSD(price);
-            // TODO: support more currency
-            if (currency === 'HKD') {
-              priceLabel = formatNumberWithUnit(
-                Number((price * USD_TO_HKD_RATIO).toFixed(1)),
-                'HKD'
-              );
-            }
+            const priceLabel = formatNumberWithUSD(price);
             const {
               stock,
               isPhysicalOnly,
@@ -431,7 +418,6 @@ export default {
 
             return {
               name,
-              currency,
               description,
               priceLabel,
               price,

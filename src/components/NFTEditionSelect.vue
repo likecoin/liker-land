@@ -10,7 +10,6 @@
         v-for="(item, index) in items"
         :key="index"
         :name="item.name"
-        :currency="item.currency"
         :price-label="item.priceLabel"
         :stock="item.stock"
         :is-selected="item.value === selectedValue"

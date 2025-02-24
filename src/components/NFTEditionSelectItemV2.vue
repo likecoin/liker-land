@@ -53,8 +53,7 @@
 </template>
 
 <script>
-import { formatNumberWithUSD, formatNumberWithUnit } from '~/util/ui';
-import { USD_TO_HKD_RATIO } from '~/constant';
+import { formatNumberWithUSD } from '~/util/ui';
 
 const PRESET_TYPE = {
   PRIMARY: 'primary',
@@ -69,10 +68,6 @@ export default {
     name: {
       type: String,
       default: '',
-    },
-    currency: {
-      type: String,
-      default: 'USD',
     },
     priceLabel: {
       type: String,
@@ -141,13 +136,7 @@ export default {
       );
 
       return {
-        originalPriceLabel:
-          this.currency === 'HKD'
-            ? formatNumberWithUnit(
-                Number((originalPrice * USD_TO_HKD_RATIO).toFixed(1)),
-                'HKD'
-              )
-            : formatNumberWithUSD(originalPrice),
+        originalPriceLabel: formatNumberWithUSD(originalPrice),
         discountPercentage,
       };
     },

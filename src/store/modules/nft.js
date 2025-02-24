@@ -107,7 +107,6 @@ const mutations = {
     {
       classId,
       prices,
-      defaultPaymentCurrency,
       mustClaimToView,
       hideDownload,
       enableCustomMessagePage,
@@ -116,7 +115,6 @@ const mutations = {
   ) {
     Vue.set(state.nftBookStoreInfoByClassIdMap, classId, {
       prices,
-      defaultPaymentCurrency,
       mustClaimToView,
       hideDownload,
       enableCustomMessagePage,
@@ -279,16 +277,10 @@ const getters = {
     }
     return undefined;
   },
-  getNFTCollectionDefaultPaymentCurrency: state => collectionId =>
-    state.nftCollectionInfoByCollectionIdMap[collectionId]
-      ?.defaultPaymentCurrency || 'USD',
   getNFTCollectionInfoByClassId: state => classId =>
     Object.entries(state.nftCollectionInfoByCollectionIdMap)
       .filter(([_, data]) => data.classIds.includes(classId))
       .map(([id, data]) => ({ id, ...data })),
-  getNFTBookStoreBookDefaultPaymentCurrency: state => classId =>
-    state.nftBookStoreInfoByClassIdMap[classId]?.defaultPaymentCurrency ||
-    'USD',
   getCanViewNFTBookBeforeClaimByClassId: state => classId =>
     !state.nftBookStoreInfoByClassIdMap[classId]?.mustClaimToView,
   getIsHideNFTBookDownload: state => classId =>
@@ -533,7 +525,6 @@ const actions = {
         prices: bookstoreInfo.prices,
         mustClaimToView: bookstoreInfo.mustClaimToView,
         hideDownload: bookstoreInfo.hideDownload,
-        defaultPaymentCurrency: bookstoreInfo.defaultPaymentCurrency,
         enableCustomMessagePage: bookstoreInfo.enableCustomMessagePage,
         signedMessageText: bookstoreInfo.signedMessageText,
         enableSignatureImage: bookstoreInfo.enableSignatureImage,
@@ -891,7 +882,6 @@ const actions = {
       prices: data.prices,
       mustClaimToView: data.mustClaimToView,
       hideDownload: data.hideDownload,
-      defaultPaymentCurrency: data.defaultPaymentCurrency,
       enableCustomMessagePage: data.enableCustomMessagePage,
       signedMessageText: data.signedMessageText,
       enableSignatureImage: data.enableSignatureImage,
