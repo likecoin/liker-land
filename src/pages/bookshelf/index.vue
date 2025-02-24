@@ -87,7 +87,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { logTrackerEvent } from '~/util/EventLogger';
-import { parseNFTMetadataURL } from '~/util/nft';
+import { parseNFTMetadataURL, NFT_TYPE_FILTER_OPTIONS } from '~/util/nft';
 import { EXTERNAL_HOST } from '~/constant';
 
 import inAppMixin from '~/mixins/in-app';
@@ -203,6 +203,7 @@ export default {
   },
   mounted() {
     this.syncRouteForTab();
+    this.syncRouteForTypeFilter(NFT_TYPE_FILTER_OPTIONS.NFT_BOOK);
     this.changeTab(tabOptions.collected);
     this.fetchData();
   },
