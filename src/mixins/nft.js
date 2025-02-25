@@ -155,6 +155,10 @@ export default {
         this.NFTClassMetadata.parent?.iscn_id_prefix
       );
     },
+    iscnURL() {
+      if (!this.iscnId) return '';
+      return `${APP_LIKE_CO_VIEW}/${encodeURIComponent(this.iscnId)}`;
+    },
     classOwner() {
       return (
         // TODO: refactor iscn owner data location
@@ -177,9 +181,6 @@ export default {
     },
     classPublisher() {
       return this.iscnData?.contentMetadata?.publisher?.trim();
-    },
-    iscnURL() {
-      return `${APP_LIKE_CO_VIEW}/${encodeURIComponent(this.iscnId)}`;
     },
     // nft info
     NFTName() {
@@ -278,6 +279,12 @@ export default {
     },
     classContentFingerprints() {
       return this.iscnData?.contentFingerprints || [];
+    },
+    classPublishedDate() {
+      return this.iscnData?.contentMetadata?.datePublished;
+    },
+    classReleasedDate() {
+      return this.classPublishedDate || this.iscnData?.recordTimestamp;
     },
     NFTPrice() {
       return this.nftIsNFTBook
