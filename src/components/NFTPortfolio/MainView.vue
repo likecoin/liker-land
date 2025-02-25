@@ -38,7 +38,6 @@
         </li>
       </ul>
       <div
-        v-if="isLoadingPortfolioItems || portfolioItemsTrimmed.length"
         :class="[
           'flex self-stretch justify-center gap-[8px] items-center desktop:justify-end',
           {
@@ -115,26 +114,6 @@
             </MenuList>
           </Dropdown>
         </div>
-      </div>
-      <div
-        v-else
-        :class="[
-          'flex self-stretch justify-center gap-[8px] items-center desktop:justify-end',
-          {
-            'opacity-0 pointer-events-none': isLoadingPortfolioItems,
-          },
-          'desktop:absolute desktop:right-0 desktop:top-[50%] desktop:transform desktop:-translate-y-1/2',
-        ]"
-      >
-        <ButtonV2
-          v-if="isBookshelf"
-          :text="$t('bookshelf_view_portfolio_button')"
-          preset="tertiary"
-          size="mini"
-          @click="goToPortfolioPage"
-          ><template #prepend>
-            <IconEye class="w-[12px]" /> </template
-        ></ButtonV2>
       </div>
     </nav>
 

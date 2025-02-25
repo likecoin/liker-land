@@ -196,6 +196,7 @@ import {
   fetchAllNFTClassFromChain,
   checkIsWritingNFT,
   parseNFTMetadataURL,
+  NFT_TYPE_FILTER_OPTIONS,
 } from '~/util/nft';
 import { EXTERNAL_HOST } from '~/constant';
 
@@ -410,6 +411,7 @@ export default {
   },
   mounted() {
     this.syncRouteForTab();
+    this.syncRouteForTypeFilter(NFT_TYPE_FILTER_OPTIONS.NFT_BOOK);
     this.loadNFTClassesForCurrentTabByAddress(this.wallet);
     this.fetchNFTDisplayStateListByAddress(this.wallet);
     this.loadTopUserListByAddress(this.wallet);

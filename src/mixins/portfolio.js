@@ -67,9 +67,7 @@ export const createPortfolioMixin = ({
     },
     nftTypeFilter() {
       const type = this.$route.query.type?.toUpperCase();
-      return NFT_TYPE_FILTER_OPTIONS[type]
-        ? type
-        : NFT_TYPE_FILTER_OPTIONS.NFT_BOOK;
+      return NFT_TYPE_FILTER_OPTIONS[type] ? type : NFT_TYPE_FILTER_OPTIONS.ALL;
     },
     isCurrentTabCollected() {
       return this.currentTab === tabOptions.collected;
