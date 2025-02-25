@@ -1,7 +1,6 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import {
-  APP_LIKE_CO_VIEW,
   LIKECOIN_CHAIN_API,
   TX_STATUS,
   LIKECOIN_NFT_API_WALLET,
@@ -37,13 +36,10 @@ import {
   getUniqueAddressesFromEvent,
 } from '~/util/nft';
 import { getDynamicCovers } from '~/util/nft-book';
-import {
-  formatNumberWithLIKE,
-  formatNumberWithUSD,
-  formatNumberWithUnit,
-} from '~/util/ui';
+import { formatNumberWithLIKE, formatNumberWithUSD } from '~/util/ui';
 
 import walletMixin from '~/mixins/wallet';
+import iscnMixin from '~/mixins/iscn';
 import alertMixin from '~/mixins/alert';
 import utmMixin from '~/mixins/utm';
 import nftEventBannerMixin from '~/mixins/nft-event-banner';
@@ -66,6 +62,7 @@ const defaultThemeColor = ['#D1D1D1', '#FFC123', '#ECBDF3'];
 export default {
   mixins: [
     walletMixin,
+    iscnMixin,
     alertMixin,
     creatorInfoMixin,
     nftClassCollectionMixin,
@@ -165,16 +162,6 @@ export default {
     ownerInfo() {
       return this.getNFTClassOwnerInfoById(this.classId) || {};
     },
-    iscnId() {
-      return (
-        this.NFTClassMetadata.parent?.iscnIdPrefix ||
-        this.NFTClassMetadata.parent?.iscn_id_prefix
-      );
-    },
-    iscnURL() {
-      if (!this.iscnId) return '';
-      return `${APP_LIKE_CO_VIEW}/${encodeURIComponent(this.iscnId)}`;
-    },
     classOwner() {
       return (
         // TODO: refactor iscn owner data location
@@ -230,12 +217,6 @@ export default {
     },
     externalUrl() {
       return this.contentMetadata.url || this.contentMetadata.external_url;
-    },
-    iscnData() {
-      if (!this.iscnId) return undefined;
-      const data = this.getISCNMetadataById(this.iscnId);
-      if (data instanceof Promise) return undefined;
-      return data;
     },
     classContentUrls() {
       return this.contentMetadata.sameAs || [];
@@ -666,7 +647,6 @@ export default {
   methods: {
     ...mapActions([
       'lazyGetUserInfoByAddress',
-      'lazyGetISCNMetadataById',
       'lazyFetchNFTClassAggregatedInfo',
       'lazyGetNFTClassMetadata',
       'lazyGetNFTOwners',
@@ -689,9 +669,6 @@ export default {
       'lazyFetchNFTBookInfoByClassId',
       'fetchNFTCollectionInfoByClassId',
     ]),
-    async fetchISCNMetadata() {
-      await this.lazyGetISCNMetadataById(this.iscnId);
-    },
     async lazyFetchNFTClassMetadata() {
       await catchAxiosError(this.lazyGetNFTClassMetadata(this.classId));
       if (this.classOwner) {
