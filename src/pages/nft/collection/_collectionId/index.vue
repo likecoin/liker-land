@@ -213,7 +213,7 @@ export default {
             name: className,
             description: classDescription,
             image: classImage,
-            iscn_owner: iscnOwner,
+            iscn_owner: classOwner,
           } = this.getNFTClassMetadataById(id);
           return {
             '@context': 'http://www.schema.org',
@@ -225,12 +225,12 @@ export default {
               description: classDescription,
               image: classImage,
               url: `${EXTERNAL_HOST}/nft/class/${id}`,
-              author: iscnOwner
+              author: classOwner
                 ? {
                     '@context': 'http://www.schema.org',
                     '@type': 'Person',
-                    url: `${EXTERNAL_HOST}/${iscnOwner}`,
-                    identifier: iscnOwner,
+                    url: `${EXTERNAL_HOST}/${classOwner}`,
+                    identifier: classOwner,
                   }
                 : undefined,
               brand: this.collectionIsBook

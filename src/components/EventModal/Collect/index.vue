@@ -81,7 +81,7 @@
           <NFTMessageIdentity
             type="creator"
             class="flex-shrink-0 !px-0"
-            :wallet-address="iscnOwner"
+            :wallet-address="classOwner"
             :avatar-size="40"
           />
           <div class="ml-[24px]">
@@ -524,7 +524,7 @@ export default {
     },
     creatorDisplayName() {
       return (
-        this.getUserInfoByAddress(this.iscnOwner)?.displayName || 'creator'
+        this.getUserInfoByAddress(this.classOwner)?.displayName || 'creator'
       );
     },
     followPromptButtonText() {
@@ -833,7 +833,7 @@ export default {
         switch (this.followPromptState) {
           case FOLLOW_PROMPT_STATE.AUTO:
             this.followPromptState = FOLLOW_PROMPT_STATE.UNFOLLOW;
-            await [this.walletUnfollowCreator(this.iscnOwner)];
+            await [this.walletUnfollowCreator(this.classOwner)];
             logTrackerEvent(
               this,
               'NFT',
@@ -845,7 +845,7 @@ export default {
           case FOLLOW_PROMPT_STATE.UNFOLLOW:
           default:
             this.followPromptState = FOLLOW_PROMPT_STATE.AUTO;
-            await this.walletFollowCreator(this.iscnOwner);
+            await this.walletFollowCreator(this.classOwner);
             logTrackerEvent(
               this,
               'NFT',

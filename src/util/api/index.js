@@ -161,7 +161,7 @@ export const getISCNRecord = iscnId => {
 };
 
 export const getNFTClassesPartial = ({
-  iscnOwner,
+  classOwner,
   nftOwner,
   expand,
   reverse,
@@ -170,7 +170,7 @@ export const getNFTClassesPartial = ({
   nocache,
 }) => {
   const qsPayload = {}; // TODO: support account based query
-  if (iscnOwner) qsPayload.iscn_owner = iscnOwner;
+  if (classOwner) qsPayload.iscn_owner = classOwner;
   if (nftOwner) qsPayload.owner = nftOwner;
   if (expand) qsPayload.expand = expand;
   if (reverse) qsPayload['pagination.reverse'] = reverse;

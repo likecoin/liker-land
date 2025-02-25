@@ -238,7 +238,7 @@ export default {
       switch (this.type) {
         case EVENT_TYPE.COLLECT:
         case EVENT_TYPE.PURCHASE:
-          return this.iscnOwner;
+          return this.classOwner;
 
         case EVENT_TYPE.SEND:
         case EVENT_TYPE.PUBLISH:

@@ -15,7 +15,7 @@
       :img-bg-color="NFTImageBackgroundColor"
       :price="NFTPrice"
       :base-price="nftBasePrice"
-      :owner-address="iscnOwner"
+      :owner-address="classOwner"
       :owner-avatar-src="creatorAvatar"
       :owner-count="ownerCount"
       :owner-name="creatorDisplayName"

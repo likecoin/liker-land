@@ -256,10 +256,10 @@
                 <NuxtLink
                   class="flex items-center text-like-green group"
                   :to="
-                    iscnOwner
+                    classOwner
                       ? localeLocation({
                           name: 'id',
-                          params: { id: iscnOwner },
+                          params: { id: classOwner },
                           query: { tab: 'created' },
                         })
                       : ''
@@ -449,7 +449,8 @@ export default {
   computed: {
     creatorDisplayName() {
       return (
-        this.getUserInfoByAddress(this.iscnOwner)?.displayName || this.iscnOwner
+        this.getUserInfoByAddress(this.classOwner)?.displayName ||
+        this.classOwner
       );
     },
     isShelfPreset() {
@@ -576,7 +577,7 @@ export default {
       }
     },
     onClickAvatar() {
-      this.$emit('click-avatar', this.iscnOwner);
+      this.$emit('click-avatar', this.classOwner);
     },
     clickShowMore() {
       this.$emit('expand');

@@ -81,7 +81,7 @@
           <NFTMessageIdentity
             type="creator"
             class="flex-shrink-0"
-            :wallet-address="iscnOwner"
+            :wallet-address="classOwner"
             :avatar-size="40"
           />
           <div class="flex-col  justify-start mt-[8px]">
@@ -124,7 +124,7 @@
           v-if="!isFree"
           type="creator"
           class="flex-shrink-0"
-          :wallet-address="iscnOwner"
+          :wallet-address="classOwner"
           :avatar-size="40"
         />
         <CollectButton
@@ -156,7 +156,7 @@ export default {
       type: String,
       default: undefined,
     },
-    iscnOwner: {
+    classOwner: {
       type: String,
       default: undefined,
     },

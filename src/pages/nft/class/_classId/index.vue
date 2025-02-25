@@ -82,7 +82,7 @@
           :class-id="classId"
           :nft-image-url="NFTImageUrl"
           :creator-message="creatorMessage"
-          :iscn-owner="iscnOwner"
+          :class-owner="classOwner"
           :is-collectable="nftIsCollectable"
           :is-free="nftIsFree"
           :own-count="ownCount"
@@ -367,7 +367,7 @@
               :avatar-size="40"
               :is-avatar-outlined="isCreatorCivicLiker"
               :is-nft-book="nftIsNFTBook"
-              :iscn-owner="iscnOwner"
+              :class-owner="classOwner"
               :iscn-work-author-name="iscnWorkAuthorName"
               :iscn-url="iscnURL"
               :display-name="creatorDisplayNameFull"
@@ -674,14 +674,14 @@ export default {
       {
         hid: 'likecoin:wallet',
         name: 'likecoin:wallet',
-        content: this.iscnOwner,
+        content: this.classOwner,
       },
     ];
-    const iscnOwnerPerson = {
+    const classOwnerPerson = {
       '@context': 'http://www.schema.org',
       '@type': 'Person',
-      url: `${EXTERNAL_HOST}/${this.iscnOwner}`,
-      identifier: this.iscnOwner,
+      url: `${EXTERNAL_HOST}/${this.classOwner}`,
+      identifier: this.classOwner,
     };
 
     const threeDModel = this.nftModelURL
@@ -707,7 +707,7 @@ export default {
         '@context': 'http://www.schema.org',
         '@type': ['CreativeWork', 'Product'],
         name: title,
-        author: this.iscnWorkAuthor || this.iscnOwnerPerson,
+        author: this.iscnWorkAuthor || this.classOwnerPerson,
         image: [ogImage],
         description,
         brand: {
@@ -725,7 +725,7 @@ export default {
         offers: {
           '@context': 'http://www.schema.org',
           '@type': 'Offer',
-          seller: iscnOwnerPerson,
+          seller: classOwnerPerson,
           price: NFTPriceUSD,
           priceCurrency: 'USD',
           availability:
@@ -758,9 +758,9 @@ export default {
           url: 'https://liker.land/about/nft-book',
           name: 'NFT Book',
         },
-        author: this.iscnWorkAuthor || iscnOwnerPerson,
+        author: this.iscnWorkAuthor || classOwnerPerson,
         sku: this.classId,
-        publisher: this.iscnWorkPublisher || iscnOwnerPerson,
+        publisher: this.iscnWorkPublisher || classOwnerPerson,
         isbn: this.iscnData?.contentMetadata?.isbn,
         inLanguage: this.iscnData?.contentMetadata?.inLanguage,
         productGroupID: this.classId,
@@ -803,7 +803,7 @@ export default {
           offers: {
             '@context': 'http://www.schema.org',
             '@type': 'Offer',
-            seller: iscnOwnerPerson,
+            seller: classOwnerPerson,
             price: e.price,
             priceCurrency: 'USD',
             availability: e.stock ? 'LimitedAvailability' : 'OutOfStock',
@@ -892,7 +892,7 @@ export default {
           {
             hid: 'product:custom_label_0',
             property: 'product:custom_label_0',
-            content: this.iscnOwner,
+            content: this.classOwner,
           },
         ].forEach(m => meta.push(m));
         meta.find(m => m.hid === 'og:url').content = `${EXTERNAL_HOST}${
@@ -1011,13 +1011,13 @@ export default {
       return this.NFTClassMetadata?.message;
     },
     isFollowed() {
-      return this.walletFollowees?.includes(this.iscnOwner) || false;
+      return this.walletFollowees?.includes(this.classOwner) || false;
     },
     isContentViewable() {
       return !(this.nftIsNFTBook && !this.ownCount);
     },
     shouldShowFollowButton() {
-      return Boolean(this.iscnOwner !== this.getAddress);
+      return Boolean(this.classOwner !== this.getAddress);
     },
     // for WNFT
     populatedCollectorsWithMemo() {
@@ -1180,7 +1180,7 @@ export default {
   },
   async mounted() {
     try {
-      this.lazyGetUserInfoByAddress(this.iscnOwner);
+      this.lazyGetUserInfoByAddress(this.classOwner);
       this.fetchIscnOwnerNFTDisplayStateList();
       this.lazyFetchNFTOwners();
       this.fetchUserCollectedCount();
@@ -1717,11 +1717,11 @@ export default {
     },
     async handleFollowButtonClick() {
       await this.handleClickFollow({
-        followOwner: this.iscnOwner,
+        followOwner: this.classOwner,
       });
       this.alertPromptSuccess(
         this.$t('portfolio_subscription_success_alert', {
-          creator: this.getUserInfoByAddress(this.iscnOwner)?.displayName,
+          creator: this.getUserInfoByAddress(this.classOwner)?.displayName,
         })
       );
       if (this.isFollowed) {

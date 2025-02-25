@@ -668,14 +668,14 @@ export default {
             name: className,
             description: classDescription,
             image: classImage = '',
-            iscn_owner: iscnOwner,
+            iscn_owner: classOwner,
           } = this.getNFTClassMetadataById(classId);
-          const iscnOwnerPerson = iscnOwner
+          const classOwnerPerson = classOwner
             ? {
                 '@context': 'http://www.schema.org',
                 '@type': 'Person',
-                url: `${EXTERNAL_HOST}/${iscnOwner}`,
-                identifier: iscnOwner,
+                url: `${EXTERNAL_HOST}/${classOwner}`,
+                identifier: classOwner,
               }
             : undefined;
 
@@ -686,7 +686,7 @@ export default {
             description: classDescription,
             image: parseNFTMetadataURL(classImage),
             url: `${EXTERNAL_HOST}/nft/class/${classId}`,
-            author: iscnOwnerPerson,
+            author: classOwnerPerson,
             identifier: classId,
           };
         }),

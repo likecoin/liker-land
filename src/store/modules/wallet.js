@@ -671,7 +671,7 @@ const actions = {
       this.$api
         .$get(
           getNFTClassesPartial({
-            iscnOwner: followees,
+            classOwner: followees,
             reverse: true,
           })
         )

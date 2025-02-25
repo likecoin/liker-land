@@ -164,7 +164,7 @@
               :avatar-url="creatorAvatar"
               :avatar-size="40"
               :is-avatar-outlined="isCreatorCivicLiker"
-              :iscn-owner="iscnOwner"
+              :class-owner="classOwner"
               :iscn-work-author-name="iscnWorkAuthorName"
               :iscn-url="iscnURL"
               :display-name="creatorDisplayNameFull"
@@ -474,8 +474,8 @@ export default {
           '@context': 'http://www.schema.org',
           '@type': this.nftIsNFTBook ? 'Book' : 'CreativeWork',
           name: title,
-          author: this.iscnWorkAuthor || this.iscnOwner,
-          publisher: this.iscnWorkPublisher || this.iscnOwner,
+          author: this.iscnWorkAuthor || this.classOwner,
+          publisher: this.iscnWorkPublisher || this.classOwner,
           image: [this.NFTImageUrl],
           description: this.NFTDescription,
           brand,
@@ -585,12 +585,12 @@ export default {
       return this.messageList.filter(element => element.message).length;
     },
     isFollowed() {
-      return this.walletFollowees?.includes(this.iscnOwner) || false;
+      return this.walletFollowees?.includes(this.classOwner) || false;
     },
   },
   async mounted() {
     try {
-      this.lazyGetUserInfoByAddresses(this.iscnOwner);
+      this.lazyGetUserInfoByAddresses(this.classOwner);
       this.fetchIscnOwnerNFTDisplayStateList();
       this.lazyFetchNFTOwners();
       this.updateNFTHistory({ getAllUserInfo: false });
@@ -756,11 +756,11 @@ export default {
     },
     async handleFollowButtonClick() {
       await this.handleClickFollow({
-        followOwner: this.iscnOwner,
+        followOwner: this.classOwner,
       });
       this.alertPromptSuccess(
         this.$t('portfolio_subscription_success_alert', {
-          creator: this.getUserInfoByAddress(this.iscnOwner)?.displayName,
+          creator: this.getUserInfoByAddress(this.classOwner)?.displayName,
         })
       );
       if (this.isFollowed) {

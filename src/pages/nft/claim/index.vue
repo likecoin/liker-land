@@ -714,12 +714,12 @@ export default {
         );
       }
       return (
-        this.getUserInfoByAddress(this.iscnOwner)?.displayName ||
+        this.getUserInfoByAddress(this.classOwner)?.displayName ||
         this.$t('nft_claim_author')
       );
     },
     creatorAvatar() {
-      return this.getUserInfoByAddress(this.iscnOwner)?.avatar;
+      return this.getUserInfoByAddress(this.classOwner)?.avatar;
     },
     productTitle() {
       let title = this.productName;

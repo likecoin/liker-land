@@ -9,7 +9,7 @@
     <NFTPageCollectCTA
       :class-id="classId"
       :nft-image-url="NFTImageUrl"
-      :iscn-owner="iscnOwner"
+      :class-owner="classOwner"
       :is-collectable="nftIsCollectable"
       button-theme="glow"
       :is-free="true"
