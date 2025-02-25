@@ -149,7 +149,7 @@
                 class="mt-[24px] mb-[48px]"
                 :class-id="classId"
                 :nft-id="nftIdCollectedFirstByUser"
-                :content-urls="iscnContentUrls"
+                :content-urls="classContentUrls"
                 :external-url="externalUrl"
                 :is-nft-book="nftIsNFTBook"
                 :is-content-viewable="isContentViewable"
@@ -358,7 +358,7 @@
           >
             <NFTPagePreviewCard
               :url="externalUrl"
-              :content-urls="iscnContentUrls"
+              :content-urls="classContentUrls"
               :image-bg-color="NFTImageBackgroundColor"
               :image-url="NFTImageUrl"
               :animation-url="NFTAnimationUrl"
@@ -450,7 +450,7 @@
             :iscn-id="iscnId"
             :iscn-url="iscnURL"
             :class-id="classId"
-            :content-fingerprints="nftISCNContentFingerprints"
+            :content-fingerprints="classContentFingerprints"
             :is-download-hidden="nftIsDownloadHidden"
             :is-nft-book="nftIsNFTBook"
             @click-show-more-history="handleClickMoreHistory"

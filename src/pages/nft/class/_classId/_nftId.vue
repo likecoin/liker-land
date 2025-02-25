@@ -156,7 +156,7 @@
             class="flex flex-col gap-[24px] items-center order-first col-span-1 desktop:order-none"
           >
             <NFTPagePreviewCard
-              :content-urls="iscnContentUrls"
+              :content-urls="classContentUrls"
               :image-bg-color="nftImageBackgroundColor"
               :image-url="nftImageURL"
               :animation-url="nftAnimationURL"
@@ -263,7 +263,7 @@
             :iscn-url="iscnURL"
             :class-id="classId"
             :nft-id="nftId"
-            :content-fingerprints="nftISCNContentFingerprints"
+            :content-fingerprints="classContentFingerprints"
             :is-download-hidden="nftIsDownloadHidden"
             :is-nft-book="nftIsNFTBook"
           />
