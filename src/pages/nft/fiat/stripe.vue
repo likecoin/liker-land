@@ -127,7 +127,7 @@ export default {
               txHash: this.result.transactionHash,
               items: [
                 {
-                  name: this.NFTName,
+                  name: this.nftName,
                   price: this.result.fiatPrice,
                   classId: this.classId,
                   priceIndex: this.editionPriceIndex,

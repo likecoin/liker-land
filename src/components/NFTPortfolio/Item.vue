@@ -7,7 +7,7 @@
       />
     </client-only>
     <NFTPortfolioBase
-      :title="NFTName"
+      :title="nftName"
       :price="NFTPrice"
       :is-free="nftIsFree"
       :class-id="classId"
@@ -17,7 +17,7 @@
       :user-display-name="creatorDisplayNameFull"
       :user-avatar-src="creatorAvatar"
       :is-user-civic-liker="isCreatorCivicLiker"
-      :image-src="NFTImageUrl"
+      :image-src="nftImageUrl"
       :is-collecting="uiIsOpenCollectModal && isCollecting"
       :own-count="ownCount"
       :display-state="nftDisplayState"

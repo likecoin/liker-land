@@ -46,7 +46,7 @@
       </transition>
       <Label v-if="isAddedToShoppingCart" preset="p5" align="center">{{
         $t('nft_collect_modal_added_to_shopping_cart_description', {
-          nft: NFTName,
+          nft: nftName,
         })
       }}</Label>
       <template v-else-if="isCompleted">
@@ -805,10 +805,10 @@ export default {
       logTrackerEvent(this, 'NFT', 'NFTClickShare', this.classId, 1);
       if (navigator?.share) {
         const title = this.$t('nft_collect_modal_share_title', {
-          name: this.NFTName,
+          name: this.nftName,
         });
         const text = this.$t('nft_collect_modal_share_text', {
-          name: this.NFTName,
+          name: this.nftName,
           creator: this.creatorDisplayName,
         });
         const url = this.justCollectedNFTId
