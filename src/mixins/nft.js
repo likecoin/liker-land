@@ -163,19 +163,19 @@ export default {
         this.NFTClassMetadata.account_owner
       );
     },
-    iscnWorkAuthor() {
+    classAuthor() {
       return this.iscnData?.contentMetadata?.author;
     },
-    iscnWorkAuthorName() {
-      if (typeof this.iscnWorkAuthor === 'string') {
-        return this.iscnWorkAuthor.trim();
+    classAuthorName() {
+      if (typeof this.classAuthor === 'string') {
+        return this.classAuthor.trim();
       }
-      return this.iscnWorkAuthor?.name?.trim();
+      return this.classAuthor?.name?.trim();
     },
-    iscnWorkAuthorDescription() {
-      return this.iscnWorkAuthor?.description?.trim();
+    classAuthorDescription() {
+      return this.classAuthor?.description?.trim();
     },
-    iscnWorkPublisher() {
+    classPublisher() {
       return this.iscnData?.contentMetadata?.publisher?.trim();
     },
     iscnURL() {
@@ -650,7 +650,7 @@ export default {
     nftSignImageAuthor() {
       const customAuthor = NFT_BOOK_WITH_SIGN_IMAGE_SET.get(this.classId);
       return (
-        customAuthor || this.iscnWorkAuthorName || this.creatorDisplayNameFull
+        customAuthor || this.classAuthorName || this.creatorDisplayNameFull
       );
     },
   },

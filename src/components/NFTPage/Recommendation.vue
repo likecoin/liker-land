@@ -156,7 +156,7 @@ export default {
       if (this.type === NFT_TYPE.COLLECTION) {
         return true;
       }
-      return !!this.iscnWorkAuthorName;
+      return !!this.classAuthorName;
     },
     defaultFeaturedWNFT() {
       return DEFAULT_RECOMMENDATIONS_LIST.WNFT.map(nft => ({
