@@ -53,7 +53,7 @@ import { createNFTClassCollectionMixin } from '~/mixins/nft-class-collection';
 
 const creatorInfoMixin = createUserInfoMixin({
   propKey: 'Creator',
-  walletKey: 'iscnOwner',
+  walletKey: 'classOwner',
 });
 
 const nftClassCollectionMixin = createNFTClassCollectionMixin({
@@ -155,7 +155,7 @@ export default {
         this.NFTClassMetadata.parent?.iscn_id_prefix
       );
     },
-    iscnOwner() {
+    classOwner() {
       return (
         // TODO: refactor iscn owner data location
         this.iscnData?.owner ||
@@ -534,7 +534,7 @@ export default {
     isNFTHidden() {
       return (
         this.getNFTBookStoreInfoByClassId(this.classId)?.isHidden ||
-        this.getNFTClassHiddenSetByAddress(this.iscnOwner)?.has(this.classId)
+        this.getNFTClassHiddenSetByAddress(this.classOwner)?.has(this.classId)
       );
     },
 
@@ -600,7 +600,7 @@ export default {
       return `${LIKECOIN_CHAIN_API}/cosmos/nft/v1beta1/classes/${this.classId}`;
     },
     getWalletIdentityType() {
-      return wallet => (wallet === this.iscnOwner ? 'creator' : 'collector');
+      return wallet => (wallet === this.classOwner ? 'creator' : 'collector');
     },
     nftDisplayState() {
       // should use the address in URL as the subject address when browsing other's profile
@@ -627,7 +627,7 @@ export default {
           if (e.event === 'purchase') {
             return {
               ...e,
-              fromWallet: this.iscnOwner,
+              fromWallet: this.classOwner,
             };
           }
           return e;
@@ -635,7 +635,7 @@ export default {
         .map(m => ({
           ...m,
           messageType:
-            m.fromWallet === this.iscnOwner ? 'creator' : 'collector',
+            m.fromWallet === this.classOwner ? 'creator' : 'collector',
           fromType: this.getWalletIdentityType(m.fromWallet),
           toType: this.getWalletIdentityType(m.toWallet),
           message: this.normalizeNFTMessage(m),
@@ -724,8 +724,8 @@ export default {
     },
     async lazyFetchNFTClassMetadata() {
       await catchAxiosError(this.lazyGetNFTClassMetadata(this.classId));
-      if (this.iscnOwner) {
-        this.lazyGetUserInfoByAddresses(this.iscnOwner);
+      if (this.classOwner) {
+        this.lazyGetUserInfoByAddresses(this.classOwner);
       }
     },
     async lazyFetchNFTClassAggregatedData({ excludeOptions = [] } = {}) {
@@ -831,7 +831,7 @@ export default {
                 classId,
                 nftId,
                 fromWallet: toWallet,
-                toWallet: this.iscnOwner || fromWallet,
+                toWallet: this.classOwner || fromWallet,
                 memo: buyerMessage,
                 txHash,
                 timestamp: timestamp - 1,
@@ -899,7 +899,7 @@ export default {
       await this.updateUserCollectedCount(this.classId, this.getAddress);
     },
     async fetchIscnOwnerNFTDisplayStateList() {
-      await this.fetchNFTDisplayStateListByAddress(this.iscnOwner);
+      await this.fetchNFTDisplayStateListByAddress(this.classOwner);
     },
     async fetchUserNFTDisplayStateList() {
       await this.fetchNFTDisplayStateListByAddress(this.getAddress);

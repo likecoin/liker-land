@@ -512,7 +512,7 @@ export default {
 
       // TODO: store partial collected classes into collectedNFTClassesByAddressMap
       const collected = await fetchAllNFTClassFromChain(this.$api, {
-        iscnOwner: this.wallet,
+        classOwner: this.wallet,
         nftOwner: this.getAddress,
       });
       const collectedSet = new Set(collected.map(n => n.id));

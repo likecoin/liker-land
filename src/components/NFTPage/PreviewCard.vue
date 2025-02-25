@@ -55,10 +55,10 @@
         <NuxtLink
           class="flex mt-[8px] w-full"
           :to="
-            iscnOwner
+            classOwner
               ? localeLocation({
                   name: 'id',
-                  params: { id: iscnOwner },
+                  params: { id: classOwner },
                   query: { tab: 'created' },
                 })
               : ''
@@ -195,7 +195,7 @@ export default {
     },
 
     // Creater Info
-    iscnOwner: {
+    classOwner: {
       type: String,
       default: undefined,
     },

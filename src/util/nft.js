@@ -314,10 +314,10 @@ export function formatNFTClassInfo(classData) {
 
 export const fetchAllNFTClassFromChain = async (
   axios,
-  { iscnOwner, nftOwner, nocache = false, reverse = false, key }
+  { classOwner, nftOwner, nocache = false, reverse = false, key }
 ) => {
   const params = {
-    iscnOwner,
+    classOwner,
     nftOwner,
     nocache,
     reverse,

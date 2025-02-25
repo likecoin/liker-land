@@ -246,15 +246,15 @@ const getters = {
   getNFTClassISCNOwnerByClassId: state => id =>
     state.metadataByClassIdMap[id]?.iscn_owner,
   getNFTClassOwnerCount: (state, getters) => id => {
-    const iscnOwner = getters.getNFTClassISCNOwnerByClassId(id);
+    const classOwner = getters.getNFTClassISCNOwnerByClassId(id);
     return Object.keys(state.ownerInfoByClassIdMap[id] || {}).filter(
-      owner => owner !== iscnOwner
+      owner => owner !== classOwner
     ).length;
   },
   getNFTClassCollectedCount: (state, getters) => id => {
-    const iscnOwner = getters.getNFTClassISCNOwnerByClassId(id);
+    const classOwner = getters.getNFTClassISCNOwnerByClassId(id);
     return Object.entries(state.ownerInfoByClassIdMap[id] || {})
-      .filter(([owner]) => owner !== iscnOwner)
+      .filter(([owner]) => owner !== classOwner)
       .reduce((totalCount, [, nftIds]) => totalCount + nftIds.length, 0);
   },
   getNFTMetadataByNFTClassAndNFTId: state => (classId, nftId) =>
@@ -710,7 +710,7 @@ const actions = {
     // fetch first page only
     let promise = this.$api.$get(
       api.getNFTClassesPartial({
-        iscnOwner: address,
+        classOwner: address,
         reverse: true,
       })
     );
@@ -736,7 +736,7 @@ const actions = {
     if (res.pagination.next_key) {
       // fetch all pages
       promise = fetchAllNFTClassFromChain(this.$api, {
-        iscnOwner: address,
+        classOwner: address,
         key: res.pagination.next_key,
         reverse: true,
       });
