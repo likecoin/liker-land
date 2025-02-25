@@ -76,11 +76,11 @@ export default {
       return this.$route.query.format || '';
     },
     fileSrc() {
-      if (this.type && Array.isArray(this.iscnContentUrls)) {
+      if (this.type && Array.isArray(this.classContentUrls)) {
         const matchingUrl =
-          (this.iscnContentUrls[this.index]?.includes(this.type) &&
-            this.iscnContentUrls[this.index]) ||
-          this.iscnContentUrls.find(url => url.includes(this.type));
+          (this.classContentUrls[this.index]?.includes(this.type) &&
+            this.classContentUrls[this.index]) ||
+          this.classContentUrls.find(url => url.includes(this.type));
         return parseNFTMetadataURL(matchingUrl);
       }
       return undefined;

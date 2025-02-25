@@ -273,10 +273,10 @@ export default {
     iscnThumbnailUrl() {
       return this.iscnData?.contentMetadata?.thumbnailUrl;
     },
-    iscnContentUrls() {
+    classContentUrls() {
       return this.iscnData?.contentMetadata?.sameAs || [];
     },
-    nftISCNContentFingerprints() {
+    classContentFingerprints() {
       return this.iscnData?.contentFingerprints || [];
     },
     NFTPrice() {

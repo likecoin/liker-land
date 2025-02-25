@@ -479,7 +479,7 @@ export default {
     },
     contentTypes() {
       const types = [];
-      this.iscnContentUrls.forEach(url => {
+      this.classContentUrls.forEach(url => {
         types.push(getContentUrlType(url));
       });
       return [...new Set(types.filter(type => type !== 'unknown'))];
