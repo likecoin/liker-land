@@ -12,7 +12,6 @@
       :is-free="nftIsFree"
       :class-id="classId"
       :external-url="externalUrl"
-      :iscn-url="iscnURL"
       :content-urls="iscnContentUrls"
       :is-collectable="nftIsCollectable"
       :user-display-name="creatorDisplayNameFull"

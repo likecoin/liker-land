@@ -770,12 +770,11 @@ export default {
         canViewNFTBookBeforeClaim: this.getCanViewNFTBookBeforeClaimByClassId(
           id
         ),
-        url:
+        externalUrl:
           this.getIscnData(id)?.contentMetadata.url ||
           this.getNFTClassMetadataById(id)?.external_url,
         id,
         contentUrls: this.getIscnData(id)?.contentMetadata.sameAs,
-        iscnUrl: this.getIscnData(id)?.contentMetadata.url,
         isNftBook: this.checkNftIsNFTBook(id),
         isContentViewable: true,
         isDownloadable: !this.getIsHideNFTBookDownload(id),

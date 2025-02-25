@@ -122,10 +122,9 @@
       <NFTClaimOptionListForMobile
         v-if="isShowingOptionListForMobile"
         class="w-full"
-        :url="url"
         :class-id="classId"
         :content-urls="contentUrls"
-        :iscn-url="iscnUrl"
+        :external-url="externalUrl"
         :is-nft-book="isNftBook"
         :is-content-viewable="isContentViewable"
         @view-content-url="
@@ -151,10 +150,6 @@ export default {
   name: 'NFTViewOptionList',
   mixins: [alertMixin],
   props: {
-    url: {
-      type: String,
-      default: undefined,
-    },
     classId: {
       type: String,
       default: undefined,
@@ -167,7 +162,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    iscnUrl: {
+    externalUrl: {
       type: String,
       default: undefined,
     },
@@ -194,10 +189,10 @@ export default {
   computed: {
     normalizedContentURLs() {
       // NOTE: Assuming if only `url` is set, it must contain the actual content rather than the book info
-      return this.contentUrls.length ? this.contentUrls : [this.url];
+      return this.contentUrls.length ? this.contentUrls : [this.externalUrl];
     },
     shouldShowViewContentButton() {
-      return !!this.normalizedContentURLs.includes(this.url);
+      return !!this.normalizedContentURLs.includes(this.externalUrl);
     },
   },
   methods: {

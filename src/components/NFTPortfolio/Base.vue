@@ -54,9 +54,8 @@
           <NFTViewOptionList
             class="flex-grow"
             :class-id="classId"
-            :url="externalUrl"
             :content-urls="contentUrls"
-            :iscn-url="iscnUrl"
+            :external-url="externalUrl"
             :is-nft-book="isNftBook"
             :is-content-viewable="isContentViewable"
             :is-content-downloadable="isContentDownloadable"
@@ -151,10 +150,6 @@ export default {
       default: undefined,
     },
     externalUrl: {
-      type: String,
-      default: '',
-    },
-    iscnUrl: {
       type: String,
       default: '',
     },

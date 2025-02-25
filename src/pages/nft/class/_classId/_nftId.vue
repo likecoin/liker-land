@@ -156,7 +156,6 @@
             class="flex flex-col gap-[24px] items-center order-first col-span-1 desktop:order-none"
           >
             <NFTPagePreviewCard
-              :url="externalUrl"
               :content-urls="iscnContentUrls"
               :image-bg-color="nftImageBackgroundColor"
               :image-url="nftImageURL"
@@ -166,7 +165,7 @@
               :is-avatar-outlined="isCreatorCivicLiker"
               :class-owner="classOwner"
               :class-author-name="classAuthorName"
-              :iscn-url="iscnURL"
+              :external-url="externalUrl"
               :display-name="creatorDisplayNameFull"
               :class-id="classId"
               :nft-id="nftId"

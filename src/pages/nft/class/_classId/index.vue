@@ -147,11 +147,10 @@
               </div>
               <NFTViewOptionList
                 class="mt-[24px] mb-[48px]"
-                :url="externalUrl"
                 :class-id="classId"
                 :nft-id="nftIdCollectedFirstByUser"
                 :content-urls="iscnContentUrls"
-                :iscn-url="iscnUrl"
+                :external-url="externalUrl"
                 :is-nft-book="nftIsNFTBook"
                 :is-content-viewable="isContentViewable"
                 :is-content-downloadable="!nftIsDownloadHidden"
@@ -369,7 +368,7 @@
               :is-nft-book="nftIsNFTBook"
               :class-owner="classOwner"
               :class-author-name="classAuthorName"
-              :iscn-url="iscnURL"
+              :external-url="externalUrl"
               :display-name="creatorDisplayNameFull"
               :class-id="classId"
               :nft-id="nftIdCollectedFirstByUser"

@@ -66,10 +66,9 @@
         <div
           v-for="{
             canViewNFTBookBeforeClaim,
-            url,
             id,
             contentUrls,
-            iscnUrl,
+            externalUrl,
             isNftBook,
             isContentViewable,
             isDownloadable,
@@ -87,10 +86,9 @@
           <NFTClaimOptionListForMobile
             v-if="isShowingOptionListForMobile"
             class="w-full"
-            :url="url"
             :class-id="id"
             :content-urls="contentUrls"
-            :iscn-url="iscnUrl"
+            :external-url="externalUrl"
             :is-nft-book="isNftBook"
             :is-content-viewable="isContentViewable"
             :is-content-downloadable="isDownloadable"
@@ -117,10 +115,9 @@
         <div
           v-for="{
             canViewNFTBookBeforeClaim,
-            url,
             id,
             contentUrls,
-            iscnUrl,
+            externalUrl,
             isNftBook,
             isContentViewable,
             isDownloadable,
@@ -130,10 +127,9 @@
           <NFTClaimOptionList
             v-if="canViewNFTBookBeforeClaim"
             class="w-full"
-            :url="url"
             :class-id="id"
             :content-urls="contentUrls"
-            :iscn-url="iscnUrl"
+            :external-url="externalUrl"
             :is-nft-book="isNftBook"
             :is-content-viewable="isContentViewable"
             :is-content-downloadable="isDownloadable"

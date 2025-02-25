@@ -57,10 +57,6 @@ export default {
   name: 'NFTClaimOptionList',
   mixins: [alertMixin],
   props: {
-    url: {
-      type: String,
-      default: undefined,
-    },
     classId: {
       type: String,
       default: undefined,
@@ -69,7 +65,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    iscnUrl: {
+    externalUrl: {
       type: String,
       default: undefined,
     },
@@ -94,7 +90,7 @@ export default {
     normalizedContentURLs() {
       // NOTE: Assuming if only `url` is set, it must contain the actual content rather than the book info
       if (this.contentUrls.length) return this.contentUrls;
-      if (this.url) return [this.url];
+      if (this.externalUrl) return [this.externalUrl];
       return [];
     },
   },
