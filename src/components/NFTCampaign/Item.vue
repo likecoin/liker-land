@@ -10,7 +10,6 @@
       :class-id="classId"
       :title="NFTName"
       :description="NFTDescription"
-      :url="externalUrl"
       :img-src="NFTImageUrl"
       :img-bg-color="NFTImageBackgroundColor"
       :price="NFTPrice"

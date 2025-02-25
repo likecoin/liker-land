@@ -44,7 +44,7 @@ import {
 export default {
   name: 'NFTClaimOptionListForMobile',
   props: {
-    url: {
+    externalUrl: {
       type: String,
       default: undefined,
     },
@@ -55,10 +55,6 @@ export default {
     contentUrls: {
       type: Array,
       default: () => [],
-    },
-    iscnUrl: {
-      type: String,
-      default: undefined,
     },
     isNftBook: {
       type: Boolean,
@@ -79,9 +75,9 @@ export default {
   },
   computed: {
     normalizedContentURLs() {
-      // NOTE: Assuming if only `url` is set, it must contain the actual content rather than the book info
+      // NOTE: Assuming if only `externalUrl` is set, it must contain the actual content rather than the book info
       if (this.contentUrls.length) return this.contentUrls;
-      if (this.url) return [this.url];
+      if (this.externalUrl) return [this.externalUrl];
       return [];
     },
   },

@@ -104,10 +104,9 @@
       <Separator v-if="isPrimitive || url" class="my-[16px]" />
 
       <NFTViewOptionList
-        :url="url"
         :class-id="classId"
         :content-urls="contentUrls"
-        :iscn-url="iscnUrl"
+        :external-url="externalUrl"
         :is-nft-book="isNftBook"
         :nft-id="nftId"
         :is-content-viewable="isContentViewable"
@@ -157,10 +156,6 @@ export default {
   },
   mixins: [nftClassCollectionMixin],
   props: {
-    url: {
-      type: String,
-      default: undefined,
-    },
     contentUrls: {
       type: Array,
       default: () => [],
@@ -203,7 +198,7 @@ export default {
       type: String,
       default: undefined,
     },
-    iscnUrl: {
+    externalUrl: {
       type: String,
       default: undefined,
     },

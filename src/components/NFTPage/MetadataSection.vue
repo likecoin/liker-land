@@ -64,7 +64,7 @@ export default {
       type: String,
       default: '',
     },
-    iscnUrl: {
+    externalUrl: {
       type: String,
       default: '',
     },
@@ -84,7 +84,7 @@ export default {
         },
         {
           label: this.$t('nft_details_page_section_metadata_iscn'),
-          href: this.iscnUrl,
+          href: this.externalUrl,
           text: this.iscnId,
         },
       ];
