@@ -368,7 +368,7 @@
               :is-avatar-outlined="isCreatorCivicLiker"
               :is-nft-book="nftIsNFTBook"
               :class-owner="classOwner"
-              :iscn-work-author-name="iscnWorkAuthorName"
+              :class-author-name="classAuthorName"
               :iscn-url="iscnURL"
               :display-name="creatorDisplayNameFull"
               :class-id="classId"
@@ -629,8 +629,8 @@ export default {
   },
   head() {
     let title = this.NFTName || this.$t('nft_details_page_title');
-    if (this.iscnWorkAuthorName) {
-      title += ` - ${this.iscnWorkAuthorName}`;
+    if (this.classAuthorName) {
+      title += ` - ${this.classAuthorName}`;
     }
     if (this.nftIsNFTBook) {
       title += ` - ${this.$t('nft_details_page_title_book')}`;
@@ -707,7 +707,7 @@ export default {
         '@context': 'http://www.schema.org',
         '@type': ['CreativeWork', 'Product'],
         name: title,
-        author: this.iscnWorkAuthor || this.classOwnerPerson,
+        author: this.classAuthor || this.classOwnerPerson,
         image: [ogImage],
         description,
         brand: {
@@ -758,9 +758,9 @@ export default {
           url: 'https://liker.land/about/nft-book',
           name: 'NFT Book',
         },
-        author: this.iscnWorkAuthor || classOwnerPerson,
+        author: this.classAuthor || classOwnerPerson,
         sku: this.classId,
-        publisher: this.iscnWorkPublisher || classOwnerPerson,
+        publisher: this.classPublisher || classOwnerPerson,
         isbn: this.iscnData?.contentMetadata?.isbn,
         inLanguage: this.iscnData?.contentMetadata?.inLanguage,
         productGroupID: this.classId,
@@ -902,8 +902,8 @@ export default {
           let titleWithEdition =
             this.NFTName || this.$t('nft_details_page_title');
           titleWithEdition += ` - ${e.name}`;
-          if (this.iscnWorkAuthorName) {
-            titleWithEdition += ` - ${this.iscnWorkAuthorName}`;
+          if (this.classAuthorName) {
+            titleWithEdition += ` - ${this.classAuthorName}`;
           }
           meta.find(m => m.hid === 'og:title').content = titleWithEdition;
         }
@@ -914,11 +914,11 @@ export default {
             content: this.iscnData?.contentMetadata?.isbn,
           });
         }
-        if (this.iscnWorkAuthorName) {
+        if (this.classAuthorName) {
           meta.push({
             hid: 'product:custom_label_1',
             property: 'product:custom_label_1',
-            content: this.iscnWorkAuthorName,
+            content: this.classAuthorName,
           });
         }
         if (this.iscnData?.contentMetadata?.inLanguage) {

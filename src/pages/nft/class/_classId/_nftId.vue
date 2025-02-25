@@ -165,7 +165,7 @@
               :avatar-size="40"
               :is-avatar-outlined="isCreatorCivicLiker"
               :class-owner="classOwner"
-              :iscn-work-author-name="iscnWorkAuthorName"
+              :class-author-name="classAuthorName"
               :iscn-url="iscnURL"
               :display-name="creatorDisplayNameFull"
               :class-id="classId"
@@ -412,8 +412,8 @@ export default {
   head() {
     let title =
       this.nftName || this.NFTName || this.$t('nft_details_page_title');
-    if (this.iscnWorkAuthorName) {
-      title += ` - ${this.iscnWorkAuthorName}`;
+    if (this.classAuthorName) {
+      title += ` - ${this.classAuthorName}`;
     }
     if (this.nftIsNFTBook) {
       title += ` - ${this.$t('nft_details_page_title_book')}`;
@@ -474,8 +474,8 @@ export default {
           '@context': 'http://www.schema.org',
           '@type': this.nftIsNFTBook ? 'Book' : 'CreativeWork',
           name: title,
-          author: this.iscnWorkAuthor || this.classOwner,
-          publisher: this.iscnWorkPublisher || this.classOwner,
+          author: this.classAuthor || this.classOwner,
+          publisher: this.classPublisher || this.classOwner,
           image: [this.NFTImageUrl],
           description: this.NFTDescription,
           brand,

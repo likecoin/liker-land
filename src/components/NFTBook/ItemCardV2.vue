@@ -29,18 +29,18 @@
 
     <div class="text-[#8B8B8B] text-[0.875rem] laptop:text-[1rem]">
       <NuxtLink
-        v-if="iscnWorkAuthorName"
+        v-if="classAuthorName"
         :to="
           localeLocation({
             name: 'store',
             query: {
-              q: iscnWorkAuthorName,
+              q: classAuthorName,
               ll_medium: linkMedium,
             },
           })
         "
       >
-        {{ iscnWorkAuthorName | ellipsis }}
+        {{ classAuthorName | ellipsis }}
       </NuxtLink>
       <NuxtLink
         v-else-if="productOwner"

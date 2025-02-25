@@ -85,24 +85,24 @@
                 'gap-[12px]',
               ]"
             >
-              <div v-if="iscnWorkAuthorName" class="flex flex-col w-full">
+              <div v-if="classAuthorName" class="flex flex-col w-full">
                 <Label
                   preset="h6"
                   :text="$t('nft_claim_NFT_author')"
                   class=" text-medium-gray font-[500]"
                 />
                 <p class="text-[16px] font-[500] w-full break-words">
-                  {{ iscnWorkAuthorName }}
+                  {{ classAuthorName }}
                 </p>
               </div>
-              <div v-if="iscnWorkPublisher" class="flex flex-col w-full">
+              <div v-if="classPublisher" class="flex flex-col w-full">
                 <Label
                   preset="h6"
                   :text="$t('identity_type_publisher')"
                   class=" text-medium-gray font-[500]"
                 />
                 <p class="text-[16px] font-[500] w-full break-words">
-                  {{ iscnWorkPublisher }}
+                  {{ classPublisher }}
                 </p>
               </div>
               <div
@@ -112,7 +112,7 @@
                 <Label
                   preset="h6"
                   :text="
-                    iscnWorkPublisher
+                    classPublisher
                       ? $t('identity_type_distributor')
                       : $t('identity_type_publisher')
                   "
