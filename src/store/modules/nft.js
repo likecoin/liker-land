@@ -1,6 +1,5 @@
 /* eslint no-param-reassign: "off" */
 import Vue from 'vue';
-import { BigNumber } from 'bignumber.js';
 import * as api from '@/util/api';
 import {
   NFT_CLASS_LIST_SORTING,
@@ -17,6 +16,10 @@ import {
   NFT_CLASS_TRENDING_LIMIT_PER_OWNER,
   NFT_DISPLAY_STATE,
 } from '~/constant';
+import {
+  isEVMClassId,
+  getNFTClassDataById as getEvmNFTClassDataById,
+} from '~/util/evm/nft';
 import * as TYPES from '../mutation-types';
 
 const typeOrder = {
@@ -565,7 +568,18 @@ const actions = {
     commit(TYPES.NFT_SET_NFT_CLASS_PURCHASE_INFO, { classId, info });
     return info;
   },
-  async fetchNFTClassMetadata({ dispatch }, classId) {
+  async fetchNFTClassMetadata({ dispatch, commit }, classId) {
+    if (isEVMClassId(classId)) {
+      const metadata = await getEvmNFTClassDataById(classId);
+      commit(TYPES.NFT_SET_NFT_CLASS_METADATA, {
+        classId,
+        metadata,
+      });
+      return metadata;
+    }
+    return dispatch('fetchLikeNFTClassMetadata', classId);
+  },
+  async fetchLikeNFTClassMetadata({ dispatch }, classId) {
     /* HACK: Use restful API instead of cosmjs to avoid loading libsodium,
       which is huge and affects index page performance */
     // const chainMetadata = await getClassInfo(classId);
