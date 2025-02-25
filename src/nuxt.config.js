@@ -349,6 +349,7 @@ const nuxtConfig = {
    ** Plugins to load before mounting the App
    */
   plugins: [
+    '~/plugins/viem.js',
     '~/plugins/axios.js',
     '~/plugins/likecoin-ui-vue.js',
     '~/plugins/portal-vue.js',
@@ -534,9 +535,17 @@ const nuxtConfig = {
           {
             targets: isServer
               ? { node: 'current' }
-              : { browsers: 'ie 11, > 1%, Firefox ESR' },
+              : {
+                  // BigInt support due to viem, sorry ie
+                  browsers:
+                    '>0.2%, not ie <= 99, not android <= 4.4.4, not dead, not op_mini all',
+                },
           },
         ],
+      ],
+      plugins: [
+        '@babel/plugin-proposal-numeric-separator',
+        '@babel/plugin-proposal-logical-assignment-operators',
       ],
     },
     transpile: [
