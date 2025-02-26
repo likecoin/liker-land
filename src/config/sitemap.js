@@ -12,7 +12,8 @@ const axios = Axios.create({
 
 const locales = ['zh-Hant', 'en'];
 /* Copied from constant due to nuxt.config.js is not es6 import syntax */
-const { IS_TESTNET } = process.env;
+// eslint-disable-next-line prefer-destructuring
+const IS_TESTNET = process.env.IS_TESTNET;
 const EXTERNAL_HOST = IS_TESTNET
   ? 'https://rinkeby.liker.land'
   : 'https://liker.land';

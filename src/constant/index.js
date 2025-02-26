@@ -1,11 +1,10 @@
-export const { IS_TESTNET } = process.env;
-
-export const { AD_CONVERSION_ID } = process.env;
-
-export const { FACEBOOK_PIXEL_ID } = process.env;
-
+/* eslint-disable prefer-destructuring */
+export const IS_TESTNET = process.env.IS_TESTNET;
+export const AD_CONVERSION_ID = process.env.AD_CONVERSION_ID;
+export const FACEBOOK_PIXEL_ID = process.env.FACEBOOK_PIXEL_ID;
 export const TEST_MODE =
   process.env.NODE_ENV !== 'production' || process.env.CI;
+/* eslint-enable prefer-destructuring */
 
 export const ONE_HOUR_IN_MS = 3600000;
 

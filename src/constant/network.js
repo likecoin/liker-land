@@ -8,7 +8,8 @@ import {
   EXTERNAL_HOST,
 } from '.';
 
-const { IS_TESTNET } = process.env;
+// eslint-disable-next-line prefer-destructuring
+const IS_TESTNET = process.env.IS_TESTNET;
 
 export const LIKECOIN_WALLET_CONNECTOR_CONFIG = {
   chainId: LIKECOIN_CHAIN_ID,
