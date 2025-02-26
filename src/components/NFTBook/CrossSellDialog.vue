@@ -265,7 +265,7 @@ export default {
         const purchaseEventParams = {
           items: [
             {
-              name: this.NFTName,
+              name: this.nftName,
               price: edition.price,
               classId: this.classId,
               priceIndex,

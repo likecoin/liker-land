@@ -8,10 +8,10 @@
     </client-only>
     <NFTCampaignItemBase
       :class-id="classId"
-      :title="NFTName"
-      :description="NFTDescription"
-      :img-src="NFTImageUrl"
-      :img-bg-color="NFTImageBackgroundColor"
+      :title="nftName"
+      :description="nftDescription"
+      :img-src="nftImageUrl"
+      :img-bg-color="nftImageBackgroundColor"
       :price="NFTPrice"
       :base-price="nftBasePrice"
       :owner-address="classOwner"

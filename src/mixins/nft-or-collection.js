@@ -1,5 +1,4 @@
 import { formatNumberWithUSD } from '~/util/ui';
-import { parseNFTMetadataURL } from '~/util/nft';
 import nftMixin from './nft';
 import collectionMixin from './nft-collection';
 
@@ -16,10 +15,10 @@ export default {
       return this.collectionId || this.classId;
     },
     productMetadata() {
-      return this.isCollection ? this.collection : this.NFTClassMetadata;
+      return this.isCollection ? this.collection : this.contentMetadata;
     },
     productName() {
-      const name = this.NFTName || this.productMetadata?.name;
+      const name = this.nftName || this.productMetadata?.name;
       const hasLocalizedName = name?.[this.collectionLocale] !== undefined;
       return hasLocalizedName ? name[this.collectionLocale] : name;
     },
@@ -31,12 +30,12 @@ export default {
       return description;
     },
     productImageUrl() {
-      return this.isCollection ? this.collectionImageUrl : this.NFTImageUrl;
+      return this.isCollection ? this.collectionImageUrl : this.nftImageUrl;
     },
     productOwner() {
       return this.isCollection
         ? this.productMetadata?.ownerWallet
-        : this.productMetadata?.iscn_owner;
+        : this.classOwner;
     },
     productAvailablePriceLabel() {
       return this.isCollection

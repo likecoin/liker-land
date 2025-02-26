@@ -80,7 +80,7 @@
         <NFTPageCollectCTA
           v-if="nftIsWritingNFT"
           :class-id="classId"
-          :nft-image-url="NFTImageUrl"
+          :nft-image-url="nftImageUrl"
           :creator-message="creatorMessage"
           :class-owner="classOwner"
           :is-collectable="nftIsCollectable"
@@ -336,7 +336,7 @@
               >
                 <NFTBookEditionCompareTableColumn
                   :class-id="classId"
-                  :src="NFTImageUrl"
+                  :src="nftImageUrl"
                   :edition-config="editionConfig"
                   @click-collect="handleCollectFromEditionCompareTable"
                 />
@@ -359,9 +359,9 @@
             <NFTPagePreviewCard
               :url="externalUrl"
               :content-urls="classContentUrls"
-              :image-bg-color="NFTImageBackgroundColor"
-              :image-url="NFTImageUrl"
-              :animation-url="NFTAnimationUrl"
+              :image-bg-color="nftImageBackgroundColor"
+              :image-url="nftImageUrl"
+              :animation-url="nftAnimationUrl"
               :avatar-url="creatorAvatar"
               :avatar-size="40"
               :is-avatar-outlined="isCreatorCivicLiker"
@@ -372,8 +372,8 @@
               :display-name="creatorDisplayNameFull"
               :class-id="classId"
               :nft-id="nftIdCollectedFirstByUser"
-              :nft-name="NFTName"
-              :nft-description="NFTDescription"
+              :nft-name="nftName"
+              :nft-description="nftDescription"
               :nft-price="NFTPrice"
               :collected-count="collectedCount"
               :collector-count="ownerCount"
@@ -627,7 +627,7 @@ export default {
     }
   },
   head() {
-    let title = this.NFTName || this.$t('nft_details_page_title');
+    let title = this.nftName || this.$t('nft_details_page_title');
     if (this.classAuthorName) {
       title += ` - ${this.classAuthorName}`;
     }
@@ -637,9 +637,9 @@ export default {
       title += ` - ${this.$t('nft_details_page_title_article')}`;
     }
     const description =
-      this.NFTDescription || this.$t('nft_details_page_description');
+      this.nftDescription || this.$t('nft_details_page_description');
     const ogImage =
-      this.NFTImageUrl ||
+      this.nftImageUrl ||
       `${EXTERNAL_HOST}/images/og/${
         this.$i18n.locale !== 'en' ? 'default-zh.jpg' : 'default.jpg'
       }`;
@@ -716,10 +716,10 @@ export default {
           name: 'Writing NFT',
         },
         sku: this.classId,
-        isbn: this.iscnData?.contentMetadata?.isbn,
+        isbn: this.contentMetadata.isbn,
         datePublished:
-          this.iscnData?.contentMetadata?.datePublished ||
-          this.iscnData?.recordTimestamp,
+          this.contentMetadata.datePublished ||
+          this.contentMetadata?.recordTimestamp,
         url: `${EXTERNAL_HOST}${this.$route.path}`,
         offers: {
           '@context': 'http://www.schema.org',
@@ -760,10 +760,10 @@ export default {
         author: this.classAuthor || classOwnerPerson,
         sku: this.classId,
         publisher: this.classPublisher || classOwnerPerson,
-        isbn: this.iscnData?.contentMetadata?.isbn,
-        inLanguage: this.iscnData?.contentMetadata?.inLanguage,
+        isbn: this.contentMetadata.isbn,
+        inLanguage: this.contentMetadata.inLanguage,
         productGroupID: this.classId,
-        datePublished: this.iscnData?.recordTimestamp,
+        datePublished: this.contentMetadata.recordTimestamp,
         bookFormat: 'https://schema.org/EBook',
         workExample: [],
         hasVariant: [],
@@ -788,8 +788,8 @@ export default {
           image: [ogImage],
           sku: `${this.classId}-${e.index}`,
           inProductGroupWithID: this.classId,
-          isbn: this.iscnData?.contentMetadata?.isbn,
-          inLanguage: this.iscnData?.contentMetadata?.inLanguage,
+          isbn: this.contentMetadata.isbn,
+          inLanguage: this.contentMetadata.inLanguage,
           bookFormat: 'https://schema.org/EBook',
           bookEdition: e.name,
           description: `${e.description}\n${description}`,
@@ -899,18 +899,18 @@ export default {
         }?price_index=${e.index}`;
         if (e.name) {
           let titleWithEdition =
-            this.NFTName || this.$t('nft_details_page_title');
+            this.nftName || this.$t('nft_details_page_title');
           titleWithEdition += ` - ${e.name}`;
           if (this.classAuthorName) {
             titleWithEdition += ` - ${this.classAuthorName}`;
           }
           meta.find(m => m.hid === 'og:title').content = titleWithEdition;
         }
-        if (this.iscnData?.contentMetadata?.isbn) {
+        if (this.contentMetadata.isbn) {
           meta.push({
             hid: 'product:isbn',
             property: 'product:isbn',
-            content: this.iscnData?.contentMetadata?.isbn,
+            content: this.contentMetadata.isbn,
           });
         }
         if (this.classAuthorName) {
@@ -920,11 +920,11 @@ export default {
             content: this.classAuthorName,
           });
         }
-        if (this.iscnData?.contentMetadata?.inLanguage) {
+        if (this.contentMetadata.inLanguage) {
           meta.push({
             hid: 'product:custom_label_2',
             property: 'product:custom_label_2',
-            content: this.iscnData?.contentMetadata?.inLanguage,
+            content: this.contentMetadata.inLanguage,
           });
         }
       }
@@ -1218,7 +1218,7 @@ export default {
       logPurchaseFlowEvent(this, 'view_item', {
         items: [
           {
-            name: this.NFTName,
+            name: this.nftName,
             classId: this.classId,
             priceIndex: this.editionPriceIndex,
             price: this.NFTPriceUSD,
@@ -1271,7 +1271,7 @@ export default {
       return {
         items: [
           {
-            name: this.NFTName,
+            name: this.nftName,
             price: customPriceInDecimal || edition.price,
             classId: this.classId,
             priceIndex: edition.index,
@@ -1691,7 +1691,7 @@ export default {
       logPurchaseFlowEvent(this, 'view_item', {
         items: [
           {
-            name: this.NFTName,
+            name: this.nftName,
             classId: this.classId,
             priceIndex: this.editionPriceIndex,
             price: this.NFTPriceUSD,
@@ -1707,8 +1707,8 @@ export default {
     },
     handleCopyURL() {
       this.shareURLPath({
-        title: this.NFTName,
-        text: this.NFTDescription,
+        title: this.nftName,
+        text: this.nftDescription,
         path: this.nftClassDetailsPageURL,
         alertMessage: this.$t('tooltip_share_done'),
       });

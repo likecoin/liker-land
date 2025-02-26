@@ -1,7 +1,6 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import {
-  APP_LIKE_CO_VIEW,
   LIKECOIN_CHAIN_API,
   TX_STATUS,
   LIKECOIN_NFT_API_WALLET,
@@ -37,13 +36,10 @@ import {
   getUniqueAddressesFromEvent,
 } from '~/util/nft';
 import { getDynamicCovers } from '~/util/nft-book';
-import {
-  formatNumberWithLIKE,
-  formatNumberWithUSD,
-  formatNumberWithUnit,
-} from '~/util/ui';
+import { formatNumberWithLIKE, formatNumberWithUSD } from '~/util/ui';
 
 import walletMixin from '~/mixins/wallet';
+import iscnMixin from '~/mixins/iscn';
 import alertMixin from '~/mixins/alert';
 import utmMixin from '~/mixins/utm';
 import nftEventBannerMixin from '~/mixins/nft-event-banner';
@@ -66,6 +62,7 @@ const defaultThemeColor = ['#D1D1D1', '#FFC123', '#ECBDF3'];
 export default {
   mixins: [
     walletMixin,
+    iscnMixin,
     alertMixin,
     creatorInfoMixin,
     nftClassCollectionMixin,
@@ -113,21 +110,37 @@ export default {
       'uiTxNFTStatus',
     ]),
     NFTClassMetadata() {
+      if (!this.classId) return {};
       return this.getNFTClassMetadataById(this.classId) || {};
     },
     nftMetadata() {
+      if (!this.classId || !this.nftId) return {};
       return (
         this.getNFTMetadataByNFTClassAndNFTId(this.classId, this.nftId) || {}
       );
     },
+    contentMetadata() {
+      const {
+        contentMetadata: iscnContentMetadata,
+        contentFingerprints,
+        recordTimestamp,
+      } = this.iscnData || {};
+      return {
+        ...this.NFTClassMetadata,
+        ...iscnContentMetadata,
+        contentFingerprints,
+        recordTimestamp,
+        ...this.nftMetadata,
+      };
+    },
     nftClassCollectionType() {
-      return getNFTClassCollectionType(this.NFTClassMetadata);
+      return getNFTClassCollectionType(this.contentMetadata);
     },
     nftClassCollectionName() {
-      return this.NFTClassMetadata.nft_meta_collection_name || '';
+      return this.contentMetadata.nft_meta_collection_name || '';
     },
     nftClassCreatorMessage() {
-      return this.NFTClassMetadata.message || '';
+      return this.contentMetadata.message || '';
     },
     purchaseInfo() {
       const info = this.getNFTClassPurchaseInfoById(this.classId) || {};
@@ -149,16 +162,6 @@ export default {
     ownerInfo() {
       return this.getNFTClassOwnerInfoById(this.classId) || {};
     },
-    iscnId() {
-      return (
-        this.NFTClassMetadata.parent?.iscnIdPrefix ||
-        this.NFTClassMetadata.parent?.iscn_id_prefix
-      );
-    },
-    iscnURL() {
-      if (!this.iscnId) return '';
-      return `${APP_LIKE_CO_VIEW}/${encodeURIComponent(this.iscnId)}`;
-    },
     classOwner() {
       return (
         // TODO: refactor iscn owner data location
@@ -168,7 +171,7 @@ export default {
       );
     },
     classAuthor() {
-      return this.iscnData?.contentMetadata?.author;
+      return this.contentMetadata.author;
     },
     classAuthorName() {
       if (typeof this.classAuthor === 'string') {
@@ -180,58 +183,28 @@ export default {
       return this.classAuthor?.description?.trim();
     },
     classPublisher() {
-      return this.iscnData?.contentMetadata?.publisher?.trim();
-    },
-    // nft info
-    NFTName() {
-      if (this.nftIsNFTBook) {
-        return this.iscnName || this.NFTClassMetadata.name;
-      }
-      return this.NFTClassMetadata.name;
+      return this.contentMetadata.publisher?.trim();
     },
     nftName() {
-      return this.nftMetadata.name || this.NFTName;
-    },
-    NFTDescription() {
-      const overrideKey = `nft_override_${this.classId}_description`;
-      const hasOverride = this.$te(overrideKey);
-      if (hasOverride) return this.$t(overrideKey);
-
-      if (this.nftIsNFTBook) {
-        return this.iscnDescription || this.NFTClassMetadata.description || '';
-      }
-      return this.NFTClassMetadata.description || '';
+      return this.contentMetadata.name;
     },
     nftDescription() {
       const overrideKey = `nft_override_${this.classId}_description`;
       const hasOverride = this.$te(overrideKey);
       if (hasOverride) return this.$t(overrideKey);
-      return this.nftMetadata.description || this.NFTDescription;
+      return this.contentMetadata.description || '';
     },
-    NFTImageUrl() {
-      const { image = '' } = this.NFTClassMetadata;
+    nftImageUrl() {
+      const { image = '', thumbnailUrl } = this.contentMetadata;
       let url = image;
       // HACK: some thumbnail url is just ar:// which is wrong
-      if (this.iscnThumbnailUrl && this.iscnThumbnailUrl !== 'ar://') {
-        url = this.iscnThumbnailUrl;
+      if (thumbnailUrl && thumbnailUrl !== 'ar://') {
+        url = thumbnailUrl;
       }
       return parseNFTMetadataURL(url);
     },
-    nftImageURL() {
-      const { image = '' } = this.nftMetadata;
-      let url = image;
-      // HACK: some thumbnail url is just ar:// which is wrong
-      if (this.iscnThumbnailUrl && this.iscnThumbnailUrl !== 'ar://') {
-        url = this.iscnThumbnailUrl;
-      }
-      return parseNFTMetadataURL(url) || this.NFTImageUrl;
-    },
-    NFTAnimationUrl() {
-      const { animation_url: video = '' } = this.NFTClassMetadata;
-      return parseNFTMetadataURL(video);
-    },
-    nftAnimationURL() {
-      const video = this.nftMetadata.animation_url || this.NFTAnimationUrl;
+    nftAnimationUrl() {
+      const { animation_url: video = '' } = this.contentMetadata;
       return parseNFTMetadataURL(video);
     },
     nftModelURL() {
@@ -239,52 +212,23 @@ export default {
         ? getNFTModel({ classId: this.classId })
         : undefined;
     },
-    NFTImageBackgroundColor() {
-      return this.NFTClassMetadata.background_color;
-    },
     nftImageBackgroundColor() {
-      return this.nftMetadata.background_color || this.NFTImageBackgroundColor;
-    },
-    NFTExternalUrl() {
-      return this.NFTClassMetadata.external_url;
-    },
-    nftExternalURL() {
-      return this.nftMetadata.external_url || this.NFTExternalUrl;
+      return this.contentMetadata.background_color;
     },
     externalUrl() {
-      // Prioritize iscn url for nft book since book info might be in iscn
-      return this.nftIsNFTBook
-        ? this.iscnUrl || this.nftExternalURL
-        : this.nftExternalURL;
-    },
-    iscnData() {
-      const data = this.getISCNMetadataById(this.iscnId);
-      if (data instanceof Promise) return undefined;
-      return data;
-    },
-    iscnName() {
-      return this.iscnData?.contentMetadata?.name;
-    },
-    iscnDescription() {
-      return this.iscnData?.contentMetadata?.description;
-    },
-    iscnUrl() {
-      return this.iscnData?.contentMetadata?.url;
-    },
-    iscnThumbnailUrl() {
-      return this.iscnData?.contentMetadata?.thumbnailUrl;
+      return this.contentMetadata.url || this.contentMetadata.external_url;
     },
     classContentUrls() {
-      return this.iscnData?.contentMetadata?.sameAs || [];
+      return this.contentMetadata.sameAs || [];
     },
     classContentFingerprints() {
-      return this.iscnData?.contentFingerprints || [];
+      return this.contentMetadata.contentFingerprints || [];
     },
     classPublishedDate() {
-      return this.iscnData?.contentMetadata?.datePublished;
+      return this.contentMetadata.datePublished;
     },
     classReleasedDate() {
-      return this.classPublishedDate || this.iscnData?.recordTimestamp;
+      return this.classPublishedDate || this.contentMetadata.recordTimestamp;
     },
     NFTPrice() {
       return this.nftIsNFTBook
@@ -703,7 +647,6 @@ export default {
   methods: {
     ...mapActions([
       'lazyGetUserInfoByAddress',
-      'lazyGetISCNMetadataById',
       'lazyFetchNFTClassAggregatedInfo',
       'lazyGetNFTClassMetadata',
       'lazyGetNFTOwners',
@@ -726,9 +669,6 @@ export default {
       'lazyFetchNFTBookInfoByClassId',
       'fetchNFTCollectionInfoByClassId',
     ]),
-    async fetchISCNMetadata() {
-      await this.lazyGetISCNMetadataById(this.iscnId);
-    },
     async lazyFetchNFTClassMetadata() {
       await catchAxiosError(this.lazyGetNFTClassMetadata(this.classId));
       if (this.classOwner) {
@@ -925,7 +865,7 @@ export default {
               classId: this.classId,
               priceIndex: this.editionPriceIndex,
               price: this.NFTPriceUSD,
-              name: this.NFTName,
+              name: this.nftName,
             },
           ],
           isNFTBook: this.nftIsNFTBook,
@@ -1027,7 +967,7 @@ export default {
             txHash,
             items: [
               {
-                name: this.NFTName,
+                name: this.nftName,
                 price: this.NFTPriceUSD,
                 priceIndex: this.editionPriceIndex,
                 classId,
@@ -1042,7 +982,7 @@ export default {
           } else {
             this.alertPromptSuccess(
               this.$t('nft_collect_modal_alert_success', {
-                name: this.NFTName,
+                name: this.nftName,
               })
             );
           }
@@ -1061,7 +1001,7 @@ export default {
         } else {
           this.alertPromptError(
             this.$t('nft_collect_modal_alert_fail', {
-              name: this.NFTName,
+              name: this.nftName,
               error: errMsg,
             })
           );
@@ -1205,7 +1145,7 @@ export default {
         } else {
           this.alertPromptError(
             this.$t('nft_collect_modal_alert_fail', {
-              name: this.NFTName,
+              name: this.nftName,
               error: errMsg,
             })
           );

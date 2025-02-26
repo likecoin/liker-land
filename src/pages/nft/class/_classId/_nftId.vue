@@ -158,8 +158,8 @@
             <NFTPagePreviewCard
               :content-urls="classContentUrls"
               :image-bg-color="nftImageBackgroundColor"
-              :image-url="nftImageURL"
-              :animation-url="nftAnimationURL"
+              :image-url="nftImageUrl"
+              :animation-url="nftAnimationUrl"
               :avatar-url="creatorAvatar"
               :avatar-size="40"
               :is-avatar-outlined="isCreatorCivicLiker"
@@ -409,8 +409,7 @@ export default {
     };
   },
   head() {
-    let title =
-      this.nftName || this.NFTName || this.$t('nft_details_page_title');
+    let title = this.nftName || this.$t('nft_details_page_title');
     if (this.classAuthorName) {
       title += ` - ${this.classAuthorName}`;
     }
@@ -420,12 +419,9 @@ export default {
       title += ` - ${this.$t('nft_details_page_title_article')}`;
     }
     const description =
-      this.nftDescription ||
-      this.NFTDescription ||
-      this.$t('nft_details_page_description');
+      this.nftDescription || this.$t('nft_details_page_description');
     const ogImage =
-      this.nftImageURL ||
-      this.NFTImageUrl ||
+      this.nftImageUrl ||
       `${EXTERNAL_HOST}/images/og/${
         this.$i18n.locale === 'zh-Hant' ? 'default-zh.jpg' : 'default.jpg'
       }`;
@@ -475,12 +471,12 @@ export default {
           name: title,
           author: this.classAuthor || this.classOwner,
           publisher: this.classPublisher || this.classOwner,
-          image: [this.NFTImageUrl],
-          description: this.NFTDescription,
+          image: [this.nftImageUrl],
+          description: this.nftDescription,
           brand,
           sku: this.classId,
-          isbn: this.iscnData?.contentMetadata?.isbn,
-          datePublished: this.iscnData?.recordTimestamp,
+          isbn: this.contentMetadata.isbn,
+          datePublished: this.contentMetadata.recordTimestamp,
           bookFormat: this.nftIsNFTBook
             ? 'https://schema.org/EBook'
             : undefined,
@@ -615,7 +611,7 @@ export default {
       logPurchaseFlowEvent(this, 'view_item', {
         items: [
           {
-            name: this.NFTName,
+            name: this.nftName,
             price: this.NFTPriceUSD,
             priceIndex: this.editionPriceIndex,
             classId: this.classId,

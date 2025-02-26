@@ -8,7 +8,7 @@
     </client-only>
     <NFTPageCollectCTA
       :class-id="classId"
-      :nft-image-url="NFTImageUrl"
+      :nft-image-url="nftImageUrl"
       :class-owner="classOwner"
       :is-collectable="nftIsCollectable"
       button-theme="glow"

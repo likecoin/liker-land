@@ -15,24 +15,24 @@
         <NFTCover
           v-if="videoSrc"
           :is-nft-book="true"
-          :src="imageSrc || NFTImageUrl"
+          :src="imageSrc || nftImageUrl"
           :video-src="videoSrc"
           :should-resize-src="shouldResizeSrc"
           :size="200"
           :theme="theme"
-          :alt="NFTName"
+          :alt="nftName"
         />
         <NFTBookCover
           v-else
           :class="coverClasses"
-          :src="imageSrc || NFTImageUrl"
-          :alt="NFTName"
+          :src="imageSrc || nftImageUrl"
+          :alt="nftName"
           :resize="200"
         />
       </component>
     </div>
     <template v-if="!isCoverPreset">
-      <Label :class="[titleStyle, 'mt-[20px]']" preset="p5" :text="NFTName" />
+      <Label :class="[titleStyle, 'mt-[20px]']" preset="p5" :text="nftName" />
       <Label
         class="text-medium-gray mt-[6px] mb-[12px]"
         preset="p6"
@@ -106,18 +106,18 @@
             v-if="videoSrc"
             :class="['mt-[-48px]', coverClasses]"
             :is-nft-book="true"
-            :src="imageSrc || NFTImageUrl"
+            :src="imageSrc || nftImageUrl"
             :should-resize-src="shouldResizeSrc"
             :video-src="videoSrc"
             :size="200"
             :theme="theme"
-            :alt="NFTName"
+            :alt="nftName"
           />
           <NFTBookCover
             v-else
             :class="['mt-[-48px]', coverClasses]"
-            :src="imageSrc || NFTImageUrl"
-            :alt="NFTName"
+            :src="imageSrc || nftImageUrl"
+            :alt="nftName"
             :resize="200"
           />
 
@@ -150,7 +150,7 @@
           />
           <h1
             :class="['text-[24px]', 'font-600', titleStyle]"
-            v-text="NFTName"
+            v-text="nftName"
           />
           <p
             v-if="!isDetailsPreset"
@@ -473,7 +473,7 @@ export default {
     isNew() {
       // True if within 30 days
       return (
-        new Date().getTime() - new Date(this.iscnData?.recordTimestamp) <
+        new Date().getTime() - new Date(this.contentMetadata.recordTimestamp) <
         1000 * 60 * 60 * 24 * 30
       );
     },
@@ -551,11 +551,12 @@ export default {
     },
     bookDescriptionTrimmed() {
       if (this.preset === PRESET_TYPE.CAMPAIGN) {
-        return this.NFTDescription.replaceAll('\n', '')
+        return this.nftDescription
+          .replaceAll('\n', '')
           .trim()
           .substring(0, 100);
       }
-      return this.NFTDescription.trim();
+      return this.nftDescription.trim();
     },
   },
   mounted() {
