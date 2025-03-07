@@ -25,6 +25,12 @@
       </i18n>
     </AlertBanner> -->
 
+    <SiteTopBanner
+      v-if="siteTopBannerMessage"
+      :banner-key="classId"
+      :messages="[siteTopBannerMessage]"
+    />
+
     <AlertBanner v-if="uiIsChainUpgrading">{{
       $t('notice_chain_upgrading')
     }}</AlertBanner>
@@ -97,7 +103,10 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import { EXTERNAL_HOST } from '~/constant';
+import {
+  EXTERNAL_HOST,
+  NFT_BOOK_WITH_TOP_BANNER_MESSAGE_MAP,
+} from '~/constant';
 
 import alertMixin from '~/mixins/alert';
 import inAppMixin from '~/mixins/in-app';
@@ -161,6 +170,19 @@ export default {
     },
     isClaimPage() {
       return this.getRouteBaseName(this.$route).includes('nft-claim');
+    },
+    isNFTClassPage() {
+      return this.getRouteBaseName(this.$route) === 'nft-class-classId';
+    },
+    classId() {
+      return this.$route.params.classId;
+    },
+    siteTopBannerMessage() {
+      return (
+        (this.isNFTClassPage &&
+          NFT_BOOK_WITH_TOP_BANNER_MESSAGE_MAP[this.classId]) ||
+        ''
+      );
     },
   },
   watch: {

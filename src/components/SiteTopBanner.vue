@@ -56,6 +56,10 @@ const LAST_CLOSED_AT_KEY = 'site-top-banner-last-closed-at';
 export default {
   name: 'SiteTopBanner',
   props: {
+    bannerKey: {
+      type: String,
+      default: 'global',
+    },
     messages: {
       type: Array,
       default: () => [],
@@ -74,6 +78,11 @@ export default {
   computed: {
     activeMessage() {
       return this.messages[this.activeMessageIndex];
+    },
+    localStorageKey() {
+      return this.bannerKey
+        ? `${LAST_CLOSED_AT_KEY}-${this.bannerKey}`
+        : LAST_CLOSED_AT_KEY;
     },
   },
   mounted() {
@@ -110,14 +119,16 @@ export default {
     closeBanner() {
       this.isShowBanner = false;
       try {
-        window.localStorage.setItem(LAST_CLOSED_AT_KEY, Date.now());
+        window.localStorage.setItem(this.localStorageKey, Date.now());
       } finally {
         this.clearInterval();
       }
     },
     showBannerIfPossible() {
       try {
-        const lastClosedTime = window.localStorage.getItem(LAST_CLOSED_AT_KEY);
+        const lastClosedTime = window.localStorage.getItem(
+          this.localStorageKey
+        );
         const oneDay = 24 * 60 * 60 * 1000;
         if (!lastClosedTime || Date.now() - lastClosedTime >= oneDay) {
           this.isShowBanner = true;

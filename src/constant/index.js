@@ -442,6 +442,13 @@ export const NFT_BOOK_WITH_SIGN_IMAGE_SET = new Map(
 
 export const NFT_BOOK_WITH_EVENT_BANNER_SET = [];
 
+export const NFT_BOOK_WITH_TOP_BANNER_MESSAGE_MAP = IS_TESTNET
+  ? {}
+  : {
+      likenft1qqqezqjuxfkrsykex6r2cdtakpkndg2wnnlsx894gmwq4p84868se52g6z:
+        '出版社已於 2025 年 2 月 13 日關閉了下載功能。在此日期前購買了此書的讀者，如欲獲得書檔，請聯絡客服。',
+    };
+
 export const NFT_BOOK_PRODUCT_PAGE_OVERRIDE = IS_TESTNET
   ? {}
   : {
