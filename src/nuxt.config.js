@@ -102,9 +102,15 @@ const nuxtConfig = {
         as: 'script',
       },
       {
-        hid: 'pixel-script-poptin-link',
+        hid: 'mailerlite-script-link',
         rel: 'preload',
-        href: 'https://cdn.popt.in/pixel.js?id=771c46b9e377e',
+        href: '/js/mailerlite.js',
+        as: 'script',
+      },
+      {
+        hid: 'mailerlite-script-universal-link',
+        rel: 'preload',
+        href: 'https://assets.mailerlite.com/js/universal.js',
         as: 'script',
       },
       {
@@ -154,8 +160,8 @@ const nuxtConfig = {
         async: true,
       },
       {
-        hid: 'pixel-script-poptin',
-        src: 'https://cdn.popt.in/pixel.js?id=771c46b9e377e',
+        hid: 'mailerlite-script',
+        src: '/js/mailerlite.js',
         async: true,
       },
       {
@@ -274,7 +280,7 @@ const nuxtConfig = {
           '*.crisp.chat',
           'connect.facebook.net',
           '*.elfsight.com',
-          'cdn.popt.in',
+          'https://assets.mailerlite.com',
         ],
         'frame-src': [
           'blob:',
@@ -300,6 +306,7 @@ const nuxtConfig = {
           'https://authcore.like.co',
           'https://likecoin.github.io',
           'https://likecoin-integration-test.authcore.io',
+          'https://assets.mailerlite.com/',
         ],
         'connect-src': [
           "'self'",
@@ -319,11 +326,7 @@ const nuxtConfig = {
           "'unsafe-inline'",
           'client.crisp.chat',
           'fonts.googleapis.com',
-
-          // Poptin
-          'fonts.popt.in',
-          'cdn.popt.in',
-          'cdnjs.cloudflare.com',
+          'https://assets.mailerlite.com',
         ],
         'worker-src': ["'self'", 'blob:'],
         'child-src': ["'self'", 'blob:'],
