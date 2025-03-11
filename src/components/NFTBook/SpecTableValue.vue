@@ -3,7 +3,7 @@
     <div :class="['font-[600]', textStyle]" v-text="text" />
     <div
       v-if="tooltipText"
-      class="relative z-[300] hidden group laptop:block"
+      class="relative hidden group laptop:block"
       @mouseenter="hoverTooltip"
     >
       <IconInfo class="w-[16px] h-[16px]" />
