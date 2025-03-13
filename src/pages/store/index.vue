@@ -111,36 +111,6 @@
                 <IconFilter />
               </template>
             </ButtonV2>
-            <Dropdown>
-              <template #trigger="{ toggle }">
-                <ButtonV2
-                  preset="tertiary"
-                  class="whitespace-nowrap"
-                  :text="selectedSortingLabel"
-                  @click="toggle"
-                >
-                  <template #append>
-                    <IconArrowDown />
-                  </template>
-                </ButtonV2>
-              </template>
-              <MenuList class="!py-[8px]">
-                <MenuItem
-                  v-for="(item, i) in availableSorting"
-                  :key="i"
-                  label-align="left"
-                  label-class="!py-[8px]"
-                  :value="item.value"
-                  :label="item.text"
-                  :selected-value="selectedSorting"
-                  @select="handleSortingChange"
-                >
-                  <template v-if="selectedSorting === item.value" #label-append>
-                    <IconCheck />
-                  </template>
-                </MenuItem>
-              </MenuList>
-            </Dropdown>
           </div>
         </div>
 
@@ -148,7 +118,7 @@
         <div
           :class="[
             'grid desktop:hidden',
-            'grid-cols-3',
+            'grid-cols-2',
 
             'w-full',
             'mt-[16px]',
@@ -181,17 +151,6 @@
             <Label :text="$t('listing_page_filter')">
               <template #prepend>
                 <IconFilter />
-              </template>
-            </Label>
-          </div>
-
-          <div
-            class="flex items-center justify-center cursor-pointer px-[10px] py-[14px]"
-            @click="handleOpenSortingDialog"
-          >
-            <Label :text="$t('order_menu_sort_by')">
-              <template #prepend>
-                <IconSorter />
               </template>
             </Label>
           </div>
@@ -397,20 +356,6 @@
         <IconScrollToTop />
       </ButtonV2>
     </div>
-
-    <!-- Mobile Sorting Dialog -->
-    <ListingPageDialog
-      :is-open="isShowSortingDialog"
-      :title="$t('listing_page_sorter')"
-      @close="handleCloseDialog"
-    >
-      <ListingPageMobileSortingSection
-        :available-sorting="availableSorting"
-        :selected-sorting="selectedSorting"
-        @change-sorting="handleSortingChange"
-        @close="handleCloseDialog"
-      />
-    </ListingPageDialog>
 
     <!-- Mobile Filter Dialog -->
     <ListingPageDialog
@@ -621,7 +566,6 @@ export default {
     return {
       bookstoreCMSTags: [], // Fetch in asyncData
 
-      isShowSortingDialog: false,
       isShowFilterDialog: false,
       dialogNFTClassList: [],
 
@@ -881,10 +825,6 @@ export default {
 
         this.$router.push({ query });
       },
-    },
-    selectedSortingLabel() {
-      const text = `listing_page_header_sort_${this.selectedSorting}`;
-      return this.$t('listing_page_header_sort', { sort: this.$t(text) });
     },
 
     bookstoreItems() {
@@ -1250,19 +1190,11 @@ export default {
       this.setFilterQuery(null);
       logTrackerEvent(this, 'listing', 'listing_filter_reset_in_empty', '', 1);
     },
-    handleSortingChange(value) {
-      logTrackerEvent(this, 'listing', 'listing_sorting_clicked', value, 1);
-      this.selectedSorting = value;
-    },
-    handleOpenSortingDialog() {
-      this.isShowSortingDialog = true;
-    },
     handleOpenFilterDialog() {
       this.isShowFilterDialog = true;
     },
     handleCloseDialog() {
       this.isShowFilterDialog = false;
-      this.isShowSortingDialog = false;
     },
     handleClickItem(event, item) {
       if (item.isMultiple) {
