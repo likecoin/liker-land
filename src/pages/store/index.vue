@@ -197,23 +197,24 @@
           </div>
         </div>
 
-        <h3
-          v-if="selectedTagTitle"
-          :class="[
-            'mt-[36px] desktop:mt-[20px]',
-            'px-[16px] desktop:px-0',
+        <template v-if="selectedTagDescription">
+          <h3
+            v-if="selectedTagTitle"
+            :class="[
+              'mt-[36px] desktop:mt-[20px]',
+              'px-[16px] desktop:px-0',
 
-            'text-[24px] desktop:text-[32px]',
-            'font-bold',
-          ]"
-          v-text="selectedTagTitle"
-        />
+              'text-[24px] desktop:text-[32px]',
+              'font-bold',
+            ]"
+            v-text="selectedTagTitle"
+          />
 
-        <p
-          v-if="selectedTagDescription"
-          class="mt-[8px] px-[16px] desktop:px-0 text-gray-4a text-[14px]"
-          v-text="selectedTagDescription"
-        />
+          <p
+            class="mt-[8px] px-[16px] desktop:px-0 text-gray-4a text-[14px]"
+            v-text="selectedTagDescription"
+          />
+        </template>
       </header>
 
       <!-- Body -->

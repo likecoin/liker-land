@@ -8,7 +8,7 @@ export const getUserCivicLikerHalo = ({ user }) => {
   return 'none';
 };
 export const getHomeRoute = () => ({
-  name: 'index',
+  name: 'store',
 });
 
 export const getGaClientId = state => state.gaClientId;

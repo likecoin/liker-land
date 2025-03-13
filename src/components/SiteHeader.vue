@@ -21,25 +21,6 @@
       >
         <Logo class="fill-current" />
       </NuxtLink>
-
-      <ButtonV2
-        :to="
-          localeLocation({
-            name: 'store',
-            query: {
-              ll_medium: 'header_store_button',
-            },
-          })
-        "
-        preset="tertiary"
-        size="mini"
-        :text="$t('header_button_try_collect')"
-        :class="[
-          '!text-like-green',
-          { '!text-white !bg-[rgba(235,235,235,0.2)]': isPlain },
-        ]"
-        @click.native="handleClickGoStore"
-      />
     </div>
 
     <div class="relative flex items-center gap-x-[.75em] sm:gap-x-[1.5em]">
@@ -242,7 +223,7 @@
           <template #trigger="{ toggle }">
             <ButtonV2
               preset="tertiary"
-              :text="$t(`Locale.${currentLocale}`),"
+              :text="$t(`Locale.${currentLocale}`)"
               @click="toggle"
             >
               <template #prepend>
@@ -332,6 +313,14 @@ export default {
   },
   async mounted() {
     await this.restoreAuthSession();
+    if (this.getRouteBaseName(this.$route) === 'index') {
+      this.$router.replace(
+        this.localeLocation({
+          name: this.walletIsMatchedSession ? 'dashboard' : 'store',
+          query: this.$route.query,
+        })
+      );
+    }
   },
   methods: {
     ...mapActions(['updatePreferences', 'userLogout', 'restoreAuthSession']),
