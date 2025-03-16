@@ -113,10 +113,10 @@ export default {
         ? formatNumberWithUSD(this.collectionPrice)
         : '-';
     },
-    nftCollectionDetailsPagePath() {
+    nftCollectionDetailsPageSharePath() {
       return `/nft/collection/${this.collectionId}?from=${this.getLikerId ||
         this.getAddress ||
-        ''}`;
+        ''}&utm_source=share&utm_medium=share_button`;
     },
   },
   methods: {

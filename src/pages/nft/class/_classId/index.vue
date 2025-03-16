@@ -1663,7 +1663,7 @@ export default {
       this.shareURLPath({
         title: this.nftName,
         text: this.nftDescription,
-        path: this.nftClassDetailsPagePath,
+        path: this.nftClassDetailsPageSharePath,
         alertMessage: this.$t('tooltip_share_done'),
       });
       logTrackerEvent(this, 'NFT', 'share', this.classId, 1, {

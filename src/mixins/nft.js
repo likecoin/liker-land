@@ -531,10 +531,10 @@ export default {
       );
       return (collector?.collectedNftIds || []).includes(this.nftId);
     },
-    nftClassDetailsPagePath() {
+    nftClassDetailsPageSharePath() {
       return `/nft/class/${this.classId}?from=${this.getLikerId ||
         this.getAddress ||
-        ''}`;
+        ''}&utm_source=share&utm_medium=share_button`;
     },
     nftIdCollectedFirstByUser() {
       const ownNFT = this.collectorMap[this.loginAddress];

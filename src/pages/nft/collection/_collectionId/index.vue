@@ -622,7 +622,7 @@ export default {
       this.shareURLPath({
         title: this.collectionName,
         text: this.collectionDescription,
-        path: this.nftCollectionDetailsPagePath,
+        path: this.nftCollectionDetailsPageSharePath,
         alertMessage: this.$t('tooltip_share_done'),
       });
       logTrackerEvent(this, 'NFT', 'share', this.collectionId, 1, {
