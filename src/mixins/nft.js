@@ -532,9 +532,13 @@ export default {
       return (collector?.collectedNftIds || []).includes(this.nftId);
     },
     nftClassDetailsPageSharePath() {
-      return `/nft/class/${this.classId}?from=${this.getLikerId ||
-        this.getAddress ||
-        ''}&utm_source=share&utm_medium=share_button`;
+      let from = this.getAddress || '';
+      if (this.getLikerId) {
+        from = `@${this.getLikerId}`;
+      }
+      return `/nft/class/${
+        this.classId
+      }?from=${from}&utm_source=share&utm_medium=share_button`;
     },
     nftIdCollectedFirstByUser() {
       const ownNFT = this.collectorMap[this.loginAddress];

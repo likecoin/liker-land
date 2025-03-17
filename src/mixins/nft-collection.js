@@ -114,9 +114,13 @@ export default {
         : '-';
     },
     nftCollectionDetailsPageSharePath() {
-      return `/nft/collection/${this.collectionId}?from=${this.getLikerId ||
-        this.getAddress ||
-        ''}&utm_source=share&utm_medium=share_button`;
+      let from = this.getAddress || '';
+      if (this.getLikerId) {
+        from = `@${this.getLikerId}`;
+      }
+      return `/nft/collection/${
+        this.collectionId
+      }?from=${from}&utm_source=share&utm_medium=share_button`;
     },
   },
   methods: {

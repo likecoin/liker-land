@@ -242,7 +242,7 @@ const getters = {
   },
   getConnector: state => state.connector,
   getLikerInfo: state => state.likerInfo,
-  getLikerId: state => state.likerInfo?.id,
+  getLikerId: state => state.likerInfo?.user,
   walletFollowees: state => state.followees,
   walletFollowers: state => state.followers,
   walletInteractedCreators: state => state.pastFollowees,
