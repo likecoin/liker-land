@@ -598,7 +598,10 @@ export default {
       return this.uiTxErrorMessage === 'ALREADY_MINTED';
     },
     nftHasSignImage() {
-      return NFT_BOOK_WITH_SIGN_IMAGE_SET.has(this.classId);
+      return (
+        this.getNFTBookStoreInfoByClassId(this.classId)?.enableSignatureImage ||
+        NFT_BOOK_WITH_SIGN_IMAGE_SET.has(this.classId)
+      );
     },
     nftSignImageAuthor() {
       const customAuthor = NFT_BOOK_WITH_SIGN_IMAGE_SET.get(this.classId);
