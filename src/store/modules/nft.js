@@ -110,6 +110,7 @@ const mutations = {
       mustClaimToView,
       hideDownload,
       enableCustomMessagePage,
+      enableSignatureImage,
       tableOfContents,
     }
   ) {
@@ -118,6 +119,7 @@ const mutations = {
       mustClaimToView,
       hideDownload,
       enableCustomMessagePage,
+      enableSignatureImage,
       tableOfContents,
     });
   },
