@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col">
-    <h4 :class="['text-[18px]', 'font-600']" v-text="title" />
-    <p :class="['whitespace-pre-line']" v-text="content" />
+  <div class="text-dark-gray">
+    <h4 class="text-16 font-600 mb-[6px]" v-text="title" />
+    <p class="text-14 whitespace-pre-line" v-text="content" />
   </div>
 </template>
 
