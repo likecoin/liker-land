@@ -68,6 +68,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    llMedium: {
+      type: String,
+      default: '',
+    },
   },
 
   data() {
@@ -93,6 +97,10 @@ export default {
       return undefined;
     },
     detailsPageRoute() {
+      const query = { ...this.$route.query };
+      if (!query.ll_medium && this.llMedium) {
+        query.ll_medium = this.llMedium;
+      }
       if (this.nftIdForDetails) {
         return this.localeLocation({
           name: 'nft-class-classId-nftId',
@@ -100,11 +108,13 @@ export default {
             classId: this.classId,
             nftId: this.nftIdForDetails,
           },
+          query,
         });
       }
       return this.localeLocation({
         name: 'nft-class-classId',
         params: { classId: this.classId },
+        query,
       });
     },
     isSocialFeedWithCollectiblesView() {
