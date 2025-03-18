@@ -2,21 +2,34 @@
   <NFTPortfolioCard
     :class="{ 'border-like-collection border-[2px]': collectionId }"
   >
-    <template v-if="hasDynamicCovers">
-      <div class="absolute inset-0 w-full h-full">
-        <img :src="resizedSrc" :alt="alt" class="h-auto max-w-full blur-sm" />
-      </div>
-      <div
-        class="absolute inset-0 w-full h-full"
-        :style="{
-          backgroundColor: themeColor || 'none',
-          opacity: 0.3,
-        }"
-      />
-    </template>
     <div
-      class="relative flex items-center justify-center w-full h-full rounded-t-[inherit]"
+      :class="[
+        'relative',
+
+        'flex',
+        'items-center',
+        'justify-center',
+
+        'w-full',
+        'h-full',
+
+        'rounded-t-[inherit]',
+
+        'overflow-hidden',
+      ]"
     >
+      <template v-if="hasDynamicCovers">
+        <div class="absolute inset-0 w-full h-full">
+          <img :src="resizedSrc" :alt="alt" class="h-auto max-w-full blur-sm" />
+        </div>
+        <div
+          class="absolute inset-0 w-full h-full"
+          :style="{
+            backgroundColor: themeColor || 'none',
+            opacity: 0.3,
+          }"
+        />
+      </template>
       <NFTBookCoverWithFrame
         :class="[
           'w-full',
@@ -53,8 +66,7 @@
             <SwiperSlide
               v-for="coverSrc in dynamicCovers"
               :key="coverSrc"
-              class="bg-[red]"
-              style="width: 220px"
+              style="width: 200px"
             >
               <NFTCover
                 :src="coverSrc"
