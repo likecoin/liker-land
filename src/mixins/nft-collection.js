@@ -2,6 +2,7 @@ import { parseNFTMetadataURL } from '~/util/nft';
 import { mapActions, mapGetters } from 'vuex';
 import { formatNumberWithUSD } from '~/util/ui';
 import { catchAxiosError } from '~/util/misc';
+import nftPageOverrideMixin from '~/mixins/nft-page-override';
 import walletMixin from '~/mixins/wallet';
 import { createUserInfoMixin } from '~/mixins/user-info';
 
@@ -11,7 +12,7 @@ const creatorInfoMixin = createUserInfoMixin({
 });
 
 export default {
-  mixins: [creatorInfoMixin, walletMixin],
+  mixins: [creatorInfoMixin, walletMixin, nftPageOverrideMixin],
   computed: {
     ...mapGetters([
       'getLikerId',

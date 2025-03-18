@@ -476,6 +476,67 @@ export const NFT_BOOK_PRODUCT_PAGE_OVERRIDE = IS_TESTNET
           'likenft1ku0gmdq6pm8vgq68fvnr7dl0vxs4j2yv0c0qlvadj5k39fdfzgsqycdllx',
         ],
       },
+      'col_book_931bb5a0-39e1-472e-963c-d542c9902ab4': {
+        recommendedClassIds: [
+          'likenft1e4espt79md5gg2lc0wqfu5zf75jsvce3qjfsxmfctdgyaede7vaq6qh94n',
+          'likenft1za4e93x4tsn7fw3n8kqnh9kssqgwxd9xk35ysxm623d4zkcm7h4sx5wlsl',
+          'likenft16cns9jk7cathhpe62v6jpyxam6z8ltdk3jw08xpmkrz53s3cknxqulpd0u',
+          'likenft1fxu3hc4f0sn0kglq2xpdc50aezt4cyl986hlrysfn0r3u0ac3egsj6vcq2',
+          'likenft1kmn4qyxus2ghxn3lde6xa2u0qt62vec7g7d5lt5a26l6f8vd9mashnhh6q',
+          'likenft1v6tnjf8ml6gly8ugtd79l0dvqu8lnkpxj785srnphxgye95c5g5splaw6c',
+          'likenft1p4kl836zwc5h6284hpw5m4w0wwcqdjfxfse2dcf8325fmge8a29sh4hec3',
+        ],
+      },
+      likenft1k4tulfcxn2vre3y4crd5hmf7gpf2fwcqrdrx85tcscwvyr6cv9pqt9469l: {
+        recommendedClassIds: [
+          'likenft1hesnt4kv7hqjkg8m3tu7vxfxcfkxmwtz49z2s8dtz7389utg70vqp7ac9q',
+          'likenft184l7uz0cud540kc7lnghdvan7649marxste4hmruq44f8c8zuw9shuknyk',
+          'likenft1fjetqyl3knuaxjsxdf3kjlfejla4evla5gk6h0w6slehf3l2r4uqh43gey',
+          'likenft1ck8pv864x85ers8vdmuy6ekpd5kw0vhhnuvf8xzus3yarecxm8rs4xdsx6',
+          'likenft150ndt6fffg2c0an7rdds2tfcpq4lqd6m7tr450lml8es57w752as26t75v',
+          'likenft16jguhkfa6nnu224fwjke2zv5f99n8wl9m097h46zqxnyu33j7rgs7f0xg3',
+          'likenft1rfd3pp4q4hvuha8xpl8wzzf7uwannv0wm05s7jz34828e4qjnyzsfd9srz',
+          'likenft1l2v3qdv4qj0pyv2tmme42dv0962csaxxhezk04jr9s2rved08s4s4x6633',
+          'likenft139537w38zlyhk9yvha4n3fz386kaakq6t3p62t23z3xs8f3v257q4k6mw4',
+          'likenft1ak9e8e08haqst8sc3lqawk30hxeqgfyxrsjy4gygajqmq2hh9xzquge3cg',
+        ],
+      },
+      likenft1hesnt4kv7hqjkg8m3tu7vxfxcfkxmwtz49z2s8dtz7389utg70vqp7ac9q: {
+        recommendedClassIds: [
+          'likenft1k4tulfcxn2vre3y4crd5hmf7gpf2fwcqrdrx85tcscwvyr6cv9pqt9469l',
+          'likenft1fjetqyl3knuaxjsxdf3kjlfejla4evla5gk6h0w6slehf3l2r4uqh43gey',
+          'likenft1l2v3qdv4qj0pyv2tmme42dv0962csaxxhezk04jr9s2rved08s4s4x6633',
+          'likenft184l7uz0cud540kc7lnghdvan7649marxste4hmruq44f8c8zuw9shuknyk',
+          'likenft16jguhkfa6nnu224fwjke2zv5f99n8wl9m097h46zqxnyu33j7rgs7f0xg3',
+          'likenft1ck8pv864x85ers8vdmuy6ekpd5kw0vhhnuvf8xzus3yarecxm8rs4xdsx6',
+          'likenft150ndt6fffg2c0an7rdds2tfcpq4lqd6m7tr450lml8es57w752as26t75v',
+          'likenft1rfd3pp4q4hvuha8xpl8wzzf7uwannv0wm05s7jz34828e4qjnyzsfd9srz',
+          'likenft139537w38zlyhk9yvha4n3fz386kaakq6t3p62t23z3xs8f3v257q4k6mw4',
+          'likenft1ak9e8e08haqst8sc3lqawk30hxeqgfyxrsjy4gygajqmq2hh9xzquge3cg',
+        ],
+      },
+      likenft1v6tnjf8ml6gly8ugtd79l0dvqu8lnkpxj785srnphxgye95c5g5splaw6c: {
+        recommendedClassIds: [
+          'likenft1p4kl836zwc5h6284hpw5m4w0wwcqdjfxfse2dcf8325fmge8a29sh4hec3',
+          'likenft1yvv59p9szvsdcv4dpyju8nr70jf56tklw4pchuy4pdkep6lvjdgslnqmmn',
+          'likenft1e4espt79md5gg2lc0wqfu5zf75jsvce3qjfsxmfctdgyaede7vaq6qh94n',
+          'likenft1za4e93x4tsn7fw3n8kqnh9kssqgwxd9xk35ysxm623d4zkcm7h4sx5wlsl',
+          'likenft16cns9jk7cathhpe62v6jpyxam6z8ltdk3jw08xpmkrz53s3cknxqulpd0u',
+          'likenft1fxu3hc4f0sn0kglq2xpdc50aezt4cyl986hlrysfn0r3u0ac3egsj6vcq2',
+          'likenft1kmn4qyxus2ghxn3lde6xa2u0qt62vec7g7d5lt5a26l6f8vd9mashnhh6q',
+        ],
+      },
+      likenft1p4kl836zwc5h6284hpw5m4w0wwcqdjfxfse2dcf8325fmge8a29sh4hec3: {
+        recommendedClassIds: [
+          'likenft1v6tnjf8ml6gly8ugtd79l0dvqu8lnkpxj785srnphxgye95c5g5splaw6c',
+          'likenft1yvv59p9szvsdcv4dpyju8nr70jf56tklw4pchuy4pdkep6lvjdgslnqmmn',
+          'likenft1e4espt79md5gg2lc0wqfu5zf75jsvce3qjfsxmfctdgyaede7vaq6qh94n',
+          'likenft1za4e93x4tsn7fw3n8kqnh9kssqgwxd9xk35ysxm623d4zkcm7h4sx5wlsl',
+          'likenft16cns9jk7cathhpe62v6jpyxam6z8ltdk3jw08xpmkrz53s3cknxqulpd0u',
+          'likenft1fxu3hc4f0sn0kglq2xpdc50aezt4cyl986hlrysfn0r3u0ac3egsj6vcq2',
+          'likenft1kmn4qyxus2ghxn3lde6xa2u0qt62vec7g7d5lt5a26l6f8vd9mashnhh6q',
+        ],
+      },
     };
 
 export const SIGN_AUTHORIZATION_PERMISSIONS = [

@@ -81,6 +81,7 @@
         </div>
         <NFTPageRecommendation
           :collection-id="collectionId"
+          :override-class-ids="nftRecommendedClassIdsOverride"
           @header-avatar-click="handleRecommendationHeaderAvatarClick"
           @follow-button-click="handleFollowButtonClick"
           @item-click="handleRecommendedItemClick"

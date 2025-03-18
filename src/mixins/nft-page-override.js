@@ -6,7 +6,10 @@ export default {
   }),
   computed: {
     nftPageOverride() {
-      return NFT_BOOK_PRODUCT_PAGE_OVERRIDE[this.classId];
+      return (
+        NFT_BOOK_PRODUCT_PAGE_OVERRIDE[this.classId] ||
+        NFT_BOOK_PRODUCT_PAGE_OVERRIDE[this.collectionId]
+      );
     },
     nftShouldShowEventBanner() {
       return !!this.nftEventBanner && !this.nftShouldHideEventBanner;
