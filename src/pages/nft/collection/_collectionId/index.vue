@@ -12,36 +12,39 @@
           @clickTooltip="handleNFTCardClickTooltip"
         >
           <template #column-left>
-            <ButtonV2
-              preset="outline"
-              :class="[
-                'w-full',
-                '!h-[32px]',
-                '!rounded-[10px]',
-                'border-[#EBEBEB]',
-              ]"
-              size="tiny"
-              @click="handleShareButtonClick"
-            >
-              <IconShare class="w-[16px] text-dark-gray" />
-              <p
-                class="ml-[8px] text-[12px] text-dark-gray"
-                v-text="$t('nft_details_page_button_share')"
-              />
-            </ButtonV2>
-            <ButtonV2
-              preset="outline"
-              class="w-full !h-[32px] !rounded-[10px] border-[#EBEBEB]"
-              size="tiny"
-              :is-disabled="isAllSoldOut"
-              @click="handleGiftButtonClick"
-            >
-              <IconGift class="w-[16px] text-dark-gray" />
-              <p
-                class="ml-[8px] text-[12px] text-dark-gray"
-                v-text="$t('nft_edition_select_confirm_button_text_gift')"
-              />
-            </ButtonV2>
+            <div class="flex flex-col gap-[8px] w-full">
+              <ButtonV2
+                preset="outline"
+                :class="[
+                  'w-full',
+                  '!h-[32px]',
+                  '!rounded-[10px]',
+                  'border-[#EBEBEB]',
+                ]"
+                size="tiny"
+                @click="handleShareButtonClick"
+              >
+                <IconShare class="w-[16px] text-dark-gray" />
+                <p
+                  class="ml-[8px] text-[12px] text-dark-gray"
+                  v-text="$t('nft_details_page_button_share')"
+                />
+              </ButtonV2>
+
+              <ButtonV2
+                preset="outline"
+                class="w-full !h-[32px] !rounded-[10px] border-[#EBEBEB]"
+                size="tiny"
+                :is-disabled="isAllSoldOut"
+                @click="handleGiftButtonClick"
+              >
+                <IconGift class="w-[16px] text-dark-gray" />
+                <p
+                  class="ml-[8px] text-[12px] text-dark-gray"
+                  v-text="$t('nft_edition_select_confirm_button_text_gift')"
+                />
+              </ButtonV2>
+            </div>
           </template>
 
           <template #column-edition-select>

@@ -42,7 +42,18 @@
             @show.once="fetchInfo"
           />
         </client-only>
-        <div class="flex flex-col items-center shrink-0 w-full max-w-[200px]">
+        <div
+          :class="[
+            'flex',
+            'flex-col',
+            'items-center',
+            'gap-[24px]',
+            'shrink-0',
+
+            'w-full',
+            'laptop:max-w-[200px]',
+          ]"
+        >
           <NFTCover
             v-if="videoSrc"
             :class="['mt-[-48px]', coverClasses]"
@@ -62,7 +73,7 @@
             :resize="200"
           />
           <Label
-            class="mt-[24px] !text-[12px] text-medium-gray"
+            class="!text-[12px] text-medium-gray"
             :text="$t('nft_collection_num_of_books', { num: classIds.length })"
           />
 
@@ -162,7 +173,7 @@
             class="relative pt-[36px] flex flex-col items-center w-full laptop:hidden"
           >
             <div
-              class="absolute top-0 left-0 right-0 mx-[-16px] my-[16px] border-b-[1px] border-[#EBEBEB]"
+              class="absolute top-0 left-0 right-0 mx-[-16px] border-b-[1px] border-[#EBEBEB]"
             />
             <slot name="column-edition-select" />
           </div>
@@ -170,9 +181,21 @@
             <slot name="column-edition-select" />
           </div>
         </div>
-        <div class="relative flex flex-col items-center laptop:hidden">
+        <div
+          :class="[
+            'relative',
+
+            'flex laptop:hidden',
+            'flex-col',
+            'items-center',
+            'gap-[24px]',
+
+            'pt-[36px]',
+            'pb-[48px]',
+          ]"
+        >
           <div
-            class="absolute top-0 left-0 right-0 mx-[-16px] my-[16px] border-b-[1px] border-[#EBEBEB]"
+            class="absolute top-0 left-0 right-0 mx-[-16px] border-b-[1px] border-[#EBEBEB]"
           />
           <slot name="column-left" />
         </div>

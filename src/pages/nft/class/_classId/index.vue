@@ -102,7 +102,15 @@
           >
             <template #column-left>
               <ul
-                class="flex gap-[16px] justify-center items-center mt-[24px] text-medium-gray text-[12px]"
+                :class="[
+                  'flex',
+                  'justify-center',
+                  'items-center',
+                  'gap-[16px]',
+
+                  'text-medium-gray',
+                  'text-[12px]',
+                ]"
               >
                 <li class="flex items-center">
                   <IconMint />
@@ -114,7 +122,7 @@
                 </li>
               </ul>
 
-              <div class="flex flex-col gap-[8px] mt-[24px] w-full">
+              <div class="flex flex-col gap-[8px] w-full">
                 <ButtonV2
                   preset="outline"
                   :class="[
@@ -132,6 +140,7 @@
                     v-text="$t('nft_details_page_button_share')"
                   />
                 </ButtonV2>
+
                 <ButtonV2
                   preset="outline"
                   :class="[
@@ -162,8 +171,8 @@
                   @click="handleClickEditionCompareButton"
                 />
               </div>
+
               <NFTViewOptionList
-                class="mt-[24px] mb-[48px]"
                 :class-id="classId"
                 :nft-id="nftIdCollectedFirstByUser"
                 :content-urls="classContentUrls"

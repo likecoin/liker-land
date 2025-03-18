@@ -12,7 +12,7 @@ export default {
       default: 'li',
     },
     date: {
-      type: String,
+      type: [String, Number],
       default: '',
     },
     isPublishedDate: {

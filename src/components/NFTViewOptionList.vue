@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col gap-[8px]">
+  <div v-if="shouldShowContentUrlButtons" class="flex flex-col gap-[8px]">
     <ButtonV2
-      v-if="url && shouldShowViewContentButton"
+      v-if="externalUrl"
       class="w-full"
       preset="outline"
       :text="
@@ -11,7 +11,7 @@
             : 'nft_details_page_button_view'
         )
       "
-      :href="url"
+      :href="externalUrl"
       rel="noopener ugc"
       target="_blank"
       @click="handleClickViewContent"
@@ -25,7 +25,7 @@
     </ButtonV2>
 
     <ButtonV2
-      v-if="shouldShowContentUrlButtons && contentUrls.length === 1"
+      v-if="contentUrls.length === 1"
       class="w-full"
       :text="
         $t(
@@ -51,7 +51,8 @@
         <IconArrowDown class="w-16 h-16 opacity-[0]" />
       </template>
     </ButtonV2>
-    <template v-else-if="shouldShowContentUrlButtons && contentUrls.length > 1">
+
+    <template v-else-if="contentUrls.length > 1">
       <Dropdown class="hidden w-full laptop:block" direction="center">
         <template #trigger>
           <ButtonV2

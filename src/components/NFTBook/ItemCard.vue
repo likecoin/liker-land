@@ -97,7 +97,9 @@
             'flex',
             'flex-col',
             'items-center',
+            'gap-[24px]',
             'shrink-0',
+
             'w-full',
             'laptop:max-w-[200px]',
           ]"
@@ -121,7 +123,7 @@
             :resize="200"
           />
 
-          <div class="hidden w-full laptop:block">
+          <div class="hidden w-full laptop:flex flex-col gap-[24px]">
             <slot name="column-left" />
           </div>
         </div>
@@ -320,7 +322,7 @@
             class="relative pt-[36px] flex flex-col items-center w-full laptop:hidden"
           >
             <div
-              class="absolute top-0 left-0 right-0 mx-[-16px] my-[16px] border-b-[1px] border-[#EBEBEB]"
+              class="absolute top-0 left-0 right-0 mx-[-16px] border-b-[1px] border-[#EBEBEB]"
             />
             <slot name="column-edition-select" />
           </div>
@@ -329,10 +331,20 @@
           </div>
         </div>
         <div
-          class="relative pt-[36px] flex flex-col items-center laptop:hidden"
+          :class="[
+            'relative',
+
+            'flex laptop:hidden',
+            'flex-col',
+            'items-center',
+            'gap-[24px]',
+
+            'pt-[36px]',
+            'pb-[48px]',
+          ]"
         >
           <div
-            class="absolute top-0 left-0 right-0 mx-[-16px] my-[16px] border-b-[1px] border-[#EBEBEB]"
+            class="absolute top-0 left-0 right-0 mx-[-16px] border-b-[1px] border-[#EBEBEB]"
           />
           <slot name="column-left" />
         </div>
