@@ -18,12 +18,12 @@
         @click="handleClickPriceSelectItem(item)"
       />
     </div>
-    <div class="flex items-center gap-[12px] w-full mt-[12px]">
+    <div class="flex items-stretch gap-[12px] w-full min-h-[56px] mt-[12px]">
       <ButtonV2
         v-if="!isAllSoldOut"
         :is-disabled="!selectedItem"
         preset="primary"
-        class="w-[58%] h-[56px] laptop:w-[260px]"
+        class="w-[60%] laptop:w-[260px]"
         @click="handleClickAddToCartButton"
       >
         <IconAdd class="w-[16px]" />
@@ -35,12 +35,7 @@
       <ButtonV2
         v-if="!isAllSoldOut"
         :is-disabled="!selectedItem"
-        :class="[
-          'h-[56px]',
-          selectedItem.hasShipping
-            ? 'w-full laptop:w-[260px]'
-            : 'w-[40%] laptop:w-[144px]',
-        ]"
+        class="w-[40%] laptop:w-[144px]"
         preset="secondary"
         :text="$t('nft_edition_select_confirm_button_text_purchase')"
         @click="handleClickCollectButton"
