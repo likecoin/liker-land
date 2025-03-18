@@ -541,7 +541,7 @@
               v-if="claimingAddress"
               :content-class="['px-[48px]']"
               class="phoneLg:w-full phoneLg:max-w-[480px]"
-              preset="'tertiary'"
+              preset="tertiary"
               :text="$t('nft_claim_claimed_button_view_collection')"
               @click="handleViewCollection"
             />
