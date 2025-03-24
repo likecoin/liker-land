@@ -19,13 +19,13 @@
       :login-label="$t('dashboard_login_in')"
       :login-button-label="$t('header_button_connect_to_wallet')"
     >
-      <ProgressIndicator v-if="!fileSrc" />
+      <ProgressIndicator v-if="!fileName" />
       <NuxtChild
         v-else-if="canRead"
         :class-id="classId"
         :nft-id="nftId"
         :file-index="index"
-        :file-src="fileSrc"
+        :file-name="fileName"
         :cors-url="corsUrl"
         :cache-key="cacheKey"
       />
@@ -38,7 +38,6 @@ import { mapActions, mapGetters } from 'vuex';
 
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
-import { parseNFTMetadataURL } from '~/util/nft';
 import { LIKECOIN_API_BASE } from '~/constant';
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -75,13 +74,21 @@ export default {
     type() {
       return this.$route.query.format || '';
     },
-    fileSrc() {
-      if (this.type && Array.isArray(this.classContentUrls)) {
-        const matchingUrl =
-          (this.classContentUrls[this.index]?.includes(this.type) &&
-            this.classContentUrls[this.index]) ||
-          this.classContentUrls.find(url => url.includes(this.type));
-        return parseNFTMetadataURL(matchingUrl);
+    fileName() {
+      if (Array.isArray(this.classContentUrls)) {
+        const matchingUrl = this.classContentUrls[this.index];
+        if (this.type && !matchingUrl.includes(this.type)) {
+          return undefined;
+        }
+        try {
+          const parsed = new URL(matchingUrl);
+          const name = parsed.searchParams.get('name');
+          return name;
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
+          return undefined;
+        }
       }
       return undefined;
     },

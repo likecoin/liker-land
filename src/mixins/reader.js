@@ -20,7 +20,7 @@ export default {
       type: String,
       default: '0',
     },
-    fileSrc: {
+    fileName: {
       type: String,
       default: '',
     },

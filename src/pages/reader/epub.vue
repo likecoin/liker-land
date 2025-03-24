@@ -265,7 +265,6 @@ import walletMixin from '~/mixins/wallet';
 import readerMixin from '~/mixins/reader';
 
 import { logTrackerEvent } from '~/util/EventLogger';
-import { getDownloadFilenameFromURL } from '~/util/nft-book';
 import { getReaderEpubCfi, postReaderEpubCfi } from '~/util/api';
 
 import { READER_ALLOW_SCRIPTED_CONTENT_OWNER_WALLET_LIST } from '~/constant';
@@ -513,17 +512,12 @@ export default {
           new Blob([buffer], {
             type: 'application/epub+zip',
           }),
-          getDownloadFilenameFromURL(this.fileSrc)
+          this.fileName
         );
       } catch (error) {
-        if (error.message === 'Network Error') {
-          // bypass CORS
-          window.open(this.fileSrc);
-        } else {
-          // eslint-disable-next-line no-console
-          console.error(error);
-          this.alertPromptError(this.$t('nft_download_content_error'));
-        }
+        // eslint-disable-next-line no-console
+        console.error(error);
+        this.alertPromptError(this.$t('nft_download_content_error'));
       }
     },
 
