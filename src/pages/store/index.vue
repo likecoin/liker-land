@@ -772,11 +772,7 @@ export default {
     availableSorting() {
       const options = [];
 
-      if (
-        ![BOOKSTORE_CORE_TAG.LATEST, BOOKSTORE_CORE_TAG.FREE].includes(
-          this.selectedTagId
-        )
-      ) {
+      if (BOOKSTORE_CORE_TAG.LATEST !== this.selectedTagId) {
         options.push({
           text: this.$t('listing_page_header_sort_default'),
           value: SORTING_OPTIONS.DEFAULT,
