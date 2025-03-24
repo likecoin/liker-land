@@ -310,7 +310,7 @@
             />
             <NFTBookSpecTableItemAvailableFormat
               :preset="preset"
-              :content-types="contentTypes"
+              :content-types="classContentTypes"
             />
             <NFTBookSpecTableItemAccessMethod
               :is-downloadable="!nftIsDownloadHidden"
@@ -378,7 +378,6 @@
   </div>
 </template>
 <script>
-import { getContentUrlType } from '~/util/misc';
 import { ellipsis } from '~/util/ui';
 
 import nftMixin from '~/mixins/nft';
@@ -488,13 +487,6 @@ export default {
         new Date().getTime() - new Date(this.contentMetadata.recordTimestamp) <
         1000 * 60 * 60 * 24 * 30
       );
-    },
-    contentTypes() {
-      const types = [];
-      this.classContentUrls.forEach(url => {
-        types.push(getContentUrlType(url));
-      });
-      return [...new Set(types.filter(type => type !== 'unknown'))];
     },
     isLinkComponent() {
       return !this.isLinkDisabled && !this.isDetailsPreset;

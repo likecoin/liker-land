@@ -19,12 +19,9 @@
             <ButtonV2
               class="w-full"
               preset="plain"
-              :download="getDownloadFilenameFromURL(contentUrl)"
+              :download="contentUrl.name || 'content'"
               @click="e => handleClickViewContentURL(e, contentUrl, index)"
-              >{{
-                getFilenameFromURL(contentUrl) ||
-                  getContentUrlButtonText(contentUrl)
-              }}&nbsp;<IconLinkExternal />
+              >{{ contentUrl.name }}&nbsp;<IconLinkExternal />
             </ButtonV2>
           </li>
         </ul>
@@ -36,10 +33,7 @@
 <script>
 import { getContentUrlType } from '~/util/misc';
 import { parseNFTMetadataURL } from '~/util/nft';
-import {
-  getFilenameFromURL,
-  getDownloadFilenameFromURL,
-} from '~/util/nft-book';
+import { getFilenameFromURL } from '~/util/nft-book';
 
 export default {
   name: 'NFTClaimOptionListForMobile',
@@ -76,18 +70,21 @@ export default {
   computed: {
     normalizedContentURLs() {
       // NOTE: Assuming if only `externalUrl` is set, it must contain the actual content rather than the book info
-      if (this.contentUrls.length) return this.contentUrls;
-      if (this.externalUrl) return [this.externalUrl];
-      return [];
+      const urls = this.contentUrls.length
+        ? this.contentUrls
+        : [this.externalUrl];
+      return urls.map(url => ({
+        url: parseNFTMetadataURL(url),
+        name: getFilenameFromURL(url) || this.getContentUrlButtonText(url),
+        type: getContentUrlType(url),
+      }));
     },
   },
   methods: {
     close() {
       this.$emit('close');
     },
-    parseNFTMetadataURL,
-    getContentUrlButtonText(url) {
-      const type = getContentUrlType(url);
+    getContentUrlButtonText({ type }) {
       switch (type) {
         case 'epub':
           return this.$t('nft_details_page_button_view_epub');
@@ -97,11 +94,8 @@ export default {
           return this.$t('nft_details_page_button_view_unknown');
       }
     },
-    getFilenameFromURL,
-    getDownloadFilenameFromURL,
     handleClickViewContentURL(e, contentUrl, index) {
-      const type = getContentUrlType(contentUrl);
-      const url = parseNFTMetadataURL(contentUrl);
+      const { type, url } = contentUrl;
       this.$emit('view-content-url', e, url, type);
       if (['pdf', 'epub'].includes(type)) {
         e.preventDefault();

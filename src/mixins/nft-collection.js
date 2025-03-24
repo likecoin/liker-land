@@ -1,7 +1,7 @@
 import { parseNFTMetadataURL } from '~/util/nft';
 import { mapActions, mapGetters } from 'vuex';
 import { formatNumberWithUSD } from '~/util/ui';
-import { catchAxiosError } from '~/util/misc';
+import { catchAxiosError, getContentUrlType } from '~/util/misc';
 import nftPageOverrideMixin from '~/mixins/nft-page-override';
 import walletMixin from '~/mixins/wallet';
 import { createUserInfoMixin } from '~/mixins/user-info';
@@ -88,6 +88,24 @@ export default {
     collectionImageUrl() {
       const image = this.collection?.image;
       return image ? parseNFTMetadataURL(image) : '';
+    },
+    collectionContentUrls() {
+      return this.classIds
+        .map(classId => {
+          const { parent } = this.getNFTClassMetadataById(classId) || {};
+          const iscnId = parent?.iscnIdPrefix || parent?.iscn_id_prefix;
+          const data = this.getISCNMetadataById(iscnId);
+          if (!data || data instanceof Promise) return undefined;
+          return data.contentMetadata?.sameAs || [];
+        })
+        .flat();
+    },
+    collectionContentTypes() {
+      const types = [];
+      this.collectionContentUrls.forEach(url => {
+        types.push(getContentUrlType(url));
+      });
+      return [...new Set(types.filter(type => type !== 'unknown'))];
     },
     collectionOwner() {
       return this.collection?.ownerWallet;

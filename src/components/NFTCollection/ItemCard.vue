@@ -162,7 +162,7 @@
               :is-campaign="preset === 'campaign'"
             />
             <NFTBookSpecTableItemAvailableFormat
-              :content-types="contentTypes"
+              :content-types="collectionContentTypes"
             />
             <NFTBookSpecTableItemAccessMethod
               :is-downloadable="isDownloadable"
@@ -233,7 +233,6 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import { getContentUrlType } from '~/util/misc';
 import { ellipsis } from '~/util/ui';
 
 import collectionMixin from '~/mixins/nft-collection';
@@ -318,22 +317,6 @@ export default {
       return this.classIds.every(
         classId => !this.getIsHideNFTBookDownload(classId)
       );
-    },
-    contentTypes() {
-      const contentURLs = this.classIds
-        .map(classId => {
-          const { parent } = this.getNFTClassMetadataById(classId) || {};
-          const iscnId = parent?.iscnIdPrefix || parent?.iscn_id_prefix;
-          const data = this.getISCNMetadataById(iscnId);
-          if (!data || data instanceof Promise) return undefined;
-          return data.contentMetadata?.sameAs || [];
-        })
-        .flat();
-      const types = [];
-      contentURLs.forEach(url => {
-        types.push(getContentUrlType(url));
-      });
-      return [...new Set(types.filter(type => type !== 'unknown'))];
     },
     isLinkComponent() {
       return !this.isLinkDisabled && !this.isDetailsPreset;

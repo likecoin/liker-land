@@ -22,7 +22,7 @@ import {
   getNFTBookPurchaseLink,
 } from '~/util/api';
 import { logTrackerEvent, logPurchaseFlowEvent } from '~/util/EventLogger';
-import { sleep, catchAxiosError } from '~/util/misc';
+import { sleep, catchAxiosError, getContentUrlType } from '~/util/misc';
 import {
   NFT_INDEXER_LIMIT_MAX,
   signTransferNFT,
@@ -220,6 +220,13 @@ export default {
     },
     classContentUrls() {
       return this.contentMetadata.sameAs || [];
+    },
+    classContentTypes() {
+      const types = [];
+      this.classContentUrls.forEach(url => {
+        types.push(getContentUrlType(url));
+      });
+      return [...new Set(types.filter(type => type !== 'unknown'))];
     },
     classContentFingerprints() {
       return this.contentMetadata.contentFingerprints || [];

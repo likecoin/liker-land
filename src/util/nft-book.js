@@ -17,7 +17,3 @@ export function getFilenameFromURL(url) {
   const qs = querystring.parse(qsStr);
   return qs?.name || '';
 }
-
-export function getDownloadFilenameFromURL(url) {
-  return `${getFilenameFromURL(url) || 'content'}`;
-}
