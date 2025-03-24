@@ -314,6 +314,7 @@
         <!-- recommend -->
         <NFTPageRecommendation
           :class-id="classId"
+          :override-class-ids="nftRecommendedClassIdsOverride"
           @item-click="handleRecommendedItemClick"
           @item-collect="handleRecommendedItemCollect"
           @slide-next.once="handleRecommendationSlideNext"

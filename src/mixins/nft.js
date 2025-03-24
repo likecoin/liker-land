@@ -607,6 +607,10 @@ export default {
         NFT_BOOK_WITH_SIGN_IMAGE_SET.has(this.classId)
       );
     },
+    nftRecommendedClassIdsOverride() {
+      return this.getNFTBookStoreInfoByClassId(this.classId)
+        ?.recommendedClassIds;
+    },
     nftSignImageAuthor() {
       const customAuthor = NFT_BOOK_WITH_SIGN_IMAGE_SET.get(this.classId);
       return (

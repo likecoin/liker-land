@@ -109,6 +109,9 @@ export default {
         params: { collectionId: this.collectionId },
       });
     },
+    collectionRecommendedClassIdsOverride() {
+      return this.collection?.recommendedClassIds || [];
+    },
     formattedNFTPriceInUSD() {
       return this.collectionPrice !== undefined
         ? formatNumberWithUSD(this.collectionPrice)

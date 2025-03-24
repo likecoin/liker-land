@@ -20,8 +20,5 @@ export default {
     nftIsOwnerHidden() {
       return this.nftPageOverride?.isOwnerHidden || false;
     },
-    nftRecommendedClassIdsOverride() {
-      return this.nftPageOverride?.recommendedClassIds || [];
-    },
   },
 };
