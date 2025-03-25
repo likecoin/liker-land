@@ -38,6 +38,7 @@ import { mapActions, mapGetters } from 'vuex';
 
 import nftMixin from '~/mixins/nft';
 import walletMixin from '~/mixins/wallet';
+import { getFilenameFromURL } from '~/util/nft-book';
 import { LIKECOIN_API_BASE } from '~/constant';
 import { logTrackerEvent } from '~/util/EventLogger';
 
@@ -80,15 +81,7 @@ export default {
         if (this.type && !matchingUrl.includes(this.type)) {
           return undefined;
         }
-        try {
-          const parsed = new URL(matchingUrl);
-          const name = parsed.searchParams.get('name');
-          return name;
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.error(error);
-          return undefined;
-        }
+        return getFilenameFromURL(matchingUrl);
       }
       return undefined;
     },
