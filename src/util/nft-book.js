@@ -13,6 +13,7 @@ export function getDynamicCovers(classId, editionIndex) {
 }
 
 export function getFilenameFromURL(url) {
+  if (!url) return '';
   const qsStr = url.split('?').pop();
   const qs = querystring.parse(qsStr);
   return qs?.name || '';
