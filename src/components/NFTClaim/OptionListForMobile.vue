@@ -72,12 +72,12 @@ export default {
       // NOTE: Assuming if only `externalUrl` is set, it must contain the actual content rather than the book info
       const urls = this.contentUrls.length
         ? this.contentUrls
-        : [this.externalUrl];
-      return urls.map(url => ({
-        url: parseNFTMetadataURL(url),
-        name: getFilenameFromURL(url) || this.getContentUrlButtonText(url),
-        type: getContentUrlType(url),
-      }));
+        : [this.externalUrl].map(url => ({
+            url: parseNFTMetadataURL(url),
+            name: getFilenameFromURL(url) || this.getContentUrlButtonText(url),
+            type: getContentUrlType(url),
+          }));
+      return urls;
     },
   },
   methods: {

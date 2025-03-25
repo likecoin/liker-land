@@ -12,7 +12,7 @@
       :is-free="nftIsFree"
       :class-id="classId"
       :external-url="externalUrl"
-      :content-urls="classContentUrls"
+      :content-urls="normalizedClassContentURLs"
       :is-collectable="nftIsCollectable"
       :user-display-name="creatorDisplayNameFull"
       :user-avatar-src="creatorAvatar"

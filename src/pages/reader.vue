@@ -76,12 +76,12 @@ export default {
       return this.$route.query.format || '';
     },
     fileName() {
-      if (Array.isArray(this.classContentUrls)) {
-        const matchingUrl = this.classContentUrls[this.index];
-        if (this.type && !matchingUrl.includes(this.type)) {
+      if (Array.isArray(this.normalizedClassContentURLs)) {
+        const matchingUrl = this.normalizedClassContentURLs[this.index];
+        if (this.type && !matchingUrl.type === this.type) {
           return undefined;
         }
-        return getFilenameFromURL(matchingUrl);
+        return matchingUrl.name;
       }
       return undefined;
     },

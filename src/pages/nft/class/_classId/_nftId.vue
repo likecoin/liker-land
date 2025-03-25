@@ -156,7 +156,7 @@
             class="flex flex-col gap-[24px] items-center order-first col-span-1 desktop:order-none"
           >
             <NFTPagePreviewCard
-              :content-urls="classContentUrls"
+              :content-urls="normalizedClassContentURLs"
               :image-bg-color="nftImageBackgroundColor"
               :image-url="nftImageUrl"
               :animation-url="nftAnimationUrl"

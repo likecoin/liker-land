@@ -175,7 +175,7 @@
               <NFTViewOptionList
                 :class-id="classId"
                 :nft-id="nftIdCollectedFirstByUser"
-                :content-urls="classContentUrls"
+                :content-urls="normalizedClassContentURLs"
                 :external-url="externalUrl"
                 :is-nft-book="nftIsNFTBook"
                 :is-content-viewable="isContentViewable"
@@ -384,7 +384,7 @@
           >
             <NFTPagePreviewCard
               :url="externalUrl"
-              :content-urls="classContentUrls"
+              :content-urls="normalizedClassContentURLs"
               :image-bg-color="nftImageBackgroundColor"
               :image-url="nftImageUrl"
               :animation-url="nftAnimationUrl"

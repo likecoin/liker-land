@@ -35,7 +35,7 @@ import {
   populateGrantEvent,
   getUniqueAddressesFromEvent,
 } from '~/util/nft';
-import { getDynamicCovers } from '~/util/nft-book';
+import { getDynamicCovers, getFilenameFromURL } from '~/util/nft-book';
 import { formatNumberWithLIKE, formatNumberWithUSD } from '~/util/ui';
 
 import walletMixin from '~/mixins/wallet';
@@ -221,11 +221,15 @@ export default {
     classContentUrls() {
       return this.contentMetadata.sameAs || [];
     },
+    normalizedClassContentURLs() {
+      return this.classContentUrls.map(url => ({
+        url: parseNFTMetadataURL(url),
+        name: getFilenameFromURL(url),
+        type: getContentUrlType(url),
+      }));
+    },
     classContentTypes() {
-      const types = [];
-      this.classContentUrls.forEach(url => {
-        types.push(getContentUrlType(url));
-      });
+      const types = this.normalizedClassContentURLs.map(({ type }) => type);
       return [...new Set(types.filter(type => type !== 'unknown'))];
     },
     classContentFingerprints() {
