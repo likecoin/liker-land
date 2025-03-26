@@ -221,7 +221,34 @@ export default {
     classContentUrls() {
       return this.contentMetadata.sameAs || [];
     },
+    classReadActionTargets() {
+      const { potentialAction } = this.contentMetadata;
+      if (!potentialAction) return [];
+      let targets = [];
+      if (Array.isArray(potentialAction)) {
+        const readAction = potentialAction.find(
+          action => action.name === 'ReadAction'
+        );
+        if (!readAction) return [];
+        ({ targets } = readAction);
+      } else {
+        const readAction = potentialAction.ReadAction;
+        if (!readAction) return [];
+        ({ targets } = readAction);
+      }
+      return targets.map(target => {
+        const { contentType, url, name } = target;
+        return {
+          url: parseNFTMetadataURL(url),
+          name,
+          type: getContentUrlType(contentType),
+        };
+      });
+    },
     normalizedClassContentURLs() {
+      if (this.classReadActionTargets?.length) {
+        return this.classReadActionTargets;
+      }
       return this.classContentUrls.map(url => ({
         url: parseNFTMetadataURL(url),
         name: getFilenameFromURL(url),
