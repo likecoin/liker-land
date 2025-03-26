@@ -163,10 +163,11 @@
           <template v-else>
             <div
               v-if="isDetailsPreset"
+              ref="description"
               :class="[
                 'relative',
                 'h-full',
-                { 'max-h-[240px]': !isExpanded },
+                { 'max-h-[320px]': !isExpanded },
                 'overflow-y-hidden',
                 'flex flex-col',
                 'gap-[40px]',
@@ -455,7 +456,7 @@ export default {
   data() {
     return {
       isLoading: false,
-      isExpanded: false,
+      isExpanded: true,
     };
   },
   computed: {
@@ -573,6 +574,11 @@ export default {
   },
   mounted() {
     if (!this.isLazyLoaded) this.fetchInfo();
+    this.$nextTick(() => {
+      if (this.$refs.description.clientHeight > 320) {
+        this.isExpanded = false;
+      }
+    });
   },
   methods: {
     async fetchInfo() {
