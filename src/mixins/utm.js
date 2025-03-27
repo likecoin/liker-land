@@ -10,7 +10,7 @@ export default {
   data() {
     return {
       utmCampaign: this.$route.query.utm_campaign,
-      utmSource: this.$route.query.utm_source,
+      utmSource: this.$route.query.utm_source || this.mixinLinkSource,
       utmMedium: this.$route.query.utm_medium || this.mixinLinkMedium,
       documentReferrer: '',
       fbClickId: this.formattedFbcQs,
@@ -21,6 +21,12 @@ export default {
       return (
         // NOTE: To be injected by the mixin user
         this.linkMedium || this.$route.query.ll_medium
+      );
+    },
+    mixinLinkSource() {
+      return (
+        // NOTE: To be injected by the mixin user
+        this.linkSource || this.$route.query.ll_source
       );
     },
     googleOrganicId() {

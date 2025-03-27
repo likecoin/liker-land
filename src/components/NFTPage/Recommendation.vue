@@ -54,6 +54,7 @@
               :portfolio-wallet="productOwner"
               :should-fetch-when-visible="true"
               ll-medium="recommend"
+              :ll-source="classId"
               @click.native="handleItemClick(nft.classId)"
               @collect="handleItemCollect(nft.classId)"
             />

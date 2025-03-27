@@ -72,6 +72,10 @@ export default {
       type: String,
       default: '',
     },
+    llSource: {
+      type: String,
+      default: '',
+    },
   },
 
   data() {
@@ -100,6 +104,9 @@ export default {
       const query = { ...this.$route.query };
       if (this.llMedium) {
         query.ll_medium = this.llMedium;
+      }
+      if (this.llSource) {
+        query.ll_source = this.llSource;
       }
       if (this.nftIdForDetails) {
         return this.localeLocation({

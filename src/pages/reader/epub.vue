@@ -15,7 +15,7 @@
                   : {
                       name: 'nft-class-classId',
                       params: { classId: classId },
-                      query: { ll_medium: 'reader' },
+                      query: { ll_medium: 'reader', ll_source: classId },
                     }
               )
             "
