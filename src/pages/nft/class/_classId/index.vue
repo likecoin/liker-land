@@ -1907,7 +1907,6 @@ export default {
       );
     },
     handleCloseTippingDialog() {
-      this.isTippingDialogOpen = false;
       logTrackerEvent(
         this,
         'NFT',
@@ -1915,6 +1914,22 @@ export default {
         this.classId,
         1
       );
+      this.customPrice = 0;
+
+      this.isTippingDialogOpen = false;
+      if (this.isAddingToCart) {
+        this.handleAddToCart();
+      } else {
+        const edition = this.getEdition(this.selectedValue);
+        if (
+          this.shouldCrossSell ||
+          (this.hasCrossSell && edition.price === 0)
+        ) {
+          this.openCrossSellDialog();
+        } else {
+          this.handleCollectFromEdition();
+        }
+      }
     },
     handleGiftClose() {
       this.isGiftDialogOpen = false;

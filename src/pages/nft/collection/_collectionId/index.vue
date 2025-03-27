@@ -695,14 +695,20 @@ export default {
       this.isTippingDialogOpen = false;
     },
     handleCloseTippingDialog() {
-      this.isTippingDialogOpen = false;
       logTrackerEvent(
         this,
         'NFT',
         'nft_collection_details_tipping_close',
-        this.classId,
+        this.collectionId,
         1
       );
+      this.customPrice = 0;
+      if (this.isAddingToCart) {
+        this.handleAddToCart();
+      } else {
+        this.handleCollectFromEdition();
+      }
+      this.isTippingDialogOpen = false;
     },
     handleGiftClose() {
       this.isGiftDialogOpen = false;
