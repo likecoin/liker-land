@@ -78,7 +78,7 @@ export default {
     fileName() {
       if (Array.isArray(this.normalizedClassContentURLs)) {
         const matchingUrl = this.normalizedClassContentURLs[this.index];
-        if (this.type && !matchingUrl.type === this.type) {
+        if (this.type && matchingUrl.type !== this.type) {
           return undefined;
         }
         return matchingUrl.name;
