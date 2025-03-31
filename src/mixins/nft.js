@@ -793,8 +793,8 @@ export default {
       });
 
       const nftBookLatestBatchEvents = [];
-      try {
-        if (this.nftIsNFTBook) {
+      if (this.nftIsNFTBook) {
+        try {
           const { messages: nftBookBuyerMessages } = await this.$api.$get(
             getNftBookBuyerMessage(this.classId)
           );
@@ -812,40 +812,41 @@ export default {
               }
             }
           }
-          latestBatchEvents.forEach(event => {
-            const {
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error(error);
+        }
+        latestBatchEvents.forEach(event => {
+          const {
+            classId,
+            nftId,
+            fromWallet,
+            toWallet,
+            buyerMessage,
+            txHash,
+            timestamp,
+          } = event;
+          nftBookLatestBatchEvents.push(event);
+          if (buyerMessage) {
+            nftBookLatestBatchEvents.push({
+              event: 'grant',
               classId,
               nftId,
-              fromWallet,
-              toWallet,
-              buyerMessage,
+              fromWallet: toWallet,
+              toWallet: this.classOwner || fromWallet,
+              memo: buyerMessage,
               txHash,
-              timestamp,
-            } = event;
-            nftBookLatestBatchEvents.push(event);
-            if (buyerMessage) {
-              nftBookLatestBatchEvents.push({
-                event: 'grant',
-                classId,
-                nftId,
-                fromWallet: toWallet,
-                toWallet: this.classOwner || fromWallet,
-                memo: buyerMessage,
-                txHash,
-                timestamp: timestamp - 1,
-              });
-            }
-          });
-        }
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+              timestamp: timestamp - 1,
+            });
+          }
+        });
       }
-
-      if (this.nftIsWritingNFT) {
+      if (this.nftIsNFTBook) {
+        this.NFTHistory = nftBookLatestBatchEvents;
+      } else if (this.isWritingNFT) {
         this.NFTHistory = populateGrantEvent(latestBatchEvents, dbEventMap);
       } else {
-        this.NFTHistory = nftBookLatestBatchEvents;
+        this.NFTHistory = latestBatchEvents;
       }
 
       const uniqueAddresses = getUniqueAddressesFromEvent(this.NFTHistory);
