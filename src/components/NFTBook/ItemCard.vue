@@ -567,7 +567,7 @@ export default {
   mounted() {
     if (!this.isLazyLoaded) this.fetchInfo();
     this.$nextTick(() => {
-      if (this.$refs.description.clientHeight > 320) {
+      if (this.$refs.description?.clientHeight > 320) {
         this.isExpanded = false;
       }
     });
