@@ -14,7 +14,7 @@
         <ul>
           <li
             v-for="(contentUrl, index) in normalizedContentURLs"
-            :key="contentUrl"
+            :key="contentUrl?.url || contentUrl"
           >
             <ButtonV2
               class="w-full"
