@@ -88,7 +88,7 @@ export default {
           ? '0'
           : '1';
       // TODO: customize pdf.js instead of using default build
-      return `https://likecoin.github.io/pdf.js/web/viewer.html?download=${download}&file=`;
+      return `https://likecoin.github.io/pdf.js/legacy/web/viewer.html?download=${download}&file=`;
     },
   },
   mounted() {
