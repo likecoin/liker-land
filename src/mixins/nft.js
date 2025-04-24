@@ -1302,6 +1302,7 @@ export default {
           this.classId,
           1
         );
+        await sleep(3000);
         await Promise.all([
           this.updateNFTOwners(), // blocking update nftIdCollectedFirstByUser,
           this.fetchUserCollectedCount(),
