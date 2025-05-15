@@ -347,7 +347,81 @@ export const LIKE_NFT_ABI = [
       },
     ],
     name: 'newBookNFT',
-    outputs: [],
+    outputs: [
+      {
+        internalType: 'address',
+        name: 'bookAddress',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: 'address',
+            name: 'creator',
+            type: 'address',
+          },
+          {
+            internalType: 'address[]',
+            name: 'updaters',
+            type: 'address[]',
+          },
+          {
+            internalType: 'address[]',
+            name: 'minters',
+            type: 'address[]',
+          },
+          {
+            components: [
+              {
+                internalType: 'string',
+                name: 'name',
+                type: 'string',
+              },
+              {
+                internalType: 'string',
+                name: 'symbol',
+                type: 'string',
+              },
+              {
+                internalType: 'string',
+                name: 'metadata',
+                type: 'string',
+              },
+              {
+                internalType: 'uint64',
+                name: 'max_supply',
+                type: 'uint64',
+              },
+            ],
+            internalType: 'struct BookConfig',
+            name: 'config',
+            type: 'tuple',
+          },
+        ],
+        internalType: 'struct MsgNewBookNFT',
+        name: 'msgNewBookNFT',
+        type: 'tuple',
+      },
+      {
+        internalType: 'uint96',
+        name: 'royaltyFraction',
+        type: 'uint96',
+      },
+    ],
+    name: 'newBookNFTWithRoyalty',
+    outputs: [
+      {
+        internalType: 'address',
+        name: 'bookAddress',
+        type: 'address',
+      },
+    ],
     stateMutability: 'nonpayable',
     type: 'function',
   },
@@ -672,7 +746,7 @@ export const LIKE_NFT_CLASS_ABI = [
   },
   {
     inputs: [],
-    name: 'ErrEmptySymbol',
+    name: 'ErrInvalidSymbol',
     type: 'error',
   },
   {
@@ -1080,6 +1154,19 @@ export const LIKE_NFT_CLASS_ABI = [
     type: 'function',
   },
   {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'burn',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [],
     name: 'contractURI',
     outputs: [
@@ -1154,6 +1241,19 @@ export const LIKE_NFT_CLASS_ABI = [
         internalType: 'uint256',
         name: '',
         type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getProtocolBeacon',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
       },
     ],
     stateMutability: 'view',
@@ -1429,6 +1529,35 @@ export const LIKE_NFT_CLASS_ABI = [
     inputs: [
       {
         internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'salePrice',
+        type: 'uint256',
+      },
+    ],
+    name: 'royaltyInfo',
+    outputs: [
+      {
+        internalType: 'address',
+        name: 'receiver',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'royaltyAmount',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
         name: 'fromTokenId',
         type: 'uint256',
       },
@@ -1518,6 +1647,19 @@ export const LIKE_NFT_CLASS_ABI = [
       },
     ],
     name: 'setApprovalForAll',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint96',
+        name: 'royaltyFraction',
+        type: 'uint96',
+      },
+    ],
+    name: 'setRoyaltyFraction',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
