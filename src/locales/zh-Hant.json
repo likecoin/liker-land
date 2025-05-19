@@ -44,10 +44,6 @@
   "alert_banner_content_heavenly_creations_life_like": "在18年前初版、如今已經絕版的香港小說家{creator}經典名作——《{book}》NFT版，4/23 限量面市！  NFT書限量1000本，售完即止，欲購從速！",
   "alert_banner_content_heavenly_creations_life_like_creator": "董啟章",
   "alert_banner_content_heavenly_creations_life_like_name": "天工開物 · 栩栩如真",
-  "AppDownloadBadges": {
-    "Download": "下載 Liker Land",
-    "Start": "開始"
-  },
   "attention_keplrMobile_openApp": "於你的 Keplr 手機應用程式，會顯示一個等待確認簽署的對話框。\n若你找不到此對話框或確認後程式沒有反應，請嘗試 1）重新登入網頁，或 2)關閉手機應用程式，然後重試。",
   "attention_likerland_openApp": "於你的 Liker Land 手機應用程式，會顯示一個等待確認簽署的對話框。\n若你找不到此對話框或確認後程式沒有反應，請嘗試 1）重新登入網頁，或 2）於手機應用程式的設定頁刪除「Wallet Connect」階段連結，然後重試。",
   "auth_required_view_hint_label_loading": "驗證錢包中",
@@ -275,16 +271,6 @@
   "footer_nav_tnc": "使用條款",
   "footer_nav_writing_nft": "Writing NFT",
   "footer_subscribe_newsletter_button": "訂閱電子報",
-  "GetAppPage": {
-    "Og": {
-      "Description": "下載手機應用程式，指尖之間收藏至愛作品。",
-      "Title": "@:GetAppPage.Title"
-    },
-    "Title": "下載 LikeCoin App"
-  },
-  "GetAppPage.Download": "下載 LikeCoin App",
-  "GetAppPage.Download.now": "立即下載",
-  "GetAppPage.Manage.like": "管理你的 LikeCoin",
   "Glossary": {
     "Blogger": "Blogger",
     "InMedia": "香港獨立媒體網",

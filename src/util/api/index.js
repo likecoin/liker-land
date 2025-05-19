@@ -10,32 +10,6 @@ import {
 } from '../../constant';
 import { normalizeLocaleForLikeCo } from '../../locales';
 
-export const getAppURL = ({
-  referrer,
-  utmCampaign,
-  utmSource = 'likerland',
-  utmMedium,
-} = {}) => {
-  if (referrer) {
-    const queryObject = {
-      event: 'app_referral',
-      referrer,
-      '~campaign': utmCampaign,
-      '~channel': utmSource,
-      '~feature': utmMedium,
-    };
-    return `https://likerland.app.link/?${querystring.stringify(queryObject)}`;
-  }
-  const queryObject = {
-    utm_campaign: utmCampaign,
-    utm_source: utmSource,
-    utm_medium: utmMedium,
-  };
-  return `https://likecoin.page.link/likerland?${querystring.stringify(
-    queryObject
-  )}`;
-};
-
 export const getOAuthRegisterAPI = ({
   language = 'zh',
   from = '',
