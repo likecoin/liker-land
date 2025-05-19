@@ -2,10 +2,15 @@ const {
   AIRTABLE_API_SECRET,
   AIRTABLE_CMS_BASE_ID,
   AIRTABLE_CMS_PRODUCTS_TABLE_ID,
+  AIRTABLE_CMS_PRODUCTS_CHAIN_TYPE,
   AIRTABLE_CMS_TAGS_TABLE_ID,
 } = require('../../config/config');
 
 const axios = require('../../modules/axios');
+
+function normalizeChainType(chainType = AIRTABLE_CMS_PRODUCTS_CHAIN_TYPE) {
+  return chainType === 'evm' ? 'evm' : 'like';
+}
 
 function normalizeTagIdForViewName(viewName) {
   switch (viewName) {
@@ -24,7 +29,7 @@ function normalizeTagIdForViewName(viewName) {
 
 async function fetchAirtableCMSProductsByTagId(
   tagId,
-  { pageSize = 100, offset }
+  { chain, pageSize = 100, offset }
 ) {
   const results = await axios.get(
     `https://api.airtable.com/v0/${AIRTABLE_CMS_BASE_ID}/${AIRTABLE_CMS_PRODUCTS_TABLE_ID}`,
@@ -33,7 +38,9 @@ async function fetchAirtableCMSProductsByTagId(
         Authorization: `Bearer ${AIRTABLE_API_SECRET}`,
       },
       params: {
-        filterByFormula: 'NOT(Hidden)',
+        filterByFormula: `AND(NOT(Hidden), Chain = "${normalizeChainType(
+          chain
+        )}")`,
         pageSize,
         view: normalizeTagIdForViewName(tagId),
         offset,

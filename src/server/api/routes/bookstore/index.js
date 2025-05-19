@@ -37,11 +37,12 @@ router.get('/bookstore/tags', async (req, res, next) => {
 
 router.get('/bookstore/products', async (req, res, next) => {
   try {
-    const { limit: pageSize, offset, tag } = req.query;
+    const { chain, limit: pageSize, offset, tag } = req.query;
 
     const tagId = tag || 'all';
 
     const result = await fetchAirtableCMSProductsByTagId(tagId, {
+      chain,
       pageSize,
       offset,
     });
