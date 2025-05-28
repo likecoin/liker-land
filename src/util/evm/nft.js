@@ -30,10 +30,11 @@ export async function getNFTClassDataById(classId) {
     abi: LIKE_NFT_CLASS_ABI,
     functionName: 'contractURI',
   });
-  if (!dataString?.startsWith('data:application/json')) {
+  const dataUriPattern = /^data:application\/json(; ?charset=utf-8|;utf8)?,/i;
+  if (!dataUriPattern.test(dataString)) {
     throw new Error('Invalid data');
   }
-  return JSON.parse(dataString.replace('data:application/json;utf8,', ''));
+  return JSON.parse(dataString.replace(dataUriPattern, ''));
 }
 
 export async function getNFTDataByTokenId(classId, tokenId) {
@@ -43,10 +44,11 @@ export async function getNFTDataByTokenId(classId, tokenId) {
     functionName: 'tokenURI',
     args: [tokenId],
   });
-  if (!dataString?.startsWith('data:application/json')) {
+  const dataUriPattern = /^data:application\/json(; ?charset=utf-8|;utf8)?,/i;
+  if (!dataUriPattern.test(dataString)) {
     throw new Error('Invalid data');
   }
-  return JSON.parse(dataString.replace('data:application/json;utf8,', ''));
+  return JSON.parse(dataString.replace(dataUriPattern, ''));
 }
 
 export async function getNFTClassBalanceOf(classId, wallet) {
