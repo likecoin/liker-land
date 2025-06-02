@@ -1,6 +1,21 @@
 import { readContract } from './client';
 import { LIKE_NFT_CLASS_ABI } from './LikeNFT';
 
+function parseURIString(inputString) {
+  let dataString = inputString;
+  if (dataString.startsWith('data:application/json;base64,')) {
+    const base64Data = dataString.replace('data:application/json;base64,', '');
+    dataString = Buffer.from(base64Data, 'base64').toString('utf-8');
+  } else {
+    const dataUriPattern = /^data:application\/json(; ?charset=utf-8|;utf8)?,/i;
+    if (!dataUriPattern.test(dataString)) {
+      throw new Error('Invalid data');
+    }
+    dataString = dataString.replace(dataUriPattern, '');
+  }
+  return JSON.parse(dataString);
+}
+
 export function isEVMClassId(classId) {
   return classId?.startsWith('0x');
 }
@@ -30,11 +45,7 @@ export async function getNFTClassDataById(classId) {
     abi: LIKE_NFT_CLASS_ABI,
     functionName: 'contractURI',
   });
-  const dataUriPattern = /^data:application\/json(; ?charset=utf-8|;utf8)?,/i;
-  if (!dataUriPattern.test(dataString)) {
-    throw new Error('Invalid data');
-  }
-  return JSON.parse(dataString.replace(dataUriPattern, ''));
+  return parseURIString(dataString);
 }
 
 export async function getNFTDataByTokenId(classId, tokenId) {
@@ -44,11 +55,7 @@ export async function getNFTDataByTokenId(classId, tokenId) {
     functionName: 'tokenURI',
     args: [tokenId],
   });
-  const dataUriPattern = /^data:application\/json(; ?charset=utf-8|;utf8)?,/i;
-  if (!dataUriPattern.test(dataString)) {
-    throw new Error('Invalid data');
-  }
-  return JSON.parse(dataString.replace(dataUriPattern, ''));
+  return parseURIString(dataString);
 }
 
 export async function getNFTClassBalanceOf(classId, wallet) {
