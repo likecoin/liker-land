@@ -1,29 +1,18 @@
 <template>
   <div class="flex flex-col items-stretch min-h-screen">
-    <!-- <AlertBanner
-      v-if="getRouteBaseName($route) !== 'nft-class-classId' && $route.params.classId !== alertBannerNFTClassId"
-      :primary-button-text="$t('alert_banner_actions_purchase')"
-      :primary-button-to="
-        localeLocation({
-          name: 'nft-class-classId',
-          params: { classId: alertBannerNFTClassId },
-        })"
-      :secondary-button-text="$t('alert_banner_actions_about')"
-      secondary-button-href="https://nowherebookstore.io/"
-      @click-primary-button="onClickAlertBanner('primary')"
-      @click-secondary-button="onClickAlertBanner('secondary')"
+    <AlertBanner
+      :secondary-button-text="$t('migration_alert_banner_button')"
+      @click-secondary-button="onClickAlertBanner"
     >
-      <i18n path="alert_banner_content_heavenly_creations_life_like">
-        <span
-          class="text-like-green font-[600]"
-          place="creator"
-        >{{ $t('alert_banner_content_heavenly_creations_life_like_creator') }}</span>
-        <span
-          class="text-like-green font-[600]"
-          place="book"
-        >{{ $t('alert_banner_content_heavenly_creations_life_like_name') }}</span>
-      </i18n>
-    </AlertBanner> -->
+      <div class="flex items-center justify-center gap-[8px]">
+        <img
+          class="h-[48px]"
+          src="~/assets/images/migration/index_alert.png"
+          alt=""
+        />
+        <p class="text-sm" v-html="migrationBannerText" />
+      </div>
+    </AlertBanner>
 
     <SiteTopBanner
       v-if="siteTopBannerMessage"
@@ -106,6 +95,7 @@ import { mapActions, mapGetters } from 'vuex';
 import {
   EXTERNAL_HOST,
   NFT_BOOK_WITH_TOP_BANNER_MESSAGE_MAP,
+  BOOK_COM_DOMAIN,
 } from '~/constant';
 
 import alertMixin from '~/mixins/alert';
@@ -184,6 +174,12 @@ export default {
         ''
       );
     },
+    migrationBannerText() {
+      return this.$t('migration_alert_banner', {
+        link: `<a href="${BOOK_COM_DOMAIN}" target="_blank" rel="noopener noreferrer" class="font-semibold text-like-green">
+          ${this.$t('migration_target_site_name')}</a>`,
+      });
+    },
   },
   watch: {
     isInInAppBrowser: {
@@ -235,14 +231,9 @@ export default {
   },
   methods: {
     ...mapActions(['uiCloseTxModal']),
-    onClickAlertBanner(type = 'primary') {
-      logTrackerEvent(
-        this,
-        'alert_banner',
-        `alert_banner_click_${type}`,
-        '',
-        1
-      );
+    onClickAlertBanner() {
+      logTrackerEvent(this, 'alert_banner', 'alert_banner_click_', '', 1);
+      window.open(BOOK_COM_DOMAIN, '_blank');
     },
     handleDialogChange(hasAnyDialogOpened) {
       this.hasAnyDialogOpened = hasAnyDialogOpened;
