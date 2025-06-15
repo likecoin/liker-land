@@ -559,6 +559,12 @@
       </NFTClaimMainSection>
     </div>
 
+    <MigrateNoticeModalClaim
+      :is-open="isMigrateModalOpen"
+      :payment-id="paymentId"
+      @close="handleCloseMigrateModal"
+    />
+
     <NFTBookCrossSellDialog
       :open="isCrossSellDialogOpen"
       :class-id="crossSellClassId"
@@ -647,6 +653,8 @@ export default {
       collectionId: this.$route.query.collection_id,
       cartItems: [],
       isViewCollectionLoading: false,
+
+      isMigrateModalOpen: false,
     };
   },
   computed: {
@@ -1072,6 +1080,7 @@ export default {
         1
       );
     }
+    this.isMigrateModalOpen = true;
   },
   methods: {
     ...mapActions([
@@ -1567,6 +1576,16 @@ export default {
         this,
         'NFT',
         'nft_claim_cross_sell_reject',
+        this.productId,
+        1
+      );
+    },
+    handleCloseMigrateModal() {
+      this.isMigrateModalOpen = false;
+      logTrackerEvent(
+        this,
+        'NFT',
+        'nft_claim_migrate_notice_modal_closed',
         this.productId,
         1
       );
