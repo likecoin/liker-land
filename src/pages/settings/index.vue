@@ -257,6 +257,7 @@
       :target-type="targetType"
       @close="isOpenIncomeDetailsDialog = false"
     />
+    <MigrateNoticeModalLogin />
   </AuthRequiredView>
 </template>
 

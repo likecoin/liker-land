@@ -80,6 +80,7 @@
           </template>
         </NFTPortfolioMainView>
       </div>
+      <MigrateNoticeModalLogin />
     </AuthRequiredView>
   </Page>
 </template>

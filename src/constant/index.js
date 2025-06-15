@@ -526,3 +526,6 @@ export const CHRISTMAS_CAMPAIGN_COUPON = 'XMASREAD';
 export const BOOKSTORE_CMS_CACHE_RESET_TIMESTAMP = 1739877450;
 
 export const BOOK_COM_DOMAIN = `https://${BOOK3_HOSTNAME}`;
+export const MIGRATION_URL = IS_TESTNET
+  ? 'https://likecoin-migration.pandawork.com/'
+  : 'https://v3-book-migration.like.co/';
