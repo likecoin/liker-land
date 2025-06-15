@@ -811,7 +811,7 @@
   "migration_dialog_button_migrate": "Migrate Now",
   "migration_dialog_claim_description_1": "Liker Land is now upgraded and rebranded as 3ook.com. For assistance, please reach out to our customer support team.",
   "migration_dialog_claim_help_text": "Hi, I would like to claim my book. Here is the information:\nPayment ID: {paymentId}",
-  "migration_dialog_claimm_button": "Get Support",
+  "migration_dialog_claim_button": "Get Support",
   "migration_dialog_description_1": "Liker Land will upgrade its technical foundation and rebrand as 3ook.com",
   "migration_dialog_description_2": "Your existing account, ebooks, and Writing NFTs will be seamlessly migrated to 3ook.com",
   "migration_dialog_description_3": "In addition to a brand-new interface, 3ook.com now features an AI reading assistant that turns every book into an audiobook",

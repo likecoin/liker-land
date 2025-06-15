@@ -57,7 +57,7 @@ export default {
     handleClickGetSupport() {
       const res = this.openCrisp(
         this.$t('migration_dialog_claim_help_text', {
-          paymentId: this.crispWebsiteId,
+          paymentId: this.paymentId,
         })
       );
       if (!res) {
