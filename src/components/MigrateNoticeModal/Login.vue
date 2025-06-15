@@ -83,16 +83,27 @@ export default {
 
   methods: {
     checkShouldShowMigrateDialog() {
-      const lastDismissAt = localStorage.getItem(MIGRATE_DISMISS_KEY);
-      if (!lastDismissAt) return true;
+      try {
+        const lastDismissAt = localStorage.getItem(MIGRATE_DISMISS_KEY);
+        if (!lastDismissAt) return true;
 
-      return (
-        (Date.now() - Number(lastDismissAt)) / 60000 > MIGRATE_WAIT_MINUTES
-      );
+        return (
+          (Date.now() - Number(lastDismissAt)) / 60000 > MIGRATE_WAIT_MINUTES
+        );
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Error checking migration dialog visibility:', error);
+        return true;
+      }
     },
     onCloseMigrateDialog() {
-      this.shouldShowMigrateDialog = false;
-      localStorage.setItem(MIGRATE_DISMISS_KEY, String(Date.now()));
+      try {
+        this.shouldShowMigrateDialog = false;
+        localStorage.setItem(MIGRATE_DISMISS_KEY, String(Date.now()));
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Error saving migration dialog dismiss time:', error);
+      }
     },
     handleMigrateNow() {
       window.open(MIGRATION_URL, '_blank', 'noopener,noreferrer');
