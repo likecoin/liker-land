@@ -52,7 +52,7 @@ export const LIKECOIN_WALLET_CONNECTOR_CONFIG = {
   authcoreApiHost: IS_TESTNET
     ? 'https://likecoin-integration-test.authcore.io'
     : 'https://authcore.like.co',
-  authcoreRedirectUrl: `http://localhost:3000/auth/redirect?method=liker-id`,
+  authcoreRedirectUrl: `${EXTERNAL_HOST}/auth/redirect?method=liker-id`,
 };
 
 export default LIKECOIN_WALLET_CONNECTOR_CONFIG;
