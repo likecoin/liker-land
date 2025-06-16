@@ -530,4 +530,4 @@ export const MIGRATION_URL = IS_TESTNET
   ? 'https://likenft-migration.pandawork.com/'
   : 'https://v3-book-migration.like.co/';
 
-export const IS_CLAIM_DISABLED = true;
+export const IS_MIGRATION_STARTED = true;

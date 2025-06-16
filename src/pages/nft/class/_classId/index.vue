@@ -554,6 +554,7 @@ import {
   LIKECOIN_API_BASE,
   LIKECOIN_BUTTON_BASE,
   BOOK3_HOSTNAME,
+  IS_MIGRATION_STARTED,
 } from '@/constant/index';
 import { nftClassCollectionType, parseNFTMetadataURL } from '~/util/nft';
 import { getNFTBookPurchaseLink, postNewStripeFiatPayment } from '~/util/api';
@@ -1381,7 +1382,7 @@ export default {
         1
       );
 
-      if (!this.nftEvmURL) {
+      if (IS_MIGRATION_STARTED) {
         this.isMigrateNoticeModalOpen = true;
         return;
       }
@@ -1523,7 +1524,7 @@ export default {
       return this.getEditionByIndex(index);
     },
     checkTippingAvailability(selectedValue) {
-      if (!this.nftEvmURL) {
+      if (IS_MIGRATION_STARTED) {
         this.isMigrateNoticeModalOpen = true;
         return;
       }

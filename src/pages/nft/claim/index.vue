@@ -600,7 +600,7 @@ import {
   parseAutoMemo,
 } from '~/util/nft';
 import { ellipsis } from '~/util/ui';
-import { NFT_BOOK_PLATFORM_LIKER_LAND, IS_CLAIM_DISABLED } from '~/constant';
+import { NFT_BOOK_PLATFORM_LIKER_LAND, IS_MIGRATION_STARTED } from '~/constant';
 import alertMixin from '~/mixins/alert';
 import crossSellMixin from '~/mixins/cross-sell';
 import walletMixin from '~/mixins/wallet';
@@ -1184,7 +1184,7 @@ export default {
       }
     },
     async claim() {
-      if (this.shouldBlockClaim || IS_CLAIM_DISABLED) {
+      if (this.shouldBlockClaim || IS_MIGRATION_STARTED) {
         this.navigateToState(NFT_CLAIM_STATE.ERROR);
         this.isMigrateModalOpen = true;
         return;
