@@ -600,7 +600,7 @@ import {
   parseAutoMemo,
 } from '~/util/nft';
 import { ellipsis } from '~/util/ui';
-import { NFT_BOOK_PLATFORM_LIKER_LAND } from '~/constant';
+import { NFT_BOOK_PLATFORM_LIKER_LAND, IS_CLAIM_DISABLED } from '~/constant';
 import alertMixin from '~/mixins/alert';
 import crossSellMixin from '~/mixins/cross-sell';
 import walletMixin from '~/mixins/wallet';
@@ -859,6 +859,7 @@ export default {
       });
       return;
     }
+    this.isMigrateModalOpen = true;
     let price;
     let { priceIndex } = this;
     if (this.cartId) {
@@ -1080,7 +1081,6 @@ export default {
         1
       );
     }
-    this.isMigrateModalOpen = true;
   },
   methods: {
     ...mapActions([
@@ -1184,8 +1184,9 @@ export default {
       }
     },
     async claim() {
-      if (this.shouldBlockClaim) {
+      if (this.shouldBlockClaim || IS_CLAIM_DISABLED) {
         this.navigateToState(NFT_CLAIM_STATE.ERROR);
+        this.isMigrateModalOpen = true;
         return;
       }
       logTrackerEvent(this, 'NFT', 'nft_claim_claim_button_clicked', '', 1);
