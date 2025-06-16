@@ -1,4 +1,4 @@
-import { LIKE_CO_URL_BASE } from '~/constant';
+import { LIKE_CO_URL_BASE, BOOK_COM_DOMAIN } from '~/constant';
 
 export const getLikeCoURL = (path = '') => `${LIKE_CO_URL_BASE}${path}`;
 
@@ -13,3 +13,15 @@ export const getLikerIdSettingsURL = ({
   getLikeCoURL(
     `/in/settings?popup=1&user_wallet=${wallet}&language=${language}&legacy=${legacy}`
   );
+
+export function getBookComUrlWithUTM({
+  source = 'likerland',
+  medium = 'popup',
+  campaign = 'migration',
+} = {}) {
+  const url = new URL(`https://${BOOK_COM_DOMAIN}`);
+  url.searchParams.set('utm_source', source);
+  url.searchParams.set('utm_medium', medium);
+  url.searchParams.set('utm_campaign', campaign);
+  return url.toString();
+}
