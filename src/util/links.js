@@ -19,7 +19,7 @@ export function getBookComURLWithUTM({
   medium = 'popup',
   campaign = 'migration',
 } = {}) {
-  const url = new URL(`https://${BOOK_COM_DOMAIN}`);
+  const url = new URL(BOOK_COM_DOMAIN);
   url.searchParams.set('utm_source', source);
   url.searchParams.set('utm_medium', medium);
   url.searchParams.set('utm_campaign', campaign);
