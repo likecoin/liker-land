@@ -102,7 +102,7 @@ import alertMixin from '~/mixins/alert';
 import inAppMixin from '~/mixins/in-app';
 import walletLoginMixin from '~/mixins/wallet-login';
 import { logTrackerEvent } from '~/util/EventLogger';
-import { getBookComUrlWithUTM } from '~/util/links';
+import { getBookComURLWithUTM } from '~/util/links';
 
 export default {
   mixins: [alertMixin, inAppMixin, walletLoginMixin],
@@ -233,11 +233,11 @@ export default {
   methods: {
     ...mapActions(['uiCloseTxModal']),
     onClickAlertBanner() {
-      const URL = getBookComUrlWithUTM({
+      const url = getBookComURLWithUTM({
         medium: 'banner',
       });
       logTrackerEvent(this, 'alert_banner', 'alert_banner_click_', '', 1);
-      window.open(URL, '_blank');
+      window.open(url, '_blank');
     },
     handleDialogChange(hasAnyDialogOpened) {
       this.hasAnyDialogOpened = hasAnyDialogOpened;

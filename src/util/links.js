@@ -14,7 +14,7 @@ export const getLikerIdSettingsURL = ({
     `/in/settings?popup=1&user_wallet=${wallet}&language=${language}&legacy=${legacy}`
   );
 
-export function getBookComUrlWithUTM({
+export function getBookComURLWithUTM({
   source = 'likerland',
   medium = 'popup',
   campaign = 'migration',
