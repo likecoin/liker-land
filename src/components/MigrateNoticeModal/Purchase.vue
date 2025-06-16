@@ -30,21 +30,19 @@
 </template>
 
 <script>
+import { BOOK_COM_DOMAIN } from '~/constant';
+
 export default {
   name: 'MigrateNoticeModalPurchase',
   props: {
     isOpen: {
       type: Boolean,
     },
-    evmURL: {
-      type: String,
-      default: '',
-    },
   },
 
   methods: {
     handleClickOpen3ook() {
-      window.open(this.evmURL, '_blank', 'noopener,noreferrer');
+      window.open(BOOK_COM_DOMAIN, '_blank', 'noopener,noreferrer');
     },
     handleDismiss() {
       this.$emit('close');

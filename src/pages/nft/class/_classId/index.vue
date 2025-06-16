@@ -540,7 +540,6 @@
     />
     <MigrateNoticeModalPurchase
       :is-open="isMigrateNoticeModalOpen"
-      :evm-u-r-l="nftEvmURL"
       @close="handleCloseMigrateNoticeModal"
     />
   </Page>
@@ -1225,7 +1224,7 @@ export default {
       if (storeInfo?.evmClassId) {
         return `https://${BOOK3_HOSTNAME}/store/${storeInfo.evmClassId}`;
       }
-      return `https://${BOOK3_HOSTNAME}/store`;
+      return undefined;
     },
   },
   async mounted() {
@@ -1382,7 +1381,7 @@ export default {
         1
       );
 
-      if (this.nftEvmURL) {
+      if (!this.nftEvmURL) {
         this.isMigrateNoticeModalOpen = true;
         return;
       }
@@ -1524,7 +1523,7 @@ export default {
       return this.getEditionByIndex(index);
     },
     checkTippingAvailability(selectedValue) {
-      if (this.nftEvmURL) {
+      if (!this.nftEvmURL) {
         this.isMigrateNoticeModalOpen = true;
         return;
       }
