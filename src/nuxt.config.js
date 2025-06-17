@@ -362,6 +362,7 @@ const nuxtConfig = {
     { src: '~/plugins/crisp.client.js', ssr: false },
     { src: '~/plugins/vue-clipboard2', ssr: false },
     { src: '~/plugins/nuxt-client-init.client', ssr: false },
+    '~/plugins/3ook.js',
   ],
 
   /*

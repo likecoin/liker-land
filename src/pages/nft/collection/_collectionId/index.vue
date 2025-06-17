@@ -155,7 +155,7 @@ export default {
       isAddingToCart: false,
     };
   },
-  async fetch({ route, store, redirect, error }) {
+  async fetch({ route, store, error, $redirectTo3ookByClassId }) {
     const { collectionId } = route.params;
     try {
       await store.dispatch('lazyFetchNFTCollectionInfoByCollectionId', {
@@ -165,9 +165,11 @@ export default {
       const collectionInfo = store.getters.getNFTCollectionInfoByCollectionId(
         collectionId
       );
-      const evmClassId = collectionInfo.classIds.find(classId => classId.startsWith('0x'));
+      const evmClassId = collectionInfo.classIds.find(classId =>
+        classId.startsWith('0x')
+      );
       if (evmClassId) {
-        redirect(302, `https://${BOOK3_HOSTNAME}/store/${evmClassId}`);
+        $redirectTo3ookByClassId(302, evmClassId);
         return;
       }
     } catch (err) {

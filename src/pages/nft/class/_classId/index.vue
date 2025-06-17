@@ -609,7 +609,14 @@ export default {
       isMigrateNoticeModalOpen: false,
     };
   },
-  async fetch({ route, store, redirect, error, localeLocation }) {
+  async fetch({
+    route,
+    store,
+    redirect,
+    error,
+    localeLocation,
+    $redirectTo3ookByClassId,
+  }) {
     const { classId } = route.params;
     const { referrer } = route.query;
     if (referrer) {
@@ -624,7 +631,7 @@ export default {
     }
     // check classId contains only valid characters
     if (classId.startsWith('0x')) {
-      redirect(301, `https://${BOOK3_HOSTNAME}/store/${classId}`);
+      $redirectTo3ookByClassId(301, classId);
       return;
     }
     if (!/^likenft1[ac-hj-np-z02-9]{58}$/.test(classId)) {
@@ -666,7 +673,7 @@ export default {
     const storeInfo = store.getters.getNFTBookStoreInfoByClassId(classId);
     if (storeInfo?.evmClassId) {
       // redirect to evm class page if exists
-      redirect(301, `https://${BOOK3_HOSTNAME}/store/${storeInfo.evmClassId}`);
+      $redirectTo3ookByClassId(301, storeInfo.evmClassId);
     }
   },
   head() {
@@ -1219,13 +1226,6 @@ export default {
         'hidden',
         'laptop:block',
       ];
-    },
-    nftEvmURL() {
-      const storeInfo = this.getNFTBookStoreInfoByClassId(this.classId);
-      if (storeInfo?.evmClassId) {
-        return `https://${BOOK3_HOSTNAME}/store/${storeInfo.evmClassId}`;
-      }
-      return undefined;
     },
   },
   async mounted() {
