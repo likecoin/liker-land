@@ -155,7 +155,7 @@ export default {
       isAddingToCart: false,
     };
   },
-  async fetch({ route, store, error, $redirectTo3ookByClassId }) {
+  async fetch({ route, store, error, $redirectTo3ookByNFTClassId }) {
     const { collectionId } = route.params;
     try {
       await store.dispatch('lazyFetchNFTCollectionInfoByCollectionId', {
@@ -169,7 +169,7 @@ export default {
         classId.startsWith('0x')
       );
       if (evmClassId) {
-        $redirectTo3ookByClassId(302, evmClassId);
+        $redirectTo3ookByNFTClassId(302, evmClassId);
         return;
       }
     } catch (err) {

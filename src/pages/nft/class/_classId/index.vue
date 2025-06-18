@@ -615,7 +615,7 @@ export default {
     redirect,
     error,
     localeLocation,
-    $redirectTo3ookByClassId,
+    $redirectTo3ookByNFTClassId,
   }) {
     const { classId } = route.params;
     const { referrer } = route.query;
@@ -631,7 +631,7 @@ export default {
     }
     // check classId contains only valid characters
     if (classId.startsWith('0x')) {
-      $redirectTo3ookByClassId(301, classId);
+      $redirectTo3ookByNFTClassId(301, classId);
       return;
     }
     if (!/^likenft1[ac-hj-np-z02-9]{58}$/.test(classId)) {
@@ -673,7 +673,7 @@ export default {
     const storeInfo = store.getters.getNFTBookStoreInfoByClassId(classId);
     if (storeInfo?.evmClassId) {
       // redirect to evm class page if exists
-      $redirectTo3ookByClassId(301, storeInfo.evmClassId);
+      $redirectTo3ookByNFTClassId(301, storeInfo.evmClassId);
     }
   },
   head() {
