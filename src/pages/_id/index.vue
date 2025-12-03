@@ -229,7 +229,9 @@ export default {
         return;
       }
       if (id.startsWith('0x')) {
-        redirect(301, `https://${BOOK3_HOSTNAME}/store/?owner_wallet=${id}`);
+        const search = new URLSearchParams(query);
+        search.set('owner_wallet', id);
+        redirect(301, `https://${BOOK3_HOSTNAME}/store?${search.toString()}`);
         return;
       }
       if (id.startsWith('cosmos1')) {
@@ -240,10 +242,9 @@ export default {
         const userInfo = await $api.$get(getUserMinAPI(id));
         const { likeWallet, evmWallet } = userInfo;
         if (evmWallet) {
-          redirect(
-            301,
-            `https://${BOOK3_HOSTNAME}/store/?owner_wallet=${evmWallet}`
-          );
+          const search = new URLSearchParams(query);
+          search.set('owner_wallet', evmWallet);
+          redirect(301, `https://${BOOK3_HOSTNAME}/store?${search.toString()}`);
         } else {
           redirect(301, {
             ...route,
