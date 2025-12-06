@@ -231,6 +231,9 @@ export default {
       if (id.startsWith('0x')) {
         const search = new URLSearchParams(query);
         search.set('owner_wallet', id);
+        if (!search.has('utm_source')) {
+          search.set('utm_source', 'likerland');
+        }
         redirect(301, `https://${BOOK3_HOSTNAME}/store?${search.toString()}`);
         return;
       }
@@ -244,6 +247,9 @@ export default {
         if (evmWallet) {
           const search = new URLSearchParams(query);
           search.set('owner_wallet', evmWallet);
+          if (!search.has('utm_source')) {
+            search.set('utm_source', 'likerland');
+          }
           redirect(301, `https://${BOOK3_HOSTNAME}/store?${search.toString()}`);
         } else {
           redirect(301, {

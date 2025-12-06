@@ -3,10 +3,11 @@ import { BOOK3_HOSTNAME } from '~/constant';
 
 export default {
   fetch({ redirect, query }) {
-    redirect(
-      301,
-      `https://${BOOK3_HOSTNAME}/about?${new URLSearchParams(query).toString()}`
-    );
+    const search = new URLSearchParams(query);
+    if (!search.has('utm_source')) {
+      search.set('utm_source', 'likerland');
+    }
+    redirect(301, `https://${BOOK3_HOSTNAME}/about?${search.toString()}`);
   },
 };
 </script>

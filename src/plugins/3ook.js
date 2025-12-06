@@ -11,6 +11,9 @@ export default ({ redirect, route }, inject) => {
         url.searchParams.append(key, value);
       });
     });
+    if (!url.searchParams.has('utm_source')) {
+      url.searchParams.set('utm_source', 'likerland');
+    }
     redirect(code, url.toString());
   });
 };
