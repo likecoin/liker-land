@@ -1,17 +1,9 @@
-<template>
-  <CivicPageV3 />
-</template>
-
 <script>
-import { EXTERNAL_HOST } from '~/constant';
-import CivicPageV3 from '~/components/CivicLikerV3/Page';
+import { EXTERNAL_HOST, BOOK3_HOSTNAME } from '~/constant';
 import { getUserMinAPI } from '~/util/api';
 import { checkUserNameValid } from '~/util/user';
 
 export default {
-  components: {
-    CivicPageV3,
-  },
   async fetch({ redirect, $api, query, localeLocation }) {
     const { from: id } = query;
     if (id && checkUserNameValid(id)) {
@@ -31,6 +23,11 @@ export default {
         console.error(msg);
       }
     }
+    const search = new URLSearchParams(query);
+    if (!search.has('utm_source')) {
+      search.set('utm_source', 'likerland');
+    }
+    redirect(301, `https://${BOOK3_HOSTNAME}/member?${search.toString()}`);
   },
   head() {
     const title = this.$t('civic_page_v3_title');
