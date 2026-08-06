@@ -12,8 +12,10 @@ jobs:
     environment: rinkeby
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@master
-      - uses: w9jds/setup-firebase@main
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      # Pinned to a SHA: this third-party action receives FIREBASE_TOKEN, which
+      # can deploy to and delete from the civic-liker projects.
+      - uses: w9jds/setup-firebase@869785322147e6a53d463a55db0a5af1b4ce4ba6 # main @ 2024-03-20
         with:
           firebase_token: ${{ secrets.FIREBASE_TOKEN }}
       # firebase.json hardcodes production 3ook.com destinations, so this
