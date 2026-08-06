@@ -32,8 +32,15 @@ must stay last. Specific families (`about`, `civic`, `settings`, the shelf
 group) come first, and two regex rules preserve deep links that still resolve on
 3ook.com:
 
-- `/…/nft/class/0x…` → `https://3ook.com/store/0x…` — EVM book permalinks
+- `/…/nft/class/0x…` → `https://3ook.com/store/0x…/` — EVM book permalinks
 - `/…/0x<40 hex>` → `https://3ook.com/store?owner_wallet=0x…` — EVM portfolios
+
+> **Do not remove the trailing slash after `:cid`.** Firebase parses `:cid?` as
+> an *optional-parameter* modifier and swallows the `?`, producing
+> `…/store/0xABCutm_source=likerland` — a 404. Any non-modifier character
+> between the capture and the `?` avoids this; a `/` is used because 3ook.com
+> serves trailing slashes with a plain 200. The portfolio rule is unaffected
+> because its capture is followed by `&`, not `?`.
 
 Legacy Cosmos identifiers (`likenft1…`, `like1…`, ISCN IDs) have no equivalent
 on 3ook.com and deliberately fall through to `/store`.

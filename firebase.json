@@ -4,12 +4,12 @@
     "redirects": [
       {
         "regex": "^/en/nft/class/(?P<cid>0x[0-9a-fA-F]+)(?:/.*)?$",
-        "destination": "https://3ook.com/en/store/:cid?utm_source=likerland",
+        "destination": "https://3ook.com/en/store/:cid/?utm_source=likerland",
         "type": 301
       },
       {
         "regex": "^(?:/zh-Hant)?/nft/class/(?P<cid>0x[0-9a-fA-F]+)(?:/.*)?$",
-        "destination": "https://3ook.com/store/:cid?utm_source=likerland",
+        "destination": "https://3ook.com/store/:cid/?utm_source=likerland",
         "type": 301
       },
       {
