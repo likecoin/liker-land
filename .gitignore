@@ -1,6 +1,9 @@
 .DS_Store
 node_modules
-functions/nuxt
-functions/dist/
-functions/nuxt.config.js
-public
+.firebase
+
+# Build output left behind by the removed Nuxt app and Cloud Functions.
+# These directories are dead; drop these three lines once they are deleted.
+/src/
+/functions/
+/public/
