@@ -13,30 +13,9 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
-      - name: Setup node env 🏗
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          cache: 'npm'
-          cache-dependency-path: |
-            src/package-lock.json
-            functions/package-lock.json
-      - name: Dependencies
-        run: npm --prefix src install && npm --prefix functions install && cp -r src/nuxt.config.js src/config src/tailwind.config.js functions/
       - uses: w9jds/setup-firebase@main
         with:
           firebase_token: ${{ secrets.FIREBASE_TOKEN }}
-      - run: firebase deploy --project civic-liker -f
-        env:
-          GA_TRACKING_ID: ${{ vars.GA_TRACKING_ID }}
-          AD_CONVERSION_ID: ${{ vars.AD_CONVERSION_ID }}
-          FACEBOOK_PIXEL_ID: ${{ vars.FACEBOOK_PIXEL_ID }}
-          GRE_API_KEY: ${{ vars.GRE_API_KEY }}
-          GRE_PROJECT_ID: ${{ vars.GRE_PROJECT_ID }}
-          STRIPE_PUBLIC_KEY: ${{ vars.STRIPE_PUBLIC_KEY }}
-          INTERCOM_APP_ID: ${{ vars.INTERCOM_APP_ID }}
-          SENTRY_DSN: ${{ vars.SENTRY_DSN }}
-          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_PUBLISH_RELEASE: 'TRUE'
+      # Scoped to `hosting` so a deploy can never implicitly add or remove
+      # Cloud Functions.
+      - run: firebase deploy --only hosting --project civic-liker
