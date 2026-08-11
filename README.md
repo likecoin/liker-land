@@ -29,21 +29,45 @@ optional: `^(?:/zh-Hant)?/about(?:/.*)?$`.
 
 Rules are evaluated **top to bottom, first match wins**, so the two catch-alls
 must stay last. Specific families (`about`, `civic`, `settings`, the shelf
-group) come first, and two regex rules preserve deep links that still resolve on
-3ook.com:
+group) come first, and three regex rules preserve deep links that still resolve
+on 3ook.com:
 
 - `/…/nft/class/0x…` → `https://3ook.com/store/0x…/` — EVM book permalinks
 - `/…/0x<40 hex>` → `https://3ook.com/store?owner_wallet=0x…` — EVM portfolios
+- `/…/<liker-id>` → `https://3ook.com/store/@<liker-id>/` — user pages
 
-> **Do not remove the trailing slash after `:cid`.** Firebase parses `:cid?` as
-> an *optional-parameter* modifier and swallows the `?`, producing
+> **Do not remove the trailing slash after `:cid` or `:id`.** Firebase parses
+> `:cid?` as an *optional-parameter* modifier and swallows the `?`, producing
 > `…/store/0xABCutm_source=likerland` — a 404. Any non-modifier character
 > between the capture and the `?` avoids this; a `/` is used because 3ook.com
 > serves trailing slashes with a plain 200. The portfolio rule is unaffected
 > because its capture is followed by `&`, not `?`.
 
+The user-page rule matches by *shape* rather than by name: one path segment of
+5–20 characters, the length `checkUserNameValid` in `likecoin-api-public`
+accepts. That validator admits lowercase only, but the retired app lowercased
+mixed-case URLs before looking an id up, so `A-Z` is matched here and forwarded
+verbatim. Note this resolves only once 3ook.com lowercases the `userId` param
+on `/store/@:userId` — it currently just strips the `@`.
+
+Matching by shape means any leftover route name would read as a liker id.
+`about`, `civic`, `settings`, the shelf group and `creators` are safe by
+ordering; the rest — `campaign`, `getapp`, `gutenberg`, `keplr`, `logout`,
+`oauth`, `shopping-cart`, `store`, `writing-nft` — need the explicit `/store`
+rule directly above it. **A new route name must be added there too**, or it
+silently redirects to a nonexistent user page. `bookmarks` and `following` are
+easy to miss this way: they read like nested paths but were children of
+`index.vue`, so their URLs were single-segment and they belong to the shelf
+group.
+
+`/zh-Hant` needs the same guard but keeps its own anchored rule. Folding it into
+that alternation breaks the locale: in `^(?:/zh-Hant)?/(?:…|zh-Hant)(?:/.*)?$`
+the optional prefix goes unused while `zh-Hant` matches as the *name* and
+`(?:/.*)?` swallows the rest, sending every `/zh-Hant/…` path to `/store`.
+
 Legacy Cosmos identifiers (`likenft1…`, `like1…`, ISCN IDs) have no equivalent
-on 3ook.com and deliberately fall through to `/store`.
+on 3ook.com and deliberately fall through to `/store`; they are longer than 20
+characters, so the user-page rule does not claim them either.
 
 `/creators` is the one route that does not go to 3ook.com — it keeps pointing at
 the Civic Liker guide on `docs.like.co`, which is still live.
@@ -81,9 +105,10 @@ codes) rather than testnet destinations.
 To check a change before shipping it:
 
 ```bash
-for p in / /en/store /zh-Hant/about /en/civic /en/settings/email \
+for p in / /en/store /zh-Hant /zh-Hant/about /en/civic /en/settings/email \
          /en/nft/class/0x1234567890abcdef1234567890abcdef12345678 \
-         /en/0x1234567890123456789012345678901234567890 /robots.txt; do
+         /en/0x1234567890123456789012345678901234567890 \
+         /ckxpress /en/ckxpress /gutenberg /robots.txt; do
   printf '%-60s ' "$p"
   curl -s -o /dev/null -w '%{http_code} -> %{redirect_url}\n' "https://liker.land$p"
 done
