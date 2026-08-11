@@ -43,12 +43,12 @@
         "type": 301
       },
       {
-        "regex": "^/en/(?:bookshelf|dashboard|feed|notifications|reader)(?:/.*)?$",
+        "regex": "^/en/(?:bookmarks|bookshelf|dashboard|feed|following|notifications|reader)(?:/.*)?$",
         "destination": "https://3ook.com/en/shelf?utm_source=likerland",
         "type": 301
       },
       {
-        "regex": "^(?:/zh-Hant)?/(?:bookshelf|dashboard|feed|notifications|reader)(?:/.*)?$",
+        "regex": "^(?:/zh-Hant)?/(?:bookmarks|bookshelf|dashboard|feed|following|notifications|reader)(?:/.*)?$",
         "destination": "https://3ook.com/shelf?utm_source=likerland",
         "type": 301
       },
@@ -70,6 +70,31 @@
       {
         "regex": "^(?:/zh-Hant)?/creators/?$",
         "destination": "https://docs.like.co/v/zh/user-guide/civic-liker",
+        "type": 301
+      },
+      {
+        "regex": "^/en/(?:campaign|getapp|gutenberg|keplr|logout|oauth|shopping-cart|store|writing-nft)(?:/.*)?$",
+        "destination": "https://3ook.com/en/store?utm_source=likerland",
+        "type": 301
+      },
+      {
+        "regex": "^(?:/zh-Hant)?/(?:campaign|getapp|gutenberg|keplr|logout|oauth|shopping-cart|store|writing-nft)(?:/.*)?$",
+        "destination": "https://3ook.com/store?utm_source=likerland",
+        "type": 301
+      },
+      {
+        "regex": "^/zh-Hant/?$",
+        "destination": "https://3ook.com/store?utm_source=likerland",
+        "type": 301
+      },
+      {
+        "regex": "^/en/(?P<id>[a-zA-Z0-9_-]{5,20})/?$",
+        "destination": "https://3ook.com/en/store/@:id/?utm_source=likerland",
+        "type": 301
+      },
+      {
+        "regex": "^(?:/zh-Hant)?/(?P<id>[a-zA-Z0-9_-]{5,20})/?$",
+        "destination": "https://3ook.com/store/@:id/?utm_source=likerland",
         "type": 301
       },
       {
